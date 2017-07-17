@@ -2,7 +2,7 @@
 
 Мобильное приложение для управления совместными финансами с долевым участием при покупке еды.
 
-Диаграмма классов:
+[Диаграмма классов](https://repository.genmymodel.com/commandus/fridge):
 
 ![Диаграмма классов](http://f.commandus.com/i/d/diagram-gmm.png)
 
