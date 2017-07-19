@@ -12,6 +12,14 @@
 #define CMD_MEAL			0
 #define CMD_BALANCE			1
 
+#define CMD_ADD_USER		10
+#define CMD_ADD_FRIDGE		11
+#define CMD_ADD_PURCHASE	12
+
+#define CMD_RM_USER			20
+#define CMD_RM_FRIDGE		21
+#define CMD_RM_PURCHASE		22
+
 /**
  * Command line interface (CLI) tool configuration structure
  */
@@ -32,10 +40,15 @@ private:
 	int errorcode;
 public:
 	int cmd;
-	uint64_t id;
-	std::string key;								///< Tox file
+	uint64_t user_id;
+	std::string user_key;							///< password
 	std::string cn;									///< common name
-
+	std::string locale;								///< Locale name
+	double cost;									///< Cost
+	double lat;										///< Latitude
+	double lon;										///< Longitude
+	int alt;										///< Altitoide
+	
 	BuyNShareConfig();
 	BuyNShareConfig
 	(

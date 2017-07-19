@@ -9,7 +9,7 @@
 
 ![Диаграмма классов](http://f.commandus.com/i/d/diagram-gmm.png#1)
 
-[Сериалиция flatbuffers](https://github.com/commandus/buy-n-share/blob/master/buynshare.fbs)
+Сериализация - описание в файле [flatbuffers](https://github.com/commandus/buy-n-share/blob/master/buynshare.fbs)
 
 ## Аудитория 
 
@@ -83,9 +83,7 @@ Linux клиент команднй строки
 - [curl](https://curl.haxx.se)
 - [flatbuffers](https://github.com/google/flatbuffers)
 
-и компилятор [flatc](https://google.github.io/flatbuffers/flatbuffers_guide_building.html)
-
-который собирается [cmake](https://cmake.org/)
+и компилятор [flatc](https://google.github.io/flatbuffers/flatbuffers_guide_building.html), который собирается [cmake](https://cmake.org/)
 
 ###  Сборка
 

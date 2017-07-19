@@ -5,7 +5,8 @@
 static const char* progname = "buy-n-share";
 
 BuyNShareConfig::BuyNShareConfig()
-	: cmd(CMD_RW), file_name(""), nick_name(""), status_message("")
+	: cmd(CMD_MEAL), user_id(0), user_key(""), cn(""), locale(""),
+	cost(0.0), lat(0.0), lon(0.0), alt(0)
 {
 }
 
@@ -30,17 +31,32 @@ int BuyNShareConfig::parseCmd
 	char* argv[]
 )
 {
-	// GTFS https://developers.google.com/transit/gtfs/reference/?csw=1
-	struct arg_lit *a_print_tox_id = arg_lit0("i", "id", "Print Tox ID");
-	struct arg_str *a_file_name = arg_str0("f", "file", "<file>", "Tox configuration file. Default " DEF_TOX_FILE_NAME);
-	struct arg_str *a_nick_name = arg_str0("n", "name", "<nick name>", "nick name");
-	struct arg_str *a_status_message = arg_str0("s", "status", "<text>", "initial status message");
-	struct arg_str *a_ids_to = arg_strn(NULL, NULL, "<Tox ID>", 0, 100, "Send to clients by TOX identifier");
+	// commands
+	struct arg_lit *a_meal = arg_lit0(NULL, "meal", "print fridge meals");
+	struct arg_lit *a_balance = arg_lit0(NULL, "balance", "print fridge purchase balance by user");
+	struct arg_str *a_add = arg_str0(NULL, "add", "<user|fridge|purchase>", "Add a new object");
+	struct arg_str *a_rm = arg_str0(NULL, "rm", "<user|fridge|purchase>", "Remove an object");
+
+	struct arg_int *a_user_id = arg_int0("i", "id", "<number>", "User identifier");
+	struct arg_str *a_user_key = arg_str1("k", "key", "<secret>", "Password");
+	
+	struct arg_str *a_cn = arg_str0("n", "cn", "<string>", "common name");
+	struct arg_str *a_locale = arg_str0("e", "locale", "<ru|en>", "Locale name");
+	struct arg_dbl *a_cost = arg_dbl0("c", "cost", "<number>", "Cost");
+	struct arg_dbl *a_lat = arg_dbl0("l", "lat", "<number>", "Latitude");
+	struct arg_dbl *a_lon = arg_dbl0("o", "lon", "<number>", "Longitude");
+	struct arg_int *a_alt = arg_int0("a", "alt", "<number>", "Altitude");
 	struct arg_lit *a_help = arg_lit0("h", "help", "Show this help");
 	struct arg_end *a_end = arg_end(20);
 
 	void* argtable[] = { 
-		a_print_tox_id, a_file_name, a_nick_name, a_ids_to, a_status_message,
+		// commands
+		a_meal, a_balance, a_add, a_rm,
+		// identification
+		a_user_id, a_user_key,
+		// options
+		a_cn, a_locale, a_cost, a_lat, a_lon, a_alt,
+		// others
 		a_help, a_end 
 	};
 
@@ -55,35 +71,43 @@ int BuyNShareConfig::parseCmd
 	// Parse the command line as defined by argtable[]
 	nerrors = arg_parse(argc, argv, argtable);
 
-	if (a_print_tox_id->count)
-		cmd = CMD_PRINT_TOX_ID;
-	else
-		cmd = CMD_RW;
-
-	if (cmd == CMD_RW)
+	cmd = CMD_MEAL;
+	if (a_balance->count)
+		cmd = CMD_BALANCE;
+	if (a_add->count)
 	{
-		if (a_ids_to->count == 0)
-		{
-			std::cerr << "Tox ID missed." << std::endl;
-			nerrors++;
-		}
+		if (*a_add->sval == "user")
+			cmd = CMD_ADD_USER;
+		if (*a_add->sval == "fridge")
+			cmd = CMD_ADD_FRIDGE;
+		if (*a_add->sval == "purchase")
+			cmd = CMD_ADD_PURCHASE;
 	}
 
-	if (a_file_name->count)
-		file_name = *a_file_name->sval;
-	else
-		file_name = DEF_TOX_FILE_NAME;
-
-	if (a_nick_name->count)
-		nick_name = *a_nick_name->sval;
-
-	if (a_status_message->count)
-		status_message = *a_status_message->sval;
-
-	for (int i = 0; i < a_ids_to->count; i++)
+	if (a_rm->count)
 	{
-		ids_to.push_back(a_ids_to->sval[i]);
+		if (*a_rm->sval == "user")
+			cmd = CMD_RM_USER;
+		if (*a_rm->sval == "fridge")
+			cmd = CMD_RM_FRIDGE;
+		if (*a_rm->sval == "purchase")
+			cmd = CMD_RM_PURCHASE;
 	}
+
+	if (a_user_id->count)
+		user_id = *a_user_id->ival;
+	if (a_user_key->count)
+		user_key = *a_user_key->sval;
+	if (a_cn->count)
+		cn = *a_cn->sval;
+	if (a_locale->count)
+		locale = *a_locale->sval;
+	if (a_lat->count)
+		lat = *a_lat->dval;
+	if (a_lon->count)
+		lon = *a_lon->dval;
+	if (a_alt->count)
+		alt = *a_alt->ival;
 
 	// special case: '--help' takes precedence over error reporting
 	if ((a_help->count) || nerrors)
