@@ -1,0 +1,50 @@
+/**
+  * buy-n-share options
+  * @file buy-n-share-config.h
+  **/
+
+#ifndef BUY_N_SHARE_CONFIG_H
+#define BUY_N_SHARE_CONFIG_H
+
+#include <string>
+#include <vector>
+
+#define CMD_MEAL			0
+#define CMD_BALANCE			1
+
+/**
+ * Command line interface (CLI) tool configuration structure
+ */
+class BuyNShareConfig
+{
+private:
+	/**
+	* Parse command line into ClitoxConfig class
+	* Return 0- success
+	*        1- show help and exit, or command syntax error
+	*        2- output file does not exists or can not open to write
+	**/
+	int parseCmd
+	(
+		int argc,
+		char* argv[]
+	);
+	int errorcode;
+public:
+	int cmd;
+	uint64_t id;
+	std::string key;								///< Tox file
+	std::string cn;									///< common name
+
+	BuyNShareConfig();
+	BuyNShareConfig
+	(
+		int argc,
+		char* argv[]
+	);
+	int error();
+};
+
+
+
+#endif
