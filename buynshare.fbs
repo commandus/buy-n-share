@@ -31,9 +31,17 @@ table Fridge
 
 table Meal
 {
-	id: ulong;
 	cn: string;
 	locale: string;
+}
+
+table Purchase
+{
+	meal: Meal;
+	cost: uint;
+	start: uint;
+	finish: uint;
+	votes: [uint];	// user identifiers
 }
 
 // relations
@@ -68,15 +76,6 @@ table FridgeUsers
 }
 
 // my purchases
-
-table Purchase
-{
-	meal: Meal;
-	cost: uint;
-	start: uint;
-	finish: uint;
-	votes: [uint];	// user identifiers
-}
 
 table UserPurchases
 {
