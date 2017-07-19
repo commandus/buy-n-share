@@ -2,9 +2,14 @@
 
 Мобильное приложение для управления совместными финансами с долевым участием при покупке еды.
 
+- [Repository git@github.com:commandus/buy-n-share.git](https://github.com/commandus//buy-n-share.git)
+- [Site https://github.com/commandus//buy-n-share](https://github.com/commandus//buy-n-share)
+
 [Диаграмма классов](https://repository.genmymodel.com/commandus/fridge):
 
 ![Диаграмма классов](http://f.commandus.com/i/d/diagram-gmm.png#1)
+
+[Сериалиция flatbuffers](https://github.com/commandus/buy-n-share/blob/master/buynshare.fbs)
 
 ## Аудитория 
 
@@ -65,3 +70,27 @@
 
 - номера Холодильника
 - стартовая сумма взноса (по умолчанию 0)
+
+## CLI клиент
+
+Linux клиент команднй строки
+
+###  Зависимости
+
+Перед сборкой необходимо установить библиотеки:
+
+- [argtable2](http://argtable.sourceforge.net/doc/argtable2.html)
+- [curl](https://curl.haxx.se)
+- [flatbuffers](https://github.com/google/flatbuffers)
+
+и компилятор [flatc](https://google.github.io/flatbuffers/flatbuffers_guide_building.html)
+
+который собирается [cmake](https://cmake.org/)
+
+###  Сборка
+
+```
+./autogen.sh
+./configure
+./make
+```
