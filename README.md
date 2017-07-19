@@ -4,7 +4,7 @@
 
 [Диаграмма классов](https://repository.genmymodel.com/commandus/fridge):
 
-![Диаграмма классов](http://f.commandus.com/i/d/diagram-gmm.png)
+![Диаграмма классов](http://f.commandus.com/i/d/diagram-gmm.png#1)
 
 ## Аудитория 
 
