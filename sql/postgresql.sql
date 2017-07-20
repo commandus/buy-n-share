@@ -30,7 +30,7 @@ CREATE TABLE fridge (
 );
 
 
-ALTER TABLE public.fridge OWNER TO commandu;
+ALTER TABLE public.fridge OWNER TO commandus_buynshare1;
 
 --
 -- Name: fridge_id_seq; Type: SEQUENCE; Schema: public; Owner: commandu
@@ -44,7 +44,7 @@ CREATE SEQUENCE fridge_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.fridge_id_seq OWNER TO commandu;
+ALTER TABLE public.fridge_id_seq OWNER TO commandus_buynshare1;
 
 --
 -- Name: fridge_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: commandu
@@ -67,7 +67,7 @@ CREATE TABLE fridgeuser (
 );
 
 
-ALTER TABLE public.fridgeuser OWNER TO commandu;
+ALTER TABLE public.fridgeuser OWNER TO commandus_buynshare1;
 
 --
 -- Name: fridgeuser_fridge_id_seq; Type: SEQUENCE; Schema: public; Owner: commandu
@@ -81,7 +81,7 @@ CREATE SEQUENCE fridgeuser_fridge_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.fridgeuser_fridge_id_seq OWNER TO commandu;
+ALTER TABLE public.fridgeuser_fridge_id_seq OWNER TO commandus_buynshare1;
 
 --
 -- Name: fridgeuser_fridge_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: commandu
@@ -102,7 +102,7 @@ CREATE SEQUENCE fridgeuser_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.fridgeuser_id_seq OWNER TO commandu;
+ALTER TABLE public.fridgeuser_id_seq OWNER TO commandus_buynshare1;
 
 --
 -- Name: fridgeuser_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: commandu
@@ -123,7 +123,7 @@ CREATE SEQUENCE fridgeuser_user_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.fridgeuser_user_id_seq OWNER TO commandu;
+ALTER TABLE public.fridgeuser_user_id_seq OWNER TO commandus_buynshare1;
 
 --
 -- Name: fridgeuser_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: commandu
@@ -143,7 +143,7 @@ CREATE TABLE meal (
 );
 
 
-ALTER TABLE public.meal OWNER TO commandu;
+ALTER TABLE public.meal OWNER TO commandus_buynshare1;
 
 --
 -- Name: meal_id_seq; Type: SEQUENCE; Schema: public; Owner: commandu
@@ -157,7 +157,7 @@ CREATE SEQUENCE meal_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.meal_id_seq OWNER TO commandu;
+ALTER TABLE public.meal_id_seq OWNER TO commandus_buynshare1;
 
 --
 -- Name: meal_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: commandu
@@ -178,7 +178,7 @@ CREATE TABLE mealcard (
 );
 
 
-ALTER TABLE public.mealcard OWNER TO commandu;
+ALTER TABLE public.mealcard OWNER TO commandus_buynshare1;
 
 --
 -- Name: mealcard_fridge_id_seq; Type: SEQUENCE; Schema: public; Owner: commandu
@@ -192,7 +192,7 @@ CREATE SEQUENCE mealcard_fridge_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.mealcard_fridge_id_seq OWNER TO commandu;
+ALTER TABLE public.mealcard_fridge_id_seq OWNER TO commandus_buynshare1;
 
 --
 -- Name: mealcard_fridge_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: commandu
@@ -213,7 +213,7 @@ CREATE SEQUENCE mealcard_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.mealcard_id_seq OWNER TO commandu;
+ALTER TABLE public.mealcard_id_seq OWNER TO commandus_buynshare1;
 
 --
 -- Name: mealcard_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: commandu
@@ -234,7 +234,7 @@ CREATE SEQUENCE mealcard_user_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.mealcard_user_id_seq OWNER TO commandu;
+ALTER TABLE public.mealcard_user_id_seq OWNER TO commandus_buynshare1;
 
 --
 -- Name: mealcard_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: commandu
@@ -258,7 +258,7 @@ CREATE TABLE purchase (
 );
 
 
-ALTER TABLE public.purchase OWNER TO commandu;
+ALTER TABLE public.purchase OWNER TO commandus_buynshare1;
 
 --
 -- Name: purchase_fridge_id_seq; Type: SEQUENCE; Schema: public; Owner: commandu
@@ -272,7 +272,7 @@ CREATE SEQUENCE purchase_fridge_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.purchase_fridge_id_seq OWNER TO commandu;
+ALTER TABLE public.purchase_fridge_id_seq OWNER TO commandus_buynshare1;
 
 --
 -- Name: purchase_fridge_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: commandu
@@ -293,7 +293,7 @@ CREATE SEQUENCE purchase_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.purchase_id_seq OWNER TO commandu;
+ALTER TABLE public.purchase_id_seq OWNER TO commandus_buynshare1;
 
 --
 -- Name: purchase_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: commandu
@@ -314,7 +314,7 @@ CREATE SEQUENCE purchase_meal_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.purchase_meal_id_seq OWNER TO commandu;
+ALTER TABLE public.purchase_meal_id_seq OWNER TO commandus_buynshare1;
 
 --
 -- Name: purchase_meal_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: commandu
@@ -335,7 +335,7 @@ CREATE SEQUENCE purchase_user_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.purchase_user_id_seq OWNER TO commandu;
+ALTER TABLE public.purchase_user_id_seq OWNER TO commandus_buynshare1;
 
 --
 -- Name: purchase_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: commandu
@@ -359,7 +359,7 @@ CREATE TABLE "user" (
 );
 
 
-ALTER TABLE public."user" OWNER TO commandu;
+ALTER TABLE public."user" OWNER TO commandus_buynshare1;
 
 --
 -- Name: user_id_seq; Type: SEQUENCE; Schema: public; Owner: commandu
@@ -373,7 +373,7 @@ CREATE SEQUENCE user_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.user_id_seq OWNER TO commandu;
+ALTER TABLE public.user_id_seq OWNER TO commandus_buynshare1;
 
 --
 -- Name: user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: commandu
@@ -394,7 +394,7 @@ CREATE TABLE vote (
 );
 
 
-ALTER TABLE public.vote OWNER TO commandu;
+ALTER TABLE public.vote OWNER TO commandus_buynshare1;
 
 --
 -- Name: vote_id_seq; Type: SEQUENCE; Schema: public; Owner: commandu
@@ -408,7 +408,7 @@ CREATE SEQUENCE vote_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.vote_id_seq OWNER TO commandu;
+ALTER TABLE public.vote_id_seq OWNER TO commandus_buynshare1;
 
 --
 -- Name: vote_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: commandu
@@ -429,7 +429,7 @@ CREATE SEQUENCE vote_purchase_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.vote_purchase_id_seq OWNER TO commandu;
+ALTER TABLE public.vote_purchase_id_seq OWNER TO commandus_buynshare1;
 
 --
 -- Name: vote_purchase_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: commandu
@@ -450,7 +450,7 @@ CREATE SEQUENCE vote_user_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.vote_user_id_seq OWNER TO commandu;
+ALTER TABLE public.vote_user_id_seq OWNER TO commandus_buynshare1;
 
 --
 -- Name: vote_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: commandu
