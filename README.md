@@ -92,3 +92,31 @@ Linux клиент команднй строки
 ./configure
 ./make
 ```
+
+### База данных
+
+Заходим пользователем postgres
+
+```
+sudo su - postgres
+```
+
+Создаем пользователя, вводим пвроль:
+```
+createuser commandus_buynshare1 -W
+Password: 
+```
+
+Создаем базу данных с новым владедельцем:
+```
+psql
+CREATE DATABASE commandus_buynshare WITH OWNER = commandus_buynshare1 ENCODING = 'UTF8';
+# Если надо, даем права кому нибудь еще
+GRANT commandus_buynshare1 TO somebody;
+\q
+```
+
+Выходим из сессии postgres
+```
+exit
+```
