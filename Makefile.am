@@ -27,7 +27,7 @@ CLEANFILES =
 #
 bin_PROGRAMS=buy-n-share
 nobase_dist_include_HEADERS = \
-	buy-n-share.h buy-n-share-config.h 
+	buy-n-share.h buy-n-share-config.h fbclient.h
 
 common_src = 
 
@@ -37,7 +37,7 @@ commonlibs = -L/usr/local/lib/ -largtable2 -lcurl
 #	buy_n_share
 #
 buy_n_share_SOURCES= \
-	buy-n-share-config.cpp  buy-n-share.cpp \
+	buy-n-share-config.cpp  buy-n-share.cpp fbclient.cpp \
 	$(common_src)
 
 buy_n_share_LDADD = $(commonlibs)

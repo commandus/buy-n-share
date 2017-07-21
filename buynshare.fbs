@@ -102,4 +102,16 @@ table UserFridges
 	users: [FridgeUsers];
 }
 
+root_type User;
+/*
+root_type Fridge;
+root_type Meal;
+root_type Purchase;
+root_type MealCard;
+root_type FridgeMealCards;
+root_type FridgeUser;
+root_type FridgeUsers;
+root_type UserPurchases;
+root_type FridgePurchases;
 root_type UserFridges;
+*/

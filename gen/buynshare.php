@@ -18,6 +18,8 @@ require "bs/Meal.php";
 require "bs/UserFridges.php";
 require "bs/UserPurchases.php";
 
+require "env.php";
+
 // https://stackoverflow.com/questions/4356289/php-random-string-generator
 function generateRandomString($length = 10) 
 {
@@ -29,16 +31,6 @@ function generateRandomString($length = 10)
 		$randomString .= $characters[rand(0, $charactersLength - 1)];
 	}
 	return $randomString;
-}
-
-function init()
-{
-	return pg_connect("host=localhost dbname=commandus_buynshare user=commandus_buynshare1 password=gjregfirf2017");
-}
-
-function done($conn)
-{
-	pg_close($conn);
 }
 
 function fb_user(
