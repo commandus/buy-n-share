@@ -40,8 +40,8 @@ private:
 	int errorcode;
 public:
 	int cmd;
-	uint64_t user_id;
-	std::string user_key;							///< password
+	uint64_t id;
+	std::string key;								///< password
 	std::string cn;									///< common name
 	std::string locale;								///< Locale name
 	double cost;									///< Cost

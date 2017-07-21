@@ -1,11 +1,12 @@
 #include "buy-n-share-config.h"
 #include <iostream>
+#include <cstring>
 #include <argtable2.h>
 
 static const char* progname = "buy-n-share";
 
 BuyNShareConfig::BuyNShareConfig()
-	: cmd(CMD_MEAL), user_id(0), user_key(""), cn(""), locale(""),
+	: cmd(CMD_MEAL), id(0), key(""), cn(""), locale(""),
 	cost(0.0), lat(0.0), lon(0.0), alt(0)
 {
 }
@@ -38,7 +39,7 @@ int BuyNShareConfig::parseCmd
 	struct arg_str *a_rm = arg_str0(NULL, "rm", "<user|fridge|purchase>", "Remove an object");
 
 	struct arg_int *a_user_id = arg_int0("i", "id", "<number>", "User identifier");
-	struct arg_str *a_user_key = arg_str1("k", "key", "<secret>", "Password");
+	struct arg_str *a_user_key = arg_str0("k", "key", "<secret>", "Password");
 	
 	struct arg_str *a_cn = arg_str0("n", "cn", "<string>", "common name");
 	struct arg_str *a_locale = arg_str0("e", "locale", "<ru|en>", "Locale name");
@@ -76,28 +77,28 @@ int BuyNShareConfig::parseCmd
 		cmd = CMD_BALANCE;
 	if (a_add->count)
 	{
-		if (*a_add->sval == "user")
+		if (strcmp(*a_add->sval, "user") == 0)
 			cmd = CMD_ADD_USER;
-		if (*a_add->sval == "fridge")
+		if (strcmp(*a_add->sval, "fridge") == 0)
 			cmd = CMD_ADD_FRIDGE;
-		if (*a_add->sval == "purchase")
+		if (strcmp(*a_add->sval, "purchase") == 0)
 			cmd = CMD_ADD_PURCHASE;
 	}
 
 	if (a_rm->count)
 	{
-		if (*a_rm->sval == "user")
+		if (strcmp(*a_rm->sval, "user") == 0)
 			cmd = CMD_RM_USER;
-		if (*a_rm->sval == "fridge")
+		if (strcmp(*a_rm->sval, "fridge") == 0)
 			cmd = CMD_RM_FRIDGE;
-		if (*a_rm->sval == "purchase")
+		if (strcmp(*a_rm->sval, "purchase") == 0)
 			cmd = CMD_RM_PURCHASE;
 	}
 
 	if (a_user_id->count)
-		user_id = *a_user_id->ival;
+		id = *a_user_id->ival;
 	if (a_user_key->count)
-		user_key = *a_user_key->sval;
+		key = *a_user_key->sval;
 	if (a_cn->count)
 		cn = *a_cn->sval;
 	if (a_locale->count)

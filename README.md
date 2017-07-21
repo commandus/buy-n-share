@@ -107,12 +107,14 @@ createuser commandus_buynshare1 -W
 Password: 
 ```
 
-Создаем базу данных с новым владедельцем:
+Создаем базу данных с новым владельцем:
 ```
 psql
 CREATE DATABASE commandus_buynshare WITH OWNER = commandus_buynshare1 ENCODING = 'UTF8';
 # Если надо, даем права кому нибудь еще
-GRANT commandus_buynshare1 TO somebody;
+# GRANT commandu_buynshare TO somebody;
+grant all on schema public to commandu_buynshare1;
+grant all on schema public to commandu_buynshare2;
 \q
 ```
 
