@@ -4,6 +4,10 @@
 #include <string> 
 #include <curl/curl.h>
 
+#include "user_generated.h"
+
+using namespace bs;
+
 class FBClient
 {
 public:
@@ -22,7 +26,7 @@ protected:
 public:
 	FBClient();
 	~FBClient();
-	int add_user(
+	const User *add_user(
 		std::string &cn,
 		std::string &key,
 		std::string &locale,

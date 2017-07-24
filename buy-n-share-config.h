@@ -14,11 +14,13 @@
 
 #define CMD_ADD_USER		10
 #define CMD_ADD_FRIDGE		11
-#define CMD_ADD_PURCHASE	12
+#define CMD_ADD_FRIDGE_USER	12
+#define CMD_ADD_PURCHASE	13
 
 #define CMD_RM_USER			20
 #define CMD_RM_FRIDGE		21
-#define CMD_RM_PURCHASE		22
+#define CMD_RM_FRIDGE_USER	22
+#define CMD_RM_PURCHASE		23
 
 /**
  * Command line interface (CLI) tool configuration structure

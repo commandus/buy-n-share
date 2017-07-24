@@ -35,8 +35,8 @@ int BuyNShareConfig::parseCmd
 	// commands
 	struct arg_lit *a_meal = arg_lit0(NULL, "meal", "print fridge meals");
 	struct arg_lit *a_balance = arg_lit0(NULL, "balance", "print fridge purchase balance by user");
-	struct arg_str *a_add = arg_str0(NULL, "add", "<user|fridge|purchase>", "Add a new object");
-	struct arg_str *a_rm = arg_str0(NULL, "rm", "<user|fridge|purchase>", "Remove an object");
+	struct arg_str *a_add = arg_str0(NULL, "add", "<user|fridge|fridgeuser|purchase>", "Add a new object");
+	struct arg_str *a_rm = arg_str0(NULL, "rm", "<user|fridge|fridgeuser|purchase>", "Remove an object");
 
 	struct arg_int *a_user_id = arg_int0("i", "id", "<number>", "User identifier");
 	struct arg_str *a_user_key = arg_str0("k", "key", "<secret>", "Password");
@@ -81,6 +81,8 @@ int BuyNShareConfig::parseCmd
 			cmd = CMD_ADD_USER;
 		if (strcmp(*a_add->sval, "fridge") == 0)
 			cmd = CMD_ADD_FRIDGE;
+		if (strcmp(*a_add->sval, "fridgeuser") == 0)
+			cmd = CMD_ADD_FRIDGE_USER;
 		if (strcmp(*a_add->sval, "purchase") == 0)
 			cmd = CMD_ADD_PURCHASE;
 	}
@@ -91,6 +93,8 @@ int BuyNShareConfig::parseCmd
 			cmd = CMD_RM_USER;
 		if (strcmp(*a_rm->sval, "fridge") == 0)
 			cmd = CMD_RM_FRIDGE;
+		if (strcmp(*a_add->sval, "fridgeuser") == 0)
+			cmd = CMD_RM_FRIDGE_USER;
 		if (strcmp(*a_rm->sval, "purchase") == 0)
 			cmd = CMD_RM_PURCHASE;
 	}

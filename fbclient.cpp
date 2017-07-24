@@ -5,10 +5,8 @@
 #include <cstring>
 #include <curl/curl.h>
 #include "flatbuffers/flatbuffers.h"
-#include "buynshare_generated.h"
 
 using namespace flatbuffers;
-using namespace bs;
 
 FBClient::FBClient()
 	: url("https://f.commandus.com/a/"), code(CURLE_OK)
@@ -89,7 +87,7 @@ CURL *FBClient::postCurlUrl
 	return curl;
 }
 
-int FBClient::add_user
+const User *FBClient::add_user
 (
 	std::string &cn,
 	std::string &key,
@@ -99,6 +97,8 @@ int FBClient::add_user
 	int alt
 )
 {
+	const User *ret_user;
+	
 	FlatBufferBuilder fbb;
 	Offset<String> scn = fbb.CreateString(cn);
 	Offset<String> skey = fbb.CreateString(key);
@@ -113,11 +113,9 @@ int FBClient::add_user
 
 	code = curl_easy_perform(curl);
 	if (code == CURLE_OK)
-	{
-		std::cerr << retval.size() << std::endl;
-		const User *u = GetUser(retval.c_str());
-		std::cerr << u->id() << " " << u->cn()->str() << " " << u->key()->str() << " " << u->geo()->lat() << " " << u->geo()->lon() << " " << u->geo()->alt() << std::endl;
-	}
+		ret_user = GetUser(retval.c_str());
+	else
+		ret_user = NULL;
 	curl_easy_cleanup(curl);
-	return 0;
+	return ret_user;
 }
