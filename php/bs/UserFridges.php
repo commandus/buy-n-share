@@ -187,9 +187,4 @@ class UserFridges extends Table
         $o = $builder->endObject();
         return $o;
     }
-
-    public static function finishUserFridgesBuffer(FlatBufferBuilder $builder, $offset)
-    {
-        $builder->finish($offset);
-    }
 }

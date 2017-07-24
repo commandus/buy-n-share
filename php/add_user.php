@@ -1,33 +1,33 @@
 <?php
 require "buynshare.php";
 
-$cn = 'Аааа';
-$key = generateRandomString();
-$locale = 'ru';
-$lat = 62.024785;
-$lon = 129.7234323;
-$alt = 509;
+// Read user
+$bb = Google\FlatBuffers\ByteBuffer::wrap(file_get_contents('php://input'));
+$u = bs\User::getRootAsUser($bb);
 
+	print $u->getId() . " " .  . " " .  . " " . $u->getLocale() . " " . $u->getGeo()->getLat() . " " . $u->getGeo()->getLon() . " " . $u->getGeo()->getAlt();
 
+// Create  a new user
 $id = add_user(
-  $cn,
-  $key,
-  $locale,
-  $lat,
-  $lon,
-  $alt
+  $u->getCn(),
+  $u->getKey(),
+  $u->getLocale(),
+  $u->getGeo()->getLat(),
+  $u->getGeo()->getLon(),
+  $u->getGeo()->getAlt()
 );
 
-$r = fb_user(
+
+// Return id, key
+header('Content-Type: application/octet-stream');
+echo fb_user(
   $id,
-  $cn,
-  $key,
-  $locale,
-  $lat,
-  $lon,
-  $alt
+  $u->getCn(),
+  $u->getKey(),
+  $u->getLocale(),
+  $u->getGeo()->getLat(),
+  $u->getGeo()->getLon(),
+  $u->getGeo()->getAlt()
 );
-
-echo $r;
 
 ?>

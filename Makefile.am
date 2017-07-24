@@ -11,19 +11,24 @@ endif
 #	Generate flatc
 #
 fbs = \
-	fbs/user.fbs fbs/fridge.fbs fbs/meal.fbs fbs/purchase.fbs fbs/mealcard.fbs \
-	fbs/fridgemealcards.fbs fbs/fridgeuser.fbs fbs/fridgeusers.fbs fbs/userfridges.fbs \
+	fbs/buynshare.fbs fbs/user.fbs fbs/fridge.fbs fbs/meal.fbs fbs/purchase.fbs \
+	fbs/mealcard.fbs fbs/fridgemealcards.fbs fbs/fridgeuser.fbs fbs/fridgeusers.fbs fbs/userfridges.fbs \
 	fbs/fridgepurchases.fbs fbs/userpurchases.fbs
 gen = gen/buynshare_generated.h
 $(gen): Makefile
-	echo "flatbuffers"
+	mkdir -p gen
 	flatc --cpp -o gen $(fbs)
+
+gen_php = php/buynshare.php
+$(gen_php): Makefile
+	mkdir -p php
+	flatc --php -o php $(fbs)
 
 #
 #	Exclude generated sources from distribution
 #
-nodist_buy_n_share_SOURCES = $(gen)
-BUILT_SOURCES = $(gen)
+nodist_buy_n_share_SOURCES = $(gen) $(gen_php)
+BUILT_SOURCES = $(gen) $(gen_php)
 CLEANFILES =
 
 #
