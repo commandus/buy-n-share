@@ -121,7 +121,7 @@ int BuyNShareConfig::parseCmd
 			arg_print_errors(stderr, a_end, progname);
 		std::cerr << "Usage: " << progname << std::endl;
 		arg_print_syntax(stderr, argtable, "\n");
-		std::cerr << "Simplest Tox CLI client" << std::endl;
+		std::cerr << "buy-n-share CLI client" << std::endl;
 		arg_print_glossary(stderr, argtable, "  %-25s %s\n");
 		arg_freetable(argtable, sizeof(argtable) / sizeof(argtable[0]));
 		return 1;
