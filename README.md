@@ -122,3 +122,21 @@ grant all on schema public to commandu_buynshare2;
 ```
 exit
 ```
+
+## Building Windows usimg Visual Studio 2017
+
+- cmake 
+- argtable2
+- flatbuffers 
+- curl
+
+### flatbuffers 
+
+```
+git clone git@github.com:google/flatbuffers.git
+cmake -G "Visual Studio 15"
+
+```
+
+### Curl 
+Install-Package curl

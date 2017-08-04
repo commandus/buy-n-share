@@ -5,7 +5,7 @@ require "buynshare.php";
 $bb = Google\FlatBuffers\ByteBuffer::wrap(file_get_contents('php://input'));
 $u = bs\User::getRootAsUser($bb);
 
-	print $u->getId() . " " .  . " " .  . " " . $u->getLocale() . " " . $u->getGeo()->getLat() . " " . $u->getGeo()->getLon() . " " . $u->getGeo()->getAlt();
+// print $u->getId() . " " . $u->getLocale() . " " . $u->getGeo()->getLat() . " " . $u->getGeo()->getLon() . " " . $u->getGeo()->getAlt();
 
 // Create  a new user
 $id = add_user(
