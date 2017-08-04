@@ -1,9 +1,12 @@
 #ifndef FBCLIENT_H
 #define FBCLIENT_H
 
+#ifdef _WIN32
+#define NOMINMAX
+#endif
+
 #include <string> 
 #include <curl/curl.h>
-
 #include "user_generated.h"
 
 using namespace bs;

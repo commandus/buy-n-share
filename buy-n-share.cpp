@@ -27,9 +27,16 @@ int main(int argc, char** argv)
 		case CMD_ADD_USER:
 			{
 				const User *u = cli.add_user(config.cn, config.key, config.locale, config.lat, config.lon, config.alt);
-				config.id = u->id();
-				config.key = u->key()->str();
-				std::cout << u->id() << "\t" << u->key()->str() << std::endl;
+				if (u)
+				{
+					config.id = u->id();
+					config.key = u->key()->str();
+					std::cout << u->id() << "\t" << u->key()->str() << std::endl;
+				}
+				else
+				{
+					std::cerr << "Error add user" << std::endl;
+				}
 			}
 			break;
 		default:

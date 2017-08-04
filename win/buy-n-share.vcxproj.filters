@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+    <Filter Include="fbs">
+      <UniqueIdentifier>{25abc0db-aec6-4499-854d-6129a7a73ad4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gen">
+      <UniqueIdentifier>{4e601864-946b-4d86-b9e9-58f2a4e78777}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="doc">
+      <UniqueIdentifier>{34657c75-b8b7-4c0e-a21b-45acd3622e12}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\buy-n-share-config.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\buy-n-share.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\fbclient.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\buy-n-share-config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\buy-n-share.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\fbclient.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gen\buynshare_generated.h">
+      <Filter>gen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gen\fridge_generated.h">
+      <Filter>gen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gen\fridgemealcards_generated.h">
+      <Filter>gen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gen\fridgepurchases_generated.h">
+      <Filter>gen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gen\fridgeuser_generated.h">
+      <Filter>gen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gen\fridgeusers_generated.h">
+      <Filter>gen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gen\meal_generated.h">
+      <Filter>gen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gen\mealcard_generated.h">
+      <Filter>gen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gen\purchase_generated.h">
+      <Filter>gen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gen\user_generated.h">
+      <Filter>gen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gen\userfridges_generated.h">
+      <Filter>gen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gen\userpurchases_generated.h">
+      <Filter>gen</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\fbs\buynshare.fbs">
+      <Filter>fbs</Filter>
+    </None>
+    <None Include="..\fbs\fridge.fbs">
+      <Filter>fbs</Filter>
+    </None>
+    <None Include="..\fbs\fridgemealcards.fbs">
+      <Filter>fbs</Filter>
+    </None>
+    <None Include="..\fbs\fridgepurchases.fbs">
+      <Filter>fbs</Filter>
+    </None>
+    <None Include="..\fbs\fridgeuser.fbs">
+      <Filter>fbs</Filter>
+    </None>
+    <None Include="..\fbs\fridgeusers.fbs">
+      <Filter>fbs</Filter>
+    </None>
+    <None Include="..\fbs\meal.fbs">
+      <Filter>fbs</Filter>
+    </None>
+    <None Include="..\fbs\mealcard.fbs">
+      <Filter>fbs</Filter>
+    </None>
+    <None Include="..\fbs\purchase.fbs">
+      <Filter>fbs</Filter>
+    </None>
+    <None Include="..\fbs\user.fbs">
+      <Filter>fbs</Filter>
+    </None>
+    <None Include="..\fbs\userfridges.fbs">
+      <Filter>fbs</Filter>
+    </None>
+    <None Include="..\fbs\userpurchases.fbs">
+      <Filter>fbs</Filter>
+    </None>
+    <None Include="..\README.md">
+      <Filter>doc</Filter>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+</Project>

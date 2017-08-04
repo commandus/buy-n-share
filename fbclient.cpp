@@ -1,15 +1,14 @@
 #include "fbclient.h"
-
 #include <iostream>
 #include <sstream>
 #include <cstring>
 #include <curl/curl.h>
-#include "flatbuffers/flatbuffers.h"
+#include <flatbuffers/flatbuffers.h>
 
 using namespace flatbuffers;
 
 FBClient::FBClient()
-	: url("https://f.commandus.com/a/"), code(CURLE_OK)
+	: url("http://f.commandus.com/a/"), code(CURLE_OK)
 {
 	curl_global_init(CURL_GLOBAL_DEFAULT);
 }
