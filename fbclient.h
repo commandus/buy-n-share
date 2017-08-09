@@ -1,6 +1,11 @@
 #ifndef FBCLIENT_H
 #define FBCLIENT_H
 
+#ifdef _WIN32
+// @see https://stackoverflow.com/questions/2789481/problem-calling-stdmax
+#define NOMINMAX
+#endif
+
 #include <string> 
 #include <curl/curl.h>
 

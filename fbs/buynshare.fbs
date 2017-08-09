@@ -101,3 +101,8 @@ table UserFridges
 	mealcards: [FridgeMealCards];
 	users: [FridgeUsers];
 }
+
+table Users
+{
+	users: [User];
+}

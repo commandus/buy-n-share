@@ -1,5 +1,4 @@
 #include "fbclient.h"
-
 #include <iostream>
 #include <sstream>
 #include <cstring>

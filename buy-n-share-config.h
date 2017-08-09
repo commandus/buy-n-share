@@ -22,6 +22,11 @@
 #define CMD_RM_FRIDGE_USER	22
 #define CMD_RM_PURCHASE		23
 
+#define CMD_LS_USER			30
+#define CMD_LS_FRIDGE		31
+#define CMD_LS_FRIDGE_USER	32
+#define CMD_LS_PURCHASE		33
+
 /**
  * Command line interface (CLI) tool configuration structure
  */

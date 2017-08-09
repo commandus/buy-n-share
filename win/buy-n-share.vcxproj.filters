@@ -83,6 +83,9 @@
     <ClInclude Include="..\gen\userpurchases_generated.h">
       <Filter>gen</Filter>
     </ClInclude>
+    <ClInclude Include="..\gen\users_generated.h">
+      <Filter>gen</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\fbs\buynshare.fbs">

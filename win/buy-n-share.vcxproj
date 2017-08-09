@@ -128,6 +128,7 @@
     <ClInclude Include="..\gen\purchase_generated.h" />
     <ClInclude Include="..\gen\userfridges_generated.h" />
     <ClInclude Include="..\gen\userpurchases_generated.h" />
+    <ClInclude Include="..\gen\users_generated.h" />
     <ClInclude Include="..\gen\user_generated.h" />
   </ItemGroup>
   <ItemGroup>
