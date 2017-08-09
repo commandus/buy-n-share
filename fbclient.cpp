@@ -1,14 +1,15 @@
 #include "fbclient.h"
+
 #include <iostream>
 #include <sstream>
 #include <cstring>
 #include <curl/curl.h>
-#include <flatbuffers/flatbuffers.h>
+#include "flatbuffers/flatbuffers.h"
 
 using namespace flatbuffers;
 
 FBClient::FBClient()
-	: url("http://f.commandus.com/a/"), code(CURLE_OK)
+	: url("https://f.commandus.com/a/"), code(CURLE_OK)
 {
 	curl_global_init(CURL_GLOBAL_DEFAULT);
 }
@@ -81,8 +82,11 @@ CURL *FBClient::postCurlUrl
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_string);
 	curl_easy_setopt(curl, CURLOPT_WRITEDATA, &retval);
   
-	curl_easy_setopt(curl, CURLOPT_POSTFIELDS, data);
-	curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, size);
+	if ((data != NULL) && (size > 0))
+	{
+		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, data);
+		curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, size);
+	}
 	return curl;
 }
 
@@ -117,4 +121,24 @@ const User *FBClient::add_user
 		ret_user = NULL;
 	curl_easy_cleanup(curl);
 	return ret_user;
+}
+
+const Users *FBClient::ls_user
+(
+	const std::string &locale
+)
+{
+	const Users *ret_users;
+	
+	CURL *curl = postCurlUrl(url + "ls_user.php", NULL, 0);
+	if (!curl)
+		return 0;
+
+	code = curl_easy_perform(curl);
+	if (code == CURLE_OK)
+		ret_users = GetUsers(retval.c_str());
+	else
+		ret_users = NULL;
+	curl_easy_cleanup(curl);
+	return ret_users;
 }

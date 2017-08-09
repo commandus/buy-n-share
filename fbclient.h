@@ -1,13 +1,11 @@
 #ifndef FBCLIENT_H
 #define FBCLIENT_H
 
-#ifdef _WIN32
-#define NOMINMAX
-#endif
-
 #include <string> 
 #include <curl/curl.h>
+
 #include "user_generated.h"
+#include "users_generated.h"
 
 using namespace bs;
 
@@ -29,7 +27,8 @@ protected:
 public:
 	FBClient();
 	~FBClient();
-	const User *add_user(
+	const User *add_user
+	(
 		std::string &cn,
 		std::string &key,
 		std::string &locale,
@@ -37,6 +36,12 @@ public:
 		double lon,
 		int alt
 	);
+
+	const Users *ls_user
+	(
+		const std::string &locale
+	);
+	
 };
 
 #endif // FBCLIENT_H

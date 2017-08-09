@@ -3,7 +3,18 @@ require "buynshare.php";
 
 // Read user
 $bb = Google\FlatBuffers\ByteBuffer::wrap(file_get_contents('php://input'));
-$u = bs\User::getRootAsUser($bb);
+
+try
+{
+	$u = bs\User::getRootAsUser($bb);
+}
+	catch(Exception $e) 
+{
+	header('Content-Type: text/plain');
+	echo "Error: no user\n";
+	return;
+}
+
 
 // print $u->getId() . " " . $u->getLocale() . " " . $u->getGeo()->getLat() . " " . $u->getGeo()->getLon() . " " . $u->getGeo()->getAlt();
 
@@ -16,7 +27,6 @@ $id = add_user(
   $u->getGeo()->getLon(),
   $u->getGeo()->getAlt()
 );
-
 
 // Return id, key
 header('Content-Type: application/octet-stream');
