@@ -2,6 +2,7 @@
 require "buynshare.php";
 
 // Read user
+/*
 $bb = Google\FlatBuffers\ByteBuffer::wrap(file_get_contents('php://input'));
 
 try
@@ -10,12 +11,13 @@ try
 }
 	catch(Exception $e) 
 {
+	http_response_code(500);
 	header('Content-Type: text/plain');
 	echo "Error: no user\n";
 	return;
 }
 
-
+*/
 // print $u->getId() . " " . $u->getLocale() . " " . $u->getGeo()->getLat() . " " . $u->getGeo()->getLon() . " " . $u->getGeo()->getAlt();
 
 // Create  a new user

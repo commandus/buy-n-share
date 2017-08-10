@@ -3,10 +3,12 @@
 #include <cstring>
 #include <argtable2.h>
 
+#define DEF_BASE_URL "https://f.commandus.com/a/"
+
 static const char* progname = "buy-n-share";
 
 BuyNShareConfig::BuyNShareConfig()
-	: cmd(CMD_MEAL), id(0), key(""), cn(""), locale(""),
+	: base_url(DEF_BASE_URL), cmd(CMD_NONE), id(0), key(""), cn(""), locale(""),
 	cost(0.0), lat(0.0), lon(0.0), alt(0)
 {
 }
@@ -32,11 +34,13 @@ int BuyNShareConfig::parseCmd
 	char* argv[]
 )
 {
+	struct arg_str *a_base_url = arg_str0("u", "url", "<URL>", "Default " DEF_BASE_URL);
 	// commands
 	struct arg_lit *a_meal = arg_lit0(NULL, "meal", "print fridge meals");
 	struct arg_lit *a_balance = arg_lit0(NULL, "balance", "print fridge purchase balance by user");
 	struct arg_str *a_add = arg_str0(NULL, "add", "<user|fridge|fridgeuser|purchase>", "Add a new object");
 	struct arg_str *a_rm = arg_str0(NULL, "rm", "<user|fridge|fridgeuser|purchase>", "Remove an object");
+	struct arg_str *a_ls = arg_str0(NULL, "ls", "<user|fridge|fridgeuser|purchase>", "List");
 
 	struct arg_int *a_user_id = arg_int0("i", "id", "<number>", "User identifier");
 	struct arg_str *a_user_key = arg_str0("k", "key", "<secret>", "Password");
@@ -51,8 +55,9 @@ int BuyNShareConfig::parseCmd
 	struct arg_end *a_end = arg_end(20);
 
 	void* argtable[] = { 
+		a_base_url,
 		// commands
-		a_meal, a_balance, a_add, a_rm,
+		a_meal, a_balance, a_add, a_rm, a_ls,
 		// identification
 		a_user_id, a_user_key,
 		// options
@@ -72,7 +77,12 @@ int BuyNShareConfig::parseCmd
 	// Parse the command line as defined by argtable[]
 	nerrors = arg_parse(argc, argv, argtable);
 
-	cmd = CMD_MEAL;
+	if (a_base_url->count)
+		base_url = *a_base_url->sval;
+	else
+		base_url = DEF_BASE_URL;
+
+	cmd = CMD_NONE;
 	if (a_balance->count)
 		cmd = CMD_BALANCE;
 	if (a_add->count)
@@ -93,10 +103,22 @@ int BuyNShareConfig::parseCmd
 			cmd = CMD_RM_USER;
 		if (strcmp(*a_rm->sval, "fridge") == 0)
 			cmd = CMD_RM_FRIDGE;
-		if (strcmp(*a_add->sval, "fridgeuser") == 0)
+		if (strcmp(*a_rm->sval, "fridgeuser") == 0)
 			cmd = CMD_RM_FRIDGE_USER;
 		if (strcmp(*a_rm->sval, "purchase") == 0)
 			cmd = CMD_RM_PURCHASE;
+	}
+
+	if (a_ls->count)
+	{
+		if (strcmp(*a_ls->sval, "user") == 0)
+			cmd = CMD_LS_USER;
+		if (strcmp(*a_ls->sval, "fridge") == 0)
+			cmd = CMD_LS_FRIDGE;
+		if (strcmp(*a_ls->sval, "fridgeuser") == 0)
+			cmd = CMD_LS_FRIDGE_USER;
+		if (strcmp(*a_ls->sval, "purchase") == 0)
+			cmd = CMD_LS_PURCHASE;
 	}
 
 	if (a_user_id->count)
@@ -113,6 +135,12 @@ int BuyNShareConfig::parseCmd
 		lon = *a_lon->dval;
 	if (a_alt->count)
 		alt = *a_alt->ival;
+
+	if (cmd == CMD_NONE)
+	{
+		std::cerr << "Error: no command"<< std::endl;
+		nerrors++;
+	}
 
 	// special case: '--help' takes precedence over error reporting
 	if ((a_help->count) || nerrors)

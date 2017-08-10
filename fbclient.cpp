@@ -7,10 +7,21 @@
 
 using namespace flatbuffers;
 
+#define DEF_URL "https://f.commandus.com/a/"
+
 FBClient::FBClient()
-	: url("https://f.commandus.com/a/"), code(CURLE_OK)
+	: url(DEF_URL), code(CURLE_OK)
 {
 	curl_global_init(CURL_GLOBAL_DEFAULT);
+}
+
+FBClient::FBClient
+(
+	const std::string &base_url
+)
+	: url(base_url), code(CURLE_OK)
+{
+
 }
 
 FBClient::~FBClient()

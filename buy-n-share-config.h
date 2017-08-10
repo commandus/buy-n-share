@@ -9,8 +9,9 @@
 #include <string>
 #include <vector>
 
-#define CMD_MEAL			0
-#define CMD_BALANCE			1
+#define CMD_NONE			0
+#define CMD_MEAL			1
+#define CMD_BALANCE			2
 
 #define CMD_ADD_USER		10
 #define CMD_ADD_FRIDGE		11
@@ -46,6 +47,7 @@ private:
 	);
 	int errorcode;
 public:
+	std::string base_url;								///< URL
 	int cmd;
 	uint64_t id;
 	std::string key;								///< password

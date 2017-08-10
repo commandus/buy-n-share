@@ -31,6 +31,7 @@ protected:
 	);
 public:
 	FBClient();
+	FBClient(const std::string &base_url);
 	~FBClient();
 	const User *add_user
 	(

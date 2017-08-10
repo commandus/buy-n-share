@@ -18,7 +18,7 @@ int main(int argc, char** argv)
 	if (config.error())
 		exit(config.error());
 
-	FBClient cli;
+	FBClient cli(config.base_url);
 
 	switch (config.cmd) 
 	{
@@ -27,19 +27,33 @@ int main(int argc, char** argv)
 		case CMD_LS_USER:
 			{
 				const Users *u = cli.ls_user(config.locale);
-				for (auto it(u->users()->begin()); it != u->users()->end(); ++it)
+				if (u)
 				{
-					std::cout << it->id() << "\t" 
-						<< it->key()->str() << std::endl;
+					for (auto it(u->users()->begin()); it != u->users()->end(); ++it)
+					{
+						std::cout << it->id() << "\t"
+							<< it->key()->str() << std::endl;
+					}
+				}
+				else
+				{
+					std::cerr << cli.url << " HTTP code " << cli.code << ": " << cli.retval << std::endl;
 				}
 			}
 			break;
 		case CMD_ADD_USER:
 			{
 				const User *u = cli.add_user(config.cn, config.key, config.locale, config.lat, config.lon, config.alt);
-				config.id = u->id();
-				config.key = u->key()->str();
-				std::cout << u->id() << "\t" << u->key()->str() << std::endl;
+				if (u)
+				{
+					config.id = u->id();
+					config.key = u->key()->str();
+					std::cout << u->id() << "\t" << u->key()->str() << std::endl;
+				}
+				else
+				{
+					std::cerr << cli.url << " HTTP code " << cli.code << ": " << cli.retval << std::endl;
+				}
 			}
 			break;
 		default:
