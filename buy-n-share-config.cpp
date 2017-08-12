@@ -3,8 +3,8 @@
 #include <cstring>
 #include <argtable2.h>
 
-#define DEF_BASE_URL "https://f.commandus.com/a/"
-
+#define DEF_BASE_URL	"https://f.commandus.com/a/"
+#define DEF_LOCALE		"ru"
 static const char* progname = "buy-n-share";
 
 BuyNShareConfig::BuyNShareConfig()
@@ -123,18 +123,32 @@ int BuyNShareConfig::parseCmd
 
 	if (a_user_id->count)
 		id = *a_user_id->ival;
+	else
+		id = 0;
 	if (a_user_key->count)
 		key = *a_user_key->sval;
+	else
+		key = "";
 	if (a_cn->count)
 		cn = *a_cn->sval;
+	else
+		cn = "";
 	if (a_locale->count)
 		locale = *a_locale->sval;
+	else
+		locale = DEF_LOCALE;
 	if (a_lat->count)
 		lat = *a_lat->dval;
+	else
+		lat = 0.0;
 	if (a_lon->count)
 		lon = *a_lon->dval;
+	else
+		lon = 0.0;
 	if (a_alt->count)
 		alt = *a_alt->ival;
+	else
+		alt = 0;
 
 	if (cmd == CMD_NONE)
 	{

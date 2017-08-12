@@ -100,6 +100,22 @@ CURL *FBClient::postCurlUrl
 	return curl;
 }
 
+long FBClient::perform
+(
+	CURL *curl
+)
+{
+	if (!curl)
+		return 0;
+	code = curl_easy_perform(curl);
+	if (code != CURLE_OK)
+		return 500 + code;
+	http_code = 0;
+	curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
+	curl_easy_cleanup(curl);
+	return http_code;
+}
+
 const User *FBClient::add_user
 (
 	std::string &cn,
@@ -121,15 +137,10 @@ const User *FBClient::add_user
 	fbb.Finish(u);
 	
 	CURL *curl = postCurlUrl(url + "add_user.php", fbb.GetBufferPointer(), fbb.GetSize());
-	if (!curl)
-		return 0;
-
-	code = curl_easy_perform(curl);
-	if (code == CURLE_OK)
+	if (perform(curl) == 200)
 		ret_user = GetUser(retval.c_str());
 	else
 		ret_user = NULL;
-	curl_easy_cleanup(curl);
 	return ret_user;
 }
 
@@ -144,11 +155,9 @@ const Users *FBClient::ls_user
 	if (!curl)
 		return 0;
 
-	code = curl_easy_perform(curl);
-	if (code == CURLE_OK)
+	if (perform(curl) == 200)
 		ret_users = GetUsers(retval.c_str());
 	else
 		ret_users = NULL;
-	curl_easy_cleanup(curl);
 	return ret_users;
 }

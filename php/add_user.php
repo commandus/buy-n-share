@@ -2,7 +2,7 @@
 require "buynshare.php";
 
 // Read user
-/*
+
 $bb = Google\FlatBuffers\ByteBuffer::wrap(file_get_contents('php://input'));
 
 try
@@ -17,7 +17,6 @@ try
 	return;
 }
 
-*/
 // print $u->getId() . " " . $u->getLocale() . " " . $u->getGeo()->getLat() . " " . $u->getGeo()->getLon() . " " . $u->getGeo()->getAlt();
 
 // Create  a new user
@@ -29,6 +28,13 @@ $id = add_user(
   $u->getGeo()->getLon(),
   $u->getGeo()->getAlt()
 );
+
+if (!$id)
+{
+	http_response_code(500);
+	header('Content-Type: text/plain');
+	echo 'Query error: ' . pg_last_error();
+}
 
 // Return id, key
 header('Content-Type: application/octet-stream');

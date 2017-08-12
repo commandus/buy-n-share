@@ -32,7 +32,13 @@ int main(int argc, char** argv)
 					for (auto it(u->users()->begin()); it != u->users()->end(); ++it)
 					{
 						std::cout << it->id() << "\t"
-							<< it->key()->str() << std::endl;
+							<< it->cn()->str() << "\t"
+							<< it->locale()->str() << "\t"
+							<< it->key()->str() << "\t"
+							<< it->geo()->lat() << "\t"
+							<< it->geo()->lon() << "\t"
+							<< it->geo()->alt() << "\t"
+							<< std::endl;
 					}
 				}
 				else

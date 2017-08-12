@@ -19,6 +19,7 @@ class FBClient
 public:
 	std::string url;
 	CURLcode code;
+	long http_code;
 	std::string retval;
 protected:
 	CURL *getCurlUrl(
@@ -28,6 +29,10 @@ protected:
 		const std::string &url, 
 		void *data,
 		size_t size
+	);
+	long perform
+	(
+		CURL *curl
 	);
 public:
 	FBClient();

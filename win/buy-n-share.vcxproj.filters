@@ -22,6 +22,9 @@
     <Filter Include="doc">
       <UniqueIdentifier>{34657c75-b8b7-4c0e-a21b-45acd3622e12}</UniqueIdentifier>
     </Filter>
+    <Filter Include="php">
+      <UniqueIdentifier>{d9b9c47f-a9ed-4a5d-b099-1a69c6faf8bd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\buy-n-share-config.cpp">
@@ -128,5 +131,20 @@
       <Filter>doc</Filter>
     </None>
     <None Include="packages.config" />
+    <None Include="..\php\add_user.php">
+      <Filter>php</Filter>
+    </None>
+    <None Include="..\php\buynshare.php">
+      <Filter>php</Filter>
+    </None>
+    <None Include="..\php\env.php">
+      <Filter>php</Filter>
+    </None>
+    <None Include="..\php\index.php">
+      <Filter>php</Filter>
+    </None>
+    <None Include="..\php\ls_user.php">
+      <Filter>php</Filter>
+    </None>
   </ItemGroup>
 </Project>

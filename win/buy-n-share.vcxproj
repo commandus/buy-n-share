@@ -144,6 +144,11 @@
     <None Include="..\fbs\user.fbs" />
     <None Include="..\fbs\userfridges.fbs" />
     <None Include="..\fbs\userpurchases.fbs" />
+    <None Include="..\php\add_user.php" />
+    <None Include="..\php\buynshare.php" />
+    <None Include="..\php\env.php" />
+    <None Include="..\php\index.php" />
+    <None Include="..\php\ls_user.php" />
     <None Include="..\README.md" />
     <None Include="packages.config" />
   </ItemGroup>
