@@ -97,7 +97,16 @@ function fb_fridgeuser(
 {
     $builder = new Google\FlatBuffers\FlatbufferBuilder(0);
 
-    $user = bs\User::createUser($builder);
+    $scn = $builder->createString("");
+    $skey = $builder->createString("");
+    $slocale = $builder->createString("");
+    bs\User::startUser($builder);
+    bs\User::addId($builder, $user_id);
+    bs\User::addCn($builder, $scn);
+    bs\User::addKey($builder, $skey);
+    bs\User::addLocale($builder, $slocale);
+    bs\User::addGeo($builder, bs\Geo::createGeo($builder, 0.0, 0.0, 0.0));
+    $user = bs\User::EndUser($builder);
 
 	bs\Fridge::startFridgeUser($builder);
     bs\Fridge::addUser($builder, $user);
@@ -300,7 +309,7 @@ function add_fridgeuser
 {
     $conn = init();
     $q = pg_query_params($conn, 
-		'INSERT INTO "fridgeuser" (fridge_id, user_id, start, finish) VALUES ($1, $2, $3, $4) RETURNING id', 
+		'INSERT INTO "fridgeuser" (fridge_id, user_id, start, finish, balance) VALUES ($1, $2, $3, $4, $5) RETURNING id', 
 		array($fridge_id, $user_id, $start, $finish, $balance)
     );
     $r = pg_fetch_row($q);
@@ -316,12 +325,12 @@ function add_fridgeuser
 
 function ls_fridgeuser
 (
-	$locale
+	$fridge_id
 )
 {
     $conn = init();
     $q = pg_query_params($conn, 
-		"SELECT id, fridge_id, user_id, start, finish FROM \"fridgeuser\" ORDER BY id", array($locale)
+		"SELECT id, fridge_id, user_id, start, finish FROM \"fridgeuser\" WHERE fridge_id = $1 ORDER BY id", array($fridge_id)
     );
 	if (!$q)
 	{
