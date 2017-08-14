@@ -17,5 +17,5 @@
 
 [Диаграмма классов](https://repository.genmymodel.com/commandus/fridge)
 
-[Описание типов flatbuffers](https://github.com/commandus/buy-n-share/blob/master/buynshare.fbs)
+[Описание типов flatbuffers](https://github.com/commandus/buy-n-share/blob/master/fbs/buynshare.fbs)
 
