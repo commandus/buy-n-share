@@ -11,6 +11,10 @@
 
 #include "user_generated.h"
 #include "users_generated.h"
+#include "fridge_generated.h"
+#include "fridges_generated.h"
+#include "fridgeuser_generated.h"
+#include "fridgeusers_generated.h"
 
 using namespace bs;
 
@@ -51,6 +55,33 @@ public:
 	const Users *ls_user
 	(
 		const std::string &locale
+	);
+
+	const Fridge *add_fridge
+	(
+		std::string &cn,
+		std::string &key,
+		std::string &locale,
+		double lat,
+		double lon,
+		int alt
+	);
+
+	const Fridges *ls_fridge
+	(
+		const std::string &locale
+	);
+	
+	const FridgeUser *add_fridge_user
+	(
+		uint64_t &user_id,
+		uint64_t &fridge_id,
+		uint64_t &cost
+	);
+
+	const FridgeUsers *ls_fridge_users
+	(
+		uint64_t &fridge_id
 	);
 	
 };

@@ -49,14 +49,15 @@ private:
 public:
 	std::string base_url;								///< URL
 	int cmd;
-	uint64_t id;
+	uint64_t user_id;
 	std::string key;								///< password
 	std::string cn;									///< common name
 	std::string locale;								///< Locale name
-	double cost;									///< Cost
+	uint64_t cost;									///< Cost
 	double lat;										///< Latitude
 	double lon;										///< Longitude
 	int alt;										///< Altitoide
+	uint64_t fridge_id;
 	
 	BuyNShareConfig();
 	BuyNShareConfig

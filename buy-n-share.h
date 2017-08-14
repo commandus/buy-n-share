@@ -1,5 +1,6 @@
 #include "buynshare_generated.h"
 #include "fridge_generated.h"
+#include "fridges_generated.h"
 #include "fridgepurchases_generated.h"
 #include "fridgeusers_generated.h"
 #include "meal_generated.h"

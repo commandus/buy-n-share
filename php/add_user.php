@@ -13,11 +13,9 @@ try
 {
 	http_response_code(500);
 	header('Content-Type: text/plain');
-	echo "Error: no user\n";
+	echo "Error: no input data\n";
 	return;
 }
-
-// print $u->getId() . " " . $u->getLocale() . " " . $u->getGeo()->getLat() . " " . $u->getGeo()->getLon() . " " . $u->getGeo()->getAlt();
 
 // Create  a new user
 $id = add_user(
@@ -33,7 +31,7 @@ if (!$id)
 {
 	http_response_code(500);
 	header('Content-Type: text/plain');
-	echo 'Query error: ' . pg_last_error();
+	echo 'Add error: ' . pg_last_error();
 }
 
 // Return id, key

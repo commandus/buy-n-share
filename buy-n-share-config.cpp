@@ -8,8 +8,8 @@
 static const char* progname = "buy-n-share";
 
 BuyNShareConfig::BuyNShareConfig()
-	: base_url(DEF_BASE_URL), cmd(CMD_NONE), id(0), key(""), cn(""), locale(""),
-	cost(0.0), lat(0.0), lon(0.0), alt(0)
+	: base_url(DEF_BASE_URL), cmd(CMD_NONE), user_id(0), key(""), cn(""), locale(""),
+	cost(0.0), lat(0.0), lon(0.0), alt(0), fridge_id(0)
 {
 }
 
@@ -47,10 +47,13 @@ int BuyNShareConfig::parseCmd
 	
 	struct arg_str *a_cn = arg_str0("n", "cn", "<string>", "common name");
 	struct arg_str *a_locale = arg_str0("e", "locale", "<ru|en>", "Locale name");
-	struct arg_dbl *a_cost = arg_dbl0("c", "cost", "<number>", "Cost");
+	struct arg_int *a_cost = arg_int0("c", "cost", "<number>", "Cost");
 	struct arg_dbl *a_lat = arg_dbl0("l", "lat", "<number>", "Latitude");
 	struct arg_dbl *a_lon = arg_dbl0("o", "lon", "<number>", "Longitude");
 	struct arg_int *a_alt = arg_int0("a", "alt", "<number>", "Altitude");
+	
+	struct arg_int *a_fridge_id = arg_int0("f", "fid", "<number>", "Fridge identifier");
+	
 	struct arg_lit *a_help = arg_lit0("h", "help", "Show this help");
 	struct arg_end *a_end = arg_end(20);
 
@@ -59,7 +62,7 @@ int BuyNShareConfig::parseCmd
 		// commands
 		a_meal, a_balance, a_add, a_rm, a_ls,
 		// identification
-		a_user_id, a_user_key,
+		a_user_id, a_fridge_id, a_user_key,
 		// options
 		a_cn, a_locale, a_cost, a_lat, a_lon, a_alt,
 		// others
@@ -122,9 +125,13 @@ int BuyNShareConfig::parseCmd
 	}
 
 	if (a_user_id->count)
-		id = *a_user_id->ival;
+		user_id = *a_user_id->ival;
 	else
-		id = 0;
+		user_id = 0;
+	if (a_fridge_id->count)
+		fridge_id = *a_fridge_id->ival;
+	else
+		fridge_id = 0;
 	if (a_user_key->count)
 		key = *a_user_key->sval;
 	else
@@ -137,6 +144,10 @@ int BuyNShareConfig::parseCmd
 		locale = *a_locale->sval;
 	else
 		locale = DEF_LOCALE;
+	if (a_cost->count)
+		cost = *a_cost->ival;
+	else
+		lat = 0.0;
 	if (a_lat->count)
 		lat = *a_lat->dval;
 	else

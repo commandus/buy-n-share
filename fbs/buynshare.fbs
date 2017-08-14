@@ -106,3 +106,14 @@ table Users
 {
 	users: [User];
 }
+
+table Fridges
+{
+        fridges: [Fridge];
+}
+
+table Purchases 
+{
+        purchases: [Purchase];
+}
+

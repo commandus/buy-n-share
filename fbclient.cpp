@@ -161,3 +161,91 @@ const Users *FBClient::ls_user
 		ret_users = NULL;
 	return ret_users;
 }
+
+const Fridge *FBClient::add_fridge
+(
+	std::string &cn,
+	std::string &key,
+	std::string &locale,
+	double lat,
+	double lon,
+	int alt
+)
+{
+	const Fridge *ret_fridge;
+	
+	FlatBufferBuilder fbb;
+	Offset<String> scn = fbb.CreateString(cn);
+	Offset<String> skey = fbb.CreateString(key);
+	Offset<String> slocale = fbb.CreateString(locale);
+	Geo geo(lat, lon, alt);
+	flatbuffers::Offset<Fridge> u = CreateFridge(fbb, 0, scn, skey, slocale, &geo);
+	fbb.Finish(u);
+	
+	CURL *curl = postCurlUrl(url + "add_fridge.php", fbb.GetBufferPointer(), fbb.GetSize());
+	if (perform(curl) == 200)
+		ret_fridge = GetFridge(retval.c_str());
+	else
+		ret_fridge = NULL;
+	return ret_fridge;
+}
+
+const FridgeUser *FBClient::add_fridge_user
+(
+	uint64_t &user_id,
+	uint64_t &fridge_id,
+	uint64_t &balance
+)
+{
+	const FridgeUser *ret_fridge;
+	
+	FlatBufferBuilder fbb;
+	flatbuffers::Offset<FridgeUser> u = CreateFridgeUser(fbb, 0, 0, 0, balance);
+	fbb.Finish(u);
+	
+	CURL *curl = postCurlUrl(url + "add_fridgeuser.php", fbb.GetBufferPointer(), fbb.GetSize());
+	if (perform(curl) == 200)
+		ret_fridge = GetFridgeUser(retval.c_str());
+	else
+		ret_fridge = NULL;
+	return ret_fridge;
+}
+
+const Fridges *FBClient::ls_fridge
+(
+	const std::string &locale
+)
+{
+	const Fridges *ret_fridges;
+	
+	CURL *curl = postCurlUrl(url + "ls_fridge.php", NULL, 0);
+	if (!curl)
+		return 0;
+
+	if (perform(curl) == 200)
+		ret_fridges = GetFridges(retval.c_str());
+	else
+		ret_fridges = NULL;
+	return ret_fridges;
+}
+
+const FridgeUsers *FBClient::ls_fridge_users
+(
+	uint64_t &fridge_id
+)
+{
+	const FridgeUsers *ret_fridge_users;
+	
+	std::stringstream sfridge_id;
+	sfridge_id << fridge_id;
+	CURL *curl = postCurlUrl(url + "ls_fridgeuser.php?fridge=" + sfridge_id.str(), NULL, 0);
+	if (!curl)
+		return 0;
+
+	if (perform(curl) == 200)
+		ret_fridge_users = GetFridgeUsers(retval.c_str());
+	else
+		ret_fridge_users = NULL;
+	return ret_fridge_users;
+}
+

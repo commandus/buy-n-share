@@ -11,9 +11,11 @@ require "bs/FridgePurchases.php";
 require "bs/FridgeUsers.php";
 require "bs/MealCard.php";
 require "bs/Purchase.php";
+require "bs/Purchases.php";
 require "bs/User.php";
 require "bs/Users.php";
 require "bs/Fridge.php";
+require "bs/Fridges.php";
 require "bs/FridgeUser.php";
 require "bs/Geo.php";
 require "bs/Meal.php";
@@ -60,6 +62,53 @@ function fb_user(
     return $builder->dataBuffer()->data();
 }
 
+function fb_fridge(
+    $id,
+    $cn,
+    $key,
+    $locale,
+    $lat,
+    $lon,
+    $alt
+)
+{
+    $builder = new Google\FlatBuffers\FlatbufferBuilder(0);
+    $scn = $builder->createString($cn);
+    $skey = $builder->createString($key);
+    $slocale = $builder->createString($locale);
+	bs\Fridge::startFridge($builder);
+    bs\Fridge::addId($builder, $id);
+    bs\Fridge::addCn($builder, $scn);
+    bs\Fridge::addKey($builder, $skey);
+    bs\Fridge::addLocale($builder, $slocale);
+    bs\Fridge::addGeo($builder, bs\Geo::createGeo($builder, $lat, $lon, $alt));
+    $u = bs\Fridge::EndFridge($builder);
+    $builder->Finish($u);
+    return $builder->dataBuffer()->data();
+}
+
+function fb_fridgeuser(
+    $fridge_id,
+    $user_id,
+    $start,
+    $finish,
+    $balance
+)
+{
+    $builder = new Google\FlatBuffers\FlatbufferBuilder(0);
+
+    $user = bs\User::createUser($builder);
+
+	bs\Fridge::startFridgeUser($builder);
+    bs\Fridge::addUser($builder, $user);
+    bs\Fridge::addStart($builder, $start);
+    bs\Fridge::addFinish($builder, $finish);
+    bs\Fridge::addBalance($builder, $balance);
+    $u = bs\Fridge::EndFridgeUser($builder);
+    $builder->Finish($u);
+    return $builder->dataBuffer()->data();
+}
+
 function fb_users
 (
     &$users
@@ -90,6 +139,39 @@ function fb_users
 	bs\Users::addUsers($builder, $uv);
 	$uu = bs\Users::EndUsers($builder);
     $builder->Finish($uu);
+    return $builder->dataBuffer()->data();
+}
+
+function fb_fridges
+(
+    &$fridges
+)
+{
+    $builder = new Google\FlatBuffers\FlatbufferBuilder(0);
+	
+	$fa = array();
+	foreach ($fridges as $fridge)
+	{
+	    $scn = $builder->createString($fridge[1]);
+	    $skey = $builder->createString($fridge[2]);
+		$slocale = $builder->createString($fridge[3]);
+
+		bs\Fridge::startFridge($builder);
+		bs\Fridge::addId($builder, $fridge[0]);
+		bs\Fridge::addCn($builder, $scn);
+
+		bs\Fridge::addKey($builder, $skey);
+		bs\Fridge::addLocale($builder, $slocale);
+		bs\Fridge::addGeo($builder, bs\Geo::createGeo($builder, $fridge[4], $fridge[5], $fridge[6]));
+
+		$f = bs\Fridge::EndFridge($builder);
+		array_push($fa, $f);
+	}
+	$fv = bs\Fridges::CreateFridgesVector($builder, $fa);
+	bs\Fridges::startFridges($builder);
+	bs\Fridges::addFridges($builder, $fv);
+	$ff = bs\Fridges::EndFridges($builder);
+    $builder->Finish($ff);
     return $builder->dataBuffer()->data();
 }
 
@@ -137,6 +219,109 @@ function ls_user
     $conn = init();
     $q = pg_query_params($conn, 
 		"SELECT id, cn, '' as key, locale, lat, lon, alt FROM \"user\" WHERE (locale = $1) ORDER BY id", array($locale)
+    );
+	if (!$q)
+	{
+	    done($conn);
+		return false;
+	}
+	$r = array();
+	while($row = pg_fetch_row($q))
+	{
+		array_push($r, $row);
+	}
+    pg_free_result($q);
+    done($conn);
+    return $r;
+}
+
+// -------------------------- Fridge --------------------------
+
+function add_fridge
+(
+    $cn,
+    $key,
+    $locale,
+    $lat,
+    $lon,
+    $alt
+)
+{
+    $conn = init();
+    $q = pg_query_params($conn, 
+		'INSERT INTO "fridge" (cn, key, locale, lat, lon, alt) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id', 
+		array($cn, $key, $locale, $lat, $lon, $alt)
+    );
+    $r = pg_fetch_row($q);
+	if (!$q)
+	{
+	    done($conn);
+		return false;
+	}
+    pg_free_result($q);
+    done($conn);
+    return $r[0];
+}
+
+function ls_fridge
+(
+	$locale
+)
+{
+    $conn = init();
+    $q = pg_query_params($conn, 
+		"SELECT id, cn, '' as key, locale, lat, lon, alt FROM \"fridge\" WHERE (locale = $1) ORDER BY id", array($locale)
+    );
+	if (!$q)
+	{
+	    done($conn);
+		return false;
+	}
+	$r = array();
+	while($row = pg_fetch_row($q))
+	{
+		array_push($r, $row);
+	}
+    pg_free_result($q);
+    done($conn);
+    return $r;
+}
+
+// -------------------------- FridgeUser --------------------------
+
+function add_fridgeuser
+(
+    $fridge_id,
+    $user_id,
+    $start,
+    $finish,
+    $balance
+)
+{
+    $conn = init();
+    $q = pg_query_params($conn, 
+		'INSERT INTO "fridgeuser" (fridge_id, user_id, start, finish) VALUES ($1, $2, $3, $4) RETURNING id', 
+		array($fridge_id, $user_id, $start, $finish, $balance)
+    );
+    $r = pg_fetch_row($q);
+	if (!$q)
+	{
+	    done($conn);
+		return false;
+	}
+    pg_free_result($q);
+    done($conn);
+    return $r[0];
+}
+
+function ls_fridgeuser
+(
+	$locale
+)
+{
+    $conn = init();
+    $q = pg_query_params($conn, 
+		"SELECT id, fridge_id, user_id, start, finish FROM \"fridgeuser\" ORDER BY id", array($locale)
     );
 	if (!$q)
 	{
