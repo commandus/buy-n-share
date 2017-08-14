@@ -9,7 +9,7 @@
 
 ![Диаграмма классов](http://f.commandus.com/i/d/diagram-gmm.png#1)
 
-Сериализация - описание в файле [flatbuffers](https://github.com/commandus/buy-n-share/blob/master/buynshare.fbs)
+Сериализация - описание в файле [flatbuffers](https://github.com/commandus/buy-n-share/blob/master/fbs/buynshare.fbs)
 
 ## Аудитория 
 
@@ -122,8 +122,36 @@ grant all on schema public to commandu_buynshare2;
 ```
 exit
 ```
+## API
 
-## Building Windows usimg Visual Studio 2017
+### Add
+
+1. User u = add_user(User); // регистрация
+2. Fridge f = add_fridge([User, ]Fridge); // также добавляет создателя в пользователи холодильника- add_fridgeuser()
+3. FridgeUser fu = add_fridgeuser([User, ]Fridge, FridgeUser[, Взнос]);  // добавляет пользователя в холодильник
+4. Meal m = add_meal([User, ]Meal);   // Новый продукт
+5. Purchase p = add_purchase([User, ]Purchase); // Добавляет также голос. Используется для проводок "Долг"
+6. Vote v = add_vote([User, ]Purchase); // Добавляет голос
+
+### Remove
+
+1. rm_fridge([User, ]Fridge); // также удаляет всех пользователей- rm_fridgeuser()
+2. Balance = rm_fridgeuser([User, ]Fridge, FridgeUser);  // удаляет пользователя холодильника, вызывает calc() и выравнивает баланс проводками "Долг" add_purchase()
+3. rm_purchase([User, ]Purchase);   // сторнирование
+4. rm_vote([User, ]Purchase); // Отзывает голос
+
+### List
+
+1. ls_fridge([User, ]Fridge); // список холодильников пользователя
+2. ls_fridgeuser([User, ]Fridge, FridgeUser);  // список пользователей холодильника
+3. ls_purchase([User, ]Purchase); // список покупок пользователя
+4. ls_meal([User]); // список продуктов
+5. ls_mealcard([User, ]Fridge); // список продуктов в холодильнике
+
+### Calc
+1. Balance = calc([User, ]Fridge)
+
+## Building Windows using Visual Studio 2017
 
 - cmake 
 - argtable2
@@ -139,4 +167,9 @@ cmake -G "Visual Studio 15"
 ```
 
 ### Curl 
+
+Установка пакета как:
+```
 Install-Package curl
+```
+неверная, так как пакет собран неправильно. Надо библиотеку собрать вручную.
