@@ -11,7 +11,7 @@ endif
 #	Generate flatc
 #
 fbs = \
-	fbs/buynshare.fbs fbs/user.fbs fbs/fridge.fbs fbs/meal.fbs fbs/purchase.fbs \
+	fbs/buynshare.fbs fbs/user.fbs fbs/users.fbs fbs/fridge.fbs fbs/meal.fbs fbs/purchase.fbs \
 	fbs/mealcard.fbs fbs/fridgemealcards.fbs fbs/fridgeuser.fbs fbs/fridgeusers.fbs fbs/userfridges.fbs \
 	fbs/fridgepurchases.fbs fbs/userpurchases.fbs
 gen = gen/buynshare_generated.h
