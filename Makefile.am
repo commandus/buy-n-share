@@ -11,9 +11,9 @@ endif
 #	Generate flatc
 #
 fbs = \
-	fbs/buynshare.fbs fbs/user.fbs fbs/users.fbs fbs/fridge.fbs fbs/meal.fbs fbs/purchase.fbs \
+	fbs/buynshare.fbs fbs/user.fbs fbs/users.fbs fbs/fridge.fbs fbs/fridges.fbs fbs/meal.fbs fbs/purchase.fbs \
 	fbs/mealcard.fbs fbs/fridgemealcards.fbs fbs/fridgeuser.fbs fbs/fridgeusers.fbs fbs/userfridges.fbs \
-	fbs/fridgepurchases.fbs fbs/userpurchases.fbs
+	fbs/purchases.fbs fbs/fridgepurchases.fbs fbs/userpurchases.fbs
 gen = gen/buynshare_generated.h
 $(gen): Makefile
 	mkdir -p gen
@@ -59,4 +59,6 @@ configdir = $(datadir)
 dist_config_DATA = \
 	README.md HISTORY \
 	$(fbs) \
-	.kdev_include_paths
+	.kdev_include_paths \
+	docs/README.md docs/_layouts/default.html \
+	php/add_fridge.php  php/add_fridgeuser.php  php/add_user.php  php/buynshare.php  php/env.php  php/index.php  php/ls_fridge.php  php/ls_fridgeuser.php  php/ls_user.php
