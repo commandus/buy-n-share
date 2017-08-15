@@ -2,7 +2,6 @@
 require "buynshare.php";
 
 // Read fridge user
-
 $bb = Google\FlatBuffers\ByteBuffer::wrap(file_get_contents('php://input'));
 
 try

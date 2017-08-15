@@ -185,6 +185,46 @@ function fb_fridges
     return $builder->dataBuffer()->data();
 }
 
+function fb_fridgeusers
+(
+    &$fridgeusers
+)
+{
+    $builder = new Google\FlatBuffers\FlatbufferBuilder(0);
+	
+	$fa = array();
+	foreach ($fridgeusers as $fridgeuser)
+	{
+        $scn = $builder->createString($fridgeuser[3]);
+        $skey = $builder->createString($fridgeuser[4]);
+        $slocale = $builder->createString($fridgeuser[5]);
+        bs\User::startUser($builder);
+        bs\User::addId($builder, $fridgeuser[2]);
+        bs\User::addCn($builder, $scn);
+        bs\User::addKey($builder, $skey);
+        bs\User::addLocale($builder, $slocale);
+        bs\User::addGeo($builder, bs\Geo::createGeo($builder, $fridgeuser[6], $fridgeuser[7], $fridgeuser[8]));
+        $user = bs\User::EndUser($builder);
+    
+        bs\FridgeUser::startFridgeUser($builder);
+        bs\FridgeUser::addFridgeid($builder, $fridgeuser[1]);
+        bs\FridgeUser::addUser($builder, $user);
+        bs\FridgeUser::addStart($builder, $fridgeuser[9]);
+        bs\FridgeUser::addFinish($builder, $fridgeuser[10]);
+        bs\FridgeUser::addBalance($builder, $fridgeuser[11]);
+        $fu = bs\FridgeUser::EndFridgeUser($builder);
+        $builder->Finish($fu);
+    
+		array_push($fa, $fu);
+	}
+	$fv = bs\FridgeUsers::CreateFridgeUsersVector($builder, $fa);
+	bs\FridgeUsers::startFridgeUsers($builder);
+	bs\FridgeUsers::addFridgeUsers($builder, $fv);
+	$ff = bs\FridgeUsers::EndFridgeUsers($builder);
+    $builder->Finish($ff);
+    return $builder->dataBuffer()->data();
+}
+
 function print_user
 (
     $b
@@ -331,7 +371,8 @@ function ls_fridgeuser
 {
     $conn = init();
     $q = pg_query_params($conn, 
-		"SELECT id, fridge_id, user_id, start, finish FROM \"fridgeuser\" WHERE fridge_id = $1 ORDER BY id", array($fridge_id)
+        "SELECT fu.id, fu.fridge_id, fu.user_id, u.cn, '' as key, u.locale, u.lat,  u.lon, u.alt, fu.start, fu.finish, fu.balance
+        FROM \"fridgeuser\" fu, \"user\" u WHERE fu.user_id = u.id AND fridge_id = $1 ORDER BY id", array($fridge_id)
     );
 	if (!$q)
 	{

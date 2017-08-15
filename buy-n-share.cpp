@@ -70,6 +70,34 @@ int main(int argc, char** argv)
 				}
 			}
 			break;
+		case CMD_LS_FRIDGE_USER:
+			{
+				const FridgeUsers *f = cli.ls_fridgeuser(config.fridge_id);
+				if (f)
+				{
+					for (auto it(f->fridgeusers()->begin()); it != f->fridgeusers()->end(); ++it)
+					{
+						std::cout 
+							<< it->fridgeid() << "\t"
+							<< it->user()->id() << "\t"
+							<< it->user()->cn()->str() << "\t"
+							<< it->user()->locale()->str() << "\t"
+							<< it->user()->key()->str() << "\t"
+							<< it->user()->geo()->lat() << "\t"
+							<< it->user()->geo()->lon() << "\t"
+							<< it->user()->geo()->alt() << "\t"
+							<< it->start() << "\t"
+							<< it->finish() << "\t"
+							<< it->balance() << "\t"
+							<< std::endl;
+					}
+				}
+				else
+				{
+					std::cerr << cli.url << " HTTP code " << cli.code << ": " << cli.retval << std::endl;
+				}
+			}
+			break;
 		case CMD_ADD_USER:
 			{
 				const User *u = cli.add_user(config.cn, config.key, config.locale, config.lat, config.lon, config.alt);

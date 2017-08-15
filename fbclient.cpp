@@ -118,12 +118,12 @@ long FBClient::perform
 
 const User *FBClient::add_user
 (
-	std::string &cn,
-	std::string &key,
-	std::string &locale,
-	double lat,
-	double lon,
-	int alt
+	const std::string &cn,
+	const std::string &key,
+	const std::string &locale,
+	const double lat,
+	const double lon,
+	const int alt
 )
 {
 	const User *ret_user;
@@ -164,12 +164,12 @@ const Users *FBClient::ls_user
 
 const Fridge *FBClient::add_fridge
 (
-	std::string &cn,
-	std::string &key,
-	std::string &locale,
-	double lat,
-	double lon,
-	int alt
+	const std::string &cn,
+	const std::string &key,
+	const std::string &locale,
+	const double lat,
+	const double lon,
+	const int alt
 )
 {
 	const Fridge *ret_fridge;
@@ -192,9 +192,9 @@ const Fridge *FBClient::add_fridge
 
 const FridgeUser *FBClient::add_fridge_user
 (
-	uint64_t &user_id,
-	uint64_t &fridge_id,
-	uint64_t &balance
+	const uint64_t &user_id,
+	const uint64_t &fridge_id,
+	const uint64_t &balance
 )
 {
 	const FridgeUser *ret_fridge;
@@ -231,9 +231,9 @@ const Fridges *FBClient::ls_fridge
 	return ret_fridges;
 }
 
-const FridgeUsers *FBClient::ls_fridge_users
+const FridgeUsers *FBClient::ls_fridgeuser
 (
-	uint64_t &fridge_id
+	const uint64_t &fridge_id
 )
 {
 	const FridgeUsers *ret_fridge_users;

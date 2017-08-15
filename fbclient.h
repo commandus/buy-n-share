@@ -44,12 +44,12 @@ public:
 	~FBClient();
 	const User *add_user
 	(
-		std::string &cn,
-		std::string &key,
-		std::string &locale,
-		double lat,
-		double lon,
-		int alt
+		const std::string &cn,
+		const std::string &key,
+		const std::string &locale,
+		const double lat,
+		const double lon,
+		const int alt
 	);
 
 	const Users *ls_user
@@ -59,12 +59,12 @@ public:
 
 	const Fridge *add_fridge
 	(
-		std::string &cn,
-		std::string &key,
-		std::string &locale,
-		double lat,
-		double lon,
-		int alt
+		const std::string &cn,
+		const std::string &key,
+		const std::string &locale,
+		const double lat,
+		const double lon,
+		const int alt
 	);
 
 	const Fridges *ls_fridge
@@ -74,14 +74,19 @@ public:
 	
 	const FridgeUser *add_fridge_user
 	(
-		uint64_t &user_id,
-		uint64_t &fridge_id,
-		uint64_t &cost
+		const uint64_t &user_id,
+		const uint64_t &fridge_id,
+		const uint64_t &cost
 	);
 
 	const FridgeUsers *ls_fridge_users
 	(
-		uint64_t &fridge_id
+		const uint64_t &fridge_id
+	);
+
+	const FridgeUsers *ls_fridgeuser
+	(
+		const uint64_t &fridge_id
 	);
 	
 };
