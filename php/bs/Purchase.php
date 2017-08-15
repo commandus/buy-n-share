@@ -32,10 +32,37 @@ class Purchase extends Table
         return $this;
     }
 
+    /**
+     * @return ulong
+     */
+    public function getId()
+    {
+        $o = $this->__offset(4);
+        return $o != 0 ? $this->bb->getUlong($o + $this->bb_pos) : 0;
+    }
+
+    /**
+     * @return ulong
+     */
+    public function getUserid()
+    {
+        $o = $this->__offset(6);
+        return $o != 0 ? $this->bb->getUlong($o + $this->bb_pos) : 0;
+    }
+
+    /**
+     * @return ulong
+     */
+    public function getFridgeid()
+    {
+        $o = $this->__offset(8);
+        return $o != 0 ? $this->bb->getUlong($o + $this->bb_pos) : 0;
+    }
+
     public function getMeal()
     {
         $obj = new Meal();
-        $o = $this->__offset(4);
+        $o = $this->__offset(10);
         return $o != 0 ? $obj->init($this->__indirect($o + $this->bb_pos), $this->bb) : 0;
     }
 
@@ -44,7 +71,7 @@ class Purchase extends Table
      */
     public function getCost()
     {
-        $o = $this->__offset(6);
+        $o = $this->__offset(12);
         return $o != 0 ? $this->bb->getUint($o + $this->bb_pos) : 0;
     }
 
@@ -53,7 +80,7 @@ class Purchase extends Table
      */
     public function getStart()
     {
-        $o = $this->__offset(8);
+        $o = $this->__offset(14);
         return $o != 0 ? $this->bb->getUint($o + $this->bb_pos) : 0;
     }
 
@@ -62,18 +89,18 @@ class Purchase extends Table
      */
     public function getFinish()
     {
-        $o = $this->__offset(10);
+        $o = $this->__offset(16);
         return $o != 0 ? $this->bb->getUint($o + $this->bb_pos) : 0;
     }
 
     /**
      * @param int offset
-     * @return uint
+     * @return ulong
      */
     public function getVotes($j)
     {
-        $o = $this->__offset(12);
-        return $o != 0 ? $this->bb->getUint($this->__vector($o) + $j * 4) : 0;
+        $o = $this->__offset(18);
+        return $o != 0 ? $this->bb->getUlong($this->__vector($o) + $j * 8) : 0;
     }
 
     /**
@@ -81,7 +108,7 @@ class Purchase extends Table
      */
     public function getVotesLength()
     {
-        $o = $this->__offset(12);
+        $o = $this->__offset(18);
         return $o != 0 ? $this->__vector_len($o) : 0;
     }
 
@@ -91,16 +118,19 @@ class Purchase extends Table
      */
     public static function startPurchase(FlatBufferBuilder $builder)
     {
-        $builder->StartObject(5);
+        $builder->StartObject(8);
     }
 
     /**
      * @param FlatBufferBuilder $builder
      * @return Purchase
      */
-    public static function createPurchase(FlatBufferBuilder $builder, $meal, $cost, $start, $finish, $votes)
+    public static function createPurchase(FlatBufferBuilder $builder, $id, $userid, $fridgeid, $meal, $cost, $start, $finish, $votes)
     {
-        $builder->startObject(5);
+        $builder->startObject(8);
+        self::addId($builder, $id);
+        self::addUserid($builder, $userid);
+        self::addFridgeid($builder, $fridgeid);
         self::addMeal($builder, $meal);
         self::addCost($builder, $cost);
         self::addStart($builder, $start);
@@ -112,12 +142,42 @@ class Purchase extends Table
 
     /**
      * @param FlatBufferBuilder $builder
+     * @param ulong
+     * @return void
+     */
+    public static function addId(FlatBufferBuilder $builder, $id)
+    {
+        $builder->addUlongX(0, $id, 0);
+    }
+
+    /**
+     * @param FlatBufferBuilder $builder
+     * @param ulong
+     * @return void
+     */
+    public static function addUserid(FlatBufferBuilder $builder, $userid)
+    {
+        $builder->addUlongX(1, $userid, 0);
+    }
+
+    /**
+     * @param FlatBufferBuilder $builder
+     * @param ulong
+     * @return void
+     */
+    public static function addFridgeid(FlatBufferBuilder $builder, $fridgeid)
+    {
+        $builder->addUlongX(2, $fridgeid, 0);
+    }
+
+    /**
+     * @param FlatBufferBuilder $builder
      * @param int
      * @return void
      */
     public static function addMeal(FlatBufferBuilder $builder, $meal)
     {
-        $builder->addOffsetX(0, $meal, 0);
+        $builder->addOffsetX(3, $meal, 0);
     }
 
     /**
@@ -127,7 +187,7 @@ class Purchase extends Table
      */
     public static function addCost(FlatBufferBuilder $builder, $cost)
     {
-        $builder->addUintX(1, $cost, 0);
+        $builder->addUintX(4, $cost, 0);
     }
 
     /**
@@ -137,7 +197,7 @@ class Purchase extends Table
      */
     public static function addStart(FlatBufferBuilder $builder, $start)
     {
-        $builder->addUintX(2, $start, 0);
+        $builder->addUintX(5, $start, 0);
     }
 
     /**
@@ -147,7 +207,7 @@ class Purchase extends Table
      */
     public static function addFinish(FlatBufferBuilder $builder, $finish)
     {
-        $builder->addUintX(3, $finish, 0);
+        $builder->addUintX(6, $finish, 0);
     }
 
     /**
@@ -157,7 +217,7 @@ class Purchase extends Table
      */
     public static function addVotes(FlatBufferBuilder $builder, $votes)
     {
-        $builder->addOffsetX(4, $votes, 0);
+        $builder->addOffsetX(7, $votes, 0);
     }
 
     /**
@@ -167,9 +227,9 @@ class Purchase extends Table
      */
     public static function createVotesVector(FlatBufferBuilder $builder, array $data)
     {
-        $builder->startVector(4, count($data), 4);
+        $builder->startVector(8, count($data), 8);
         for ($i = count($data) - 1; $i >= 0; $i--) {
-            $builder->addUint($data[$i]);
+            $builder->addUlong($data[$i]);
         }
         return $builder->endVector();
     }
@@ -181,7 +241,7 @@ class Purchase extends Table
      */
     public static function startVotesVector(FlatBufferBuilder $builder, $numElems)
     {
-        $builder->startVector(4, $numElems, 4);
+        $builder->startVector(8, $numElems, 8);
     }
 
     /**

@@ -32,15 +32,24 @@ class Meal extends Table
         return $this;
     }
 
-    public function getCn()
+    /**
+     * @return ulong
+     */
+    public function getId()
     {
         $o = $this->__offset(4);
+        return $o != 0 ? $this->bb->getUlong($o + $this->bb_pos) : 0;
+    }
+
+    public function getCn()
+    {
+        $o = $this->__offset(6);
         return $o != 0 ? $this->__string($o + $this->bb_pos) : null;
     }
 
     public function getLocale()
     {
-        $o = $this->__offset(6);
+        $o = $this->__offset(8);
         return $o != 0 ? $this->__string($o + $this->bb_pos) : null;
     }
 
@@ -50,20 +59,31 @@ class Meal extends Table
      */
     public static function startMeal(FlatBufferBuilder $builder)
     {
-        $builder->StartObject(2);
+        $builder->StartObject(3);
     }
 
     /**
      * @param FlatBufferBuilder $builder
      * @return Meal
      */
-    public static function createMeal(FlatBufferBuilder $builder, $cn, $locale)
+    public static function createMeal(FlatBufferBuilder $builder, $id, $cn, $locale)
     {
-        $builder->startObject(2);
+        $builder->startObject(3);
+        self::addId($builder, $id);
         self::addCn($builder, $cn);
         self::addLocale($builder, $locale);
         $o = $builder->endObject();
         return $o;
+    }
+
+    /**
+     * @param FlatBufferBuilder $builder
+     * @param ulong
+     * @return void
+     */
+    public static function addId(FlatBufferBuilder $builder, $id)
+    {
+        $builder->addUlongX(0, $id, 0);
     }
 
     /**
@@ -73,7 +93,7 @@ class Meal extends Table
      */
     public static function addCn(FlatBufferBuilder $builder, $cn)
     {
-        $builder->addOffsetX(0, $cn, 0);
+        $builder->addOffsetX(1, $cn, 0);
     }
 
     /**
@@ -83,7 +103,7 @@ class Meal extends Table
      */
     public static function addLocale(FlatBufferBuilder $builder, $locale)
     {
-        $builder->addOffsetX(1, $locale, 0);
+        $builder->addOffsetX(2, $locale, 0);
     }
 
     /**
