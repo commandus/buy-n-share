@@ -213,6 +213,57 @@ const FridgeUser *FBClient::add_fridge_user
 	return ret_fridge;
 }
 
+const Meal *FBClient::add_meal
+(
+	const std::string &cn,
+	const std::string &locale
+)
+{
+	const Meal *ret_meal;
+	
+	FlatBufferBuilder fbb;
+	Offset<String> scn = fbb.CreateString(cn);
+	Offset<String> slocale = fbb.CreateString(locale);
+	flatbuffers::Offset<Meal> m = CreateMeal(fbb, 0, scn, slocale);
+	fbb.Finish(m);
+	
+	CURL *curl = postCurlUrl(url + "add_meal.php", fbb.GetBufferPointer(), fbb.GetSize());
+	if (perform(curl) == 200)
+		ret_meal = GetMeal(retval.c_str());
+	else
+		ret_meal = NULL;
+	return ret_meal;
+}
+
+const Purchase *FBClient::add_purchase
+(
+	const uint64_t &user_id,
+	const uint64_t &fridge_id,
+	const uint64_t &meal_id,
+	const uint64_t &cost
+)
+{
+	const Purchase *ret_purchase;
+	
+	FlatBufferBuilder fbb;
+	flatbuffers::Offset<Meal> meal = CreateMeal(fbb, meal_id, 0, 0);
+
+	std::vector<uint64_t> vote;
+	vote.push_back(user_id);
+	flatbuffers::Offset<flatbuffers::Vector<uint64_t>> votes = fbb.CreateVector(vote);
+	
+	flatbuffers::Offset<Purchase> m = CreatePurchase(fbb, 0, user_id, fridge_id, meal, cost, 0, 0, votes);
+	fbb.Finish(m);
+	
+	CURL *curl = postCurlUrl(url + "add_purchase.php", fbb.GetBufferPointer(), fbb.GetSize());
+	if (perform(curl) == 200)
+		ret_purchase = GetPurchase(retval.c_str());
+	else
+		ret_purchase = NULL;
+	return ret_purchase;
+}
+
+
 const Fridges *FBClient::ls_fridge
 (
 	const std::string &locale
@@ -251,3 +302,39 @@ const FridgeUsers *FBClient::ls_fridgeuser
 	return ret_fridge_users;
 }
 
+const Meals  *FBClient::ls_meal
+(
+	const std::string &locale
+)
+{
+	const Meals *ret_meals;
+	
+	CURL *curl = postCurlUrl(url + "ls_meal.php?locale=" + locale, NULL, 0);
+	if (!curl)
+		return 0;
+
+	if (perform(curl) == 200)
+		ret_meals = GetMeals(retval.c_str());
+	else
+		ret_meals = NULL;
+	return ret_meals;
+}
+
+const Purchases *FBClient::ls_purchase
+(
+	const uint64_t &user_id
+)
+{
+	const Purchases *ret_purchases;
+	std::stringstream suser_id;
+	suser_id << user_id;
+	CURL *curl = postCurlUrl(url + "ls_purchase.php?user_id=" + suser_id.str(), NULL, 0);
+	if (!curl)
+		return 0;
+
+	if (perform(curl) == 200)
+		ret_purchases = GetPurchases(retval.c_str());
+	else
+		ret_purchases = NULL;
+	return ret_purchases;
+}

@@ -98,6 +98,44 @@ int main(int argc, char** argv)
 				}
 			}
 			break;
+		case CMD_LS_MEAL:
+			{
+				const Meals *m = cli.ls_meal(config.locale);
+				if (m)
+				{
+					for (auto it(m->meals()->begin()); it != m->meals()->end(); ++it)
+					{
+						std::cout << it->id() << "\t"
+							<< it->cn()->str() << "\t"
+							<< it->locale()->str() << "\t"
+							<< std::endl;
+					}
+				}
+				else
+				{
+					std::cerr << cli.url << " HTTP code " << cli.code << ": " << cli.retval << std::endl;
+				}
+			}
+			break;
+		case CMD_LS_PURCHASE:
+			{
+				const Purchases *p = cli.ls_purchase(config.user_id);
+				if (p)
+				{
+					for (auto it(p->purchases()->begin()); it != p->purchases()->end(); ++it)
+					{
+						std::cout << it->id() << "\t"
+							<< it->start() << "\t"
+							<< it->finish() << "\t"
+							<< std::endl;
+					}
+				}
+				else
+				{
+					std::cerr << cli.url << " HTTP code " << cli.code << ": " << cli.retval << std::endl;
+				}
+			}
+			break;
 		case CMD_ADD_USER:
 			{
 				const User *u = cli.add_user(config.cn, config.key, config.locale, config.lat, config.lon, config.alt);
@@ -134,6 +172,32 @@ int main(int argc, char** argv)
 				if (f)
 				{
 					std::cout << f->start() << "\t" << f->finish() << std::endl;
+				}
+				else
+				{
+					std::cerr << cli.url << " HTTP code " << cli.code << ": " << cli.retval << std::endl;
+				}
+			}
+			break;
+		case CMD_ADD_MEAL:
+			{
+				const Meal *m = cli.add_meal(config.cn, config.locale);
+				if (m)
+				{
+					std::cout << m->id() << "\t" << m->cn() << "\t" << m->locale() << std::endl;
+				}
+				else
+				{
+					std::cerr << cli.url << " HTTP code " << cli.code << ": " << cli.retval << std::endl;
+				}
+			}
+			break;
+		case CMD_ADD_PURCHASE:
+			{
+				const Purchase *p = cli.add_purchase(config.user_id, config.fridge_id, config.meal_id, config.cost);
+				if (p)
+				{
+					std::cout << p->id() << "\t" << p->start() << "\t" << p->finish() << std::endl;
 				}
 				else
 				{

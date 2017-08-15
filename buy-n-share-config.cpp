@@ -9,7 +9,7 @@ static const char* progname = "buy-n-share";
 
 BuyNShareConfig::BuyNShareConfig()
 	: base_url(DEF_BASE_URL), cmd(CMD_NONE), user_id(0), key(""), cn(""), locale(""),
-	cost(0.0), lat(0.0), lon(0.0), alt(0), fridge_id(0)
+	cost(0.0), lat(0.0), lon(0.0), alt(0), fridge_id(0), meal_id(0)
 {
 }
 
@@ -38,9 +38,9 @@ int BuyNShareConfig::parseCmd
 	// commands
 	struct arg_lit *a_meal = arg_lit0(NULL, "meal", "print fridge meals");
 	struct arg_lit *a_balance = arg_lit0(NULL, "balance", "print fridge purchase balance by user");
-	struct arg_str *a_add = arg_str0(NULL, "add", "<user|fridge|fridgeuser|purchase>", "Add a new object");
-	struct arg_str *a_rm = arg_str0(NULL, "rm", "<user|fridge|fridgeuser|purchase>", "Remove an object");
-	struct arg_str *a_ls = arg_str0(NULL, "ls", "<user|fridge|fridgeuser|purchase>", "List");
+	struct arg_str *a_add = arg_str0(NULL, "add", "<user|fridge|fridgeuser|meal|purchase>", "Add a new object");
+	struct arg_str *a_rm = arg_str0(NULL, "rm", "<user|fridge|fridgeuser|meal|purchase>", "Remove an object");
+	struct arg_str *a_ls = arg_str0(NULL, "ls", "<user|fridge|fridgeuser|meal|purchase>", "List");
 
 	struct arg_int *a_user_id = arg_int0("i", "id", "<number>", "User identifier");
 	struct arg_str *a_user_key = arg_str0("k", "key", "<secret>", "Password");
@@ -53,6 +53,7 @@ int BuyNShareConfig::parseCmd
 	struct arg_int *a_alt = arg_int0("a", "alt", "<number>", "Altitude");
 	
 	struct arg_int *a_fridge_id = arg_int0("f", "fid", "<number>", "Fridge identifier");
+	struct arg_int *a_meal_id = arg_int0("m", "mid", "<number>", "Meal identifier");
 	
 	struct arg_lit *a_help = arg_lit0("h", "help", "Show this help");
 	struct arg_end *a_end = arg_end(20);
@@ -62,7 +63,7 @@ int BuyNShareConfig::parseCmd
 		// commands
 		a_meal, a_balance, a_add, a_rm, a_ls,
 		// identification
-		a_user_id, a_fridge_id, a_user_key,
+		a_user_id, a_fridge_id, a_meal_id, a_user_key,
 		// options
 		a_cn, a_locale, a_cost, a_lat, a_lon, a_alt,
 		// others
@@ -96,6 +97,8 @@ int BuyNShareConfig::parseCmd
 			cmd = CMD_ADD_FRIDGE;
 		if (strcmp(*a_add->sval, "fridgeuser") == 0)
 			cmd = CMD_ADD_FRIDGE_USER;
+		if (strcmp(*a_add->sval, "meal") == 0)
+			cmd = CMD_ADD_MEAL;
 		if (strcmp(*a_add->sval, "purchase") == 0)
 			cmd = CMD_ADD_PURCHASE;
 	}
@@ -108,6 +111,8 @@ int BuyNShareConfig::parseCmd
 			cmd = CMD_RM_FRIDGE;
 		if (strcmp(*a_rm->sval, "fridgeuser") == 0)
 			cmd = CMD_RM_FRIDGE_USER;
+		if (strcmp(*a_rm->sval, "meal") == 0)
+			cmd = CMD_RM_MEAL;
 		if (strcmp(*a_rm->sval, "purchase") == 0)
 			cmd = CMD_RM_PURCHASE;
 	}
@@ -120,6 +125,8 @@ int BuyNShareConfig::parseCmd
 			cmd = CMD_LS_FRIDGE;
 		if (strcmp(*a_ls->sval, "fridgeuser") == 0)
 			cmd = CMD_LS_FRIDGE_USER;
+		if (strcmp(*a_ls->sval, "meal") == 0)
+			cmd = CMD_LS_MEAL;
 		if (strcmp(*a_ls->sval, "purchase") == 0)
 			cmd = CMD_LS_PURCHASE;
 	}
@@ -132,6 +139,10 @@ int BuyNShareConfig::parseCmd
 		fridge_id = *a_fridge_id->ival;
 	else
 		fridge_id = 0;
+	if (a_meal_id->count)
+		meal_id = *a_meal_id->ival;
+	else
+		meal_id = 0;
 	if (a_user_key->count)
 		key = *a_user_key->sval;
 	else

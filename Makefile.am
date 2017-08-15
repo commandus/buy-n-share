@@ -13,7 +13,7 @@ endif
 fbs = \
 	fbs/buynshare.fbs fbs/user.fbs fbs/users.fbs fbs/fridge.fbs fbs/fridges.fbs fbs/meal.fbs fbs/purchase.fbs \
 	fbs/mealcard.fbs fbs/fridgemealcards.fbs fbs/fridgeuser.fbs fbs/fridgeusers.fbs fbs/userfridges.fbs \
-	fbs/purchases.fbs fbs/fridgepurchases.fbs fbs/userpurchases.fbs
+	fbs/purchases.fbs fbs/fridgepurchases.fbs fbs/userpurchases.fbs fbs/meals.fbs
 gen = gen/buynshare_generated.h
 $(gen): Makefile
 	mkdir -p gen
@@ -21,8 +21,8 @@ $(gen): Makefile
 
 gen_php = php/bs/Fridge.php php/bs/FridgeMealCards.php  php/bs/FridgePurchases.php  php/bs/FridgeUser.php \
 	php/bs/Geo.php php/bs/Meal.php php/bs/Purchases.php php/bs/User.php php/bs/Users.php \
-	php/bs/Fridge.php php/bs/Fridges.php php/bs/FridgeUsers.php php/bs/MealCard.php \
-	php/bs/Purchase.php php/bs/UserFridges.php php/bs/UserPurchases.php
+	php/bs/Fridges.php php/bs/FridgeUsers.php php/bs/MealCard.php \
+	php/bs/Purchase.php php/bs/UserFridges.php php/bs/UserPurchases.php php/bs/Meals.php
 	
 $(gen_php): Makefile
 	mkdir -p php

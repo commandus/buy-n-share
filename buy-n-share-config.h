@@ -16,17 +16,20 @@
 #define CMD_ADD_USER		10
 #define CMD_ADD_FRIDGE		11
 #define CMD_ADD_FRIDGE_USER	12
-#define CMD_ADD_PURCHASE	13
+#define CMD_ADD_MEAL		13
+#define CMD_ADD_PURCHASE	14
 
 #define CMD_RM_USER			20
 #define CMD_RM_FRIDGE		21
 #define CMD_RM_FRIDGE_USER	22
-#define CMD_RM_PURCHASE		23
+#define CMD_RM_MEAL			23
+#define CMD_RM_PURCHASE		24
 
 #define CMD_LS_USER			30
 #define CMD_LS_FRIDGE		31
 #define CMD_LS_FRIDGE_USER	32
-#define CMD_LS_PURCHASE		33
+#define CMD_LS_MEAL			33
+#define CMD_LS_PURCHASE		34
 
 /**
  * Command line interface (CLI) tool configuration structure
@@ -58,6 +61,7 @@ public:
 	double lon;										///< Longitude
 	int alt;										///< Altitoide
 	uint64_t fridge_id;
+	uint64_t meal_id;
 	
 	BuyNShareConfig();
 	BuyNShareConfig

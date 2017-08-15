@@ -15,6 +15,10 @@
 #include "fridges_generated.h"
 #include "fridgeuser_generated.h"
 #include "fridgeusers_generated.h"
+#include "meal_generated.h"
+#include "meals_generated.h"
+#include "purchase_generated.h"
+#include "purchases_generated.h"
 
 using namespace bs;
 
@@ -52,11 +56,6 @@ public:
 		const int alt
 	);
 
-	const Users *ls_user
-	(
-		const std::string &locale
-	);
-
 	const Fridge *add_fridge
 	(
 		const std::string &cn,
@@ -67,11 +66,6 @@ public:
 		const int alt
 	);
 
-	const Fridges *ls_fridge
-	(
-		const std::string &locale
-	);
-	
 	const FridgeUser *add_fridge_user
 	(
 		const uint64_t &user_id,
@@ -79,6 +73,31 @@ public:
 		const uint64_t &cost
 	);
 
+	const Meal *add_meal
+	(
+		const std::string &cn,
+		const std::string &locale
+	);
+
+	const Purchase *add_purchase
+	(
+		const uint64_t &user_id,
+		const uint64_t &fridge_id,
+		const uint64_t &meal_id,
+		const uint64_t &cost
+	);
+
+	const Users *ls_user
+	(
+		const std::string &locale
+	);
+
+
+	const Fridges *ls_fridge
+	(
+		const std::string &locale
+	);
+	
 	const FridgeUsers *ls_fridge_users
 	(
 		const uint64_t &fridge_id
@@ -87,6 +106,16 @@ public:
 	const FridgeUsers *ls_fridgeuser
 	(
 		const uint64_t &fridge_id
+	);
+
+	const Meals *ls_meal
+	(
+		const std::string &locale
+	);
+
+	const Purchases *ls_purchase
+	(
+		const uint64_t &user_id
 	);
 	
 };
