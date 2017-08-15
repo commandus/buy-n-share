@@ -19,6 +19,7 @@ require "bs/Fridges.php";
 require "bs/FridgeUser.php";
 require "bs/Geo.php";
 require "bs/Meal.php";
+require "bs/Meals.php";
 require "bs/UserFridges.php";
 require "bs/UserPurchases.php";
 
@@ -116,6 +117,43 @@ function fb_fridgeuser(
     bs\FridgeUser::addBalance($builder, $balance);
     $fu = bs\FridgeUser::EndFridgeUser($builder);
     $builder->Finish($fu);
+    return $builder->dataBuffer()->data();
+}
+
+function fb_meal(
+    $id,
+    $cn,
+    $locale
+)
+{
+    $builder = new Google\FlatBuffers\FlatbufferBuilder(0);
+    $scn = $builder->createString($cn);
+    $slocale = $builder->createString($locale);
+	bs\Meal::startMeal($builder);
+    bs\Meal::addId($builder, $id);
+    bs\Meal::addCn($builder, $scn);
+    bs\Meal::addLocale($builder, $slocale);
+    $u = bs\Meal::EndMeal($builder);
+    $builder->Finish($u);
+    return $builder->dataBuffer()->data();
+}
+
+function fb_purchase(
+    $id,
+    $user_id,
+    $fridge_id,
+    $meal_id,
+    $cost,
+    $start,
+    $finish,
+    &$votes
+)
+{
+    $builder = new Google\FlatBuffers\FlatbufferBuilder(0);
+    $meal = bs\Meal::createMeal($builder, $meal_id, 0, 0);
+    $vvotes = bs\Votes::CreateVotesVector($builder, $votes);
+    $p = bs\Purchase::createPurchase($id, $user_id, $fridge_id, $meal, $cost, $start, $finish, $vvotes);
+    $builder->Finish($p);
     return $builder->dataBuffer()->data();
 }
 
@@ -221,6 +259,35 @@ function fb_fridgeusers
 	bs\FridgeUsers::startFridgeUsers($builder);
 	bs\FridgeUsers::addFridgeUsers($builder, $fv);
 	$ff = bs\FridgeUsers::EndFridgeUsers($builder);
+    $builder->Finish($ff);
+    return $builder->dataBuffer()->data();
+}
+
+function fb_meals
+(
+    &$meals
+)
+{
+    $builder = new Google\FlatBuffers\FlatbufferBuilder(0);
+	
+	$ma = array();
+	foreach ($meals as $meal)
+	{
+	    $scn = $builder->createString($meal[1]);
+		$slocale = $builder->createString($meal[2]);
+
+		bs\Meal::startFridge($builder);
+		bs\Meal::addId($builder, $meal[0]);
+		bs\Meal::addCn($builder, $scn);
+		bs\Meal::addLocale($builder, $slocale);
+
+		$f = bs\Fridge::EndFridge($builder);
+		array_push($ma, $f);
+	}
+	$mv = bs\Meals::CreateMealsVector($builder, $ma);
+	bs\Meals::startMeals($builder);
+	bs\Meals::addMeals($builder, $mv);
+	$ff = bs\Meals::EndMeals($builder);
     $builder->Finish($ff);
     return $builder->dataBuffer()->data();
 }
@@ -388,5 +455,110 @@ function ls_fridgeuser
     done($conn);
     return $r;
 }
+
+function ls_meal
+(
+	$locale
+)
+{
+    $conn = init();
+    $q = pg_query_params($conn, 
+        "SELECT id, cn, locale
+        FROM \"meal\" WHERE locale = $1 ORDER BY id", array($locale)
+    );
+	if (!$q)
+	{
+	    done($conn);
+		return false;
+	}
+	$r = array();
+	while($row = pg_fetch_row($q))
+	{
+		array_push($r, $row);
+	}
+    pg_free_result($q);
+    done($conn);
+    return $r;
+}
+
+function ls_purchase
+(
+	$user_id
+)
+{
+    $conn = init();
+    $q = pg_query_params($conn, 
+        "SELECT p.id, p.fridge_id, p.user_id, p.meal_id, p.cost, p.start, p.finish,
+        f.cn, '' as fkey, f.locale, f.lat, f.lon, f.alt,
+	    u.cn, '' as ukey, u.locale, u.lat, u.lon, u.alt,
+	    m.cn, m.locale
+        FROM \"purchase\" p, \"user\" u, \"fridge\" f, \"meal\" m WHERE p.fridge_id = f.id AND 
+        p.user_id = u.id AND p.meal_id = m.id AND p.user_id = $1 
+        ORDER BY p.id", array($user_id)
+    );
+	if (!$q)
+	{
+	    done($conn);
+		return false;
+	}
+	$r = array();
+	while($row = pg_fetch_row($q))
+	{
+		array_push($r, $row);
+	}
+    pg_free_result($q);
+    done($conn);
+    return $r;
+}
+
+function add_meal
+(
+    $cn,
+    $locale
+)
+{
+    $conn = init();
+    $q = pg_query_params($conn, 
+		'INSERT INTO "meal" (cn, locale) VALUES ($1, $2) RETURNING id', 
+		array($cn, $locale)
+    );
+    $r = pg_fetch_row($q);
+	if (!$q)
+	{
+	    done($conn);
+		return false;
+	}
+    pg_free_result($q);
+    done($conn);
+    return $r[0];
+}
+
+function add_purchase
+(
+    $user_id,
+    $fridge_id,
+    $meal_id,
+    $cost,
+    $start,
+    $finish,
+    $votes
+)
+{
+    $conn = init();
+    $q = pg_query_params($conn, 
+		'INSERT INTO "meal" (cn, locale) VALUES ($1, $2) RETURNING id', 
+		array($cn, $locale)
+    );
+    $r = pg_fetch_row($q);
+	if (!$q)
+	{
+	    done($conn);
+		return false;
+	}
+    pg_free_result($q);
+    done($conn);
+    return $r[0];
+}
+
 
 ?>

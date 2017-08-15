@@ -184,7 +184,7 @@ int main(int argc, char** argv)
 				const Meal *m = cli.add_meal(config.cn, config.locale);
 				if (m)
 				{
-					std::cout << m->id() << "\t" << m->cn() << "\t" << m->locale() << std::endl;
+					std::cout << m->id() << "\t" << m->cn()->str() << "\t" << m->locale()->str() << std::endl;
 				}
 				else
 				{
