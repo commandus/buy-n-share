@@ -19,7 +19,11 @@ $(gen): Makefile
 	mkdir -p gen
 	flatc --cpp -o gen $(fbs)
 
-gen_php = php/buynshare.php
+gen_php = php/bs/Fridge.php php/bs/FridgeMealCards.php  php/bs/FridgePurchases.php  php/bs/FridgeUser.php \
+	php/bs/Geo.php php/bs/Meal.php php/bs/Purchases.php php/bs/User.php php/bs/Users.php \
+	php/bs/Fridge.php php/bs/Fridges.php php/bs/FridgeUsers.php php/bs/MealCard.php \
+	php/bs/Purchase.php php/bs/UserFridges.php php/bs/UserPurchases.php
+	
 $(gen_php): Makefile
 	mkdir -p php
 	flatc --php -o php $(fbs)

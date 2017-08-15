@@ -32,10 +32,19 @@ class FridgeUser extends Table
         return $this;
     }
 
+    /**
+     * @return ulong
+     */
+    public function getFridgeid()
+    {
+        $o = $this->__offset(4);
+        return $o != 0 ? $this->bb->getUlong($o + $this->bb_pos) : 0;
+    }
+
     public function getUser()
     {
         $obj = new User();
-        $o = $this->__offset(4);
+        $o = $this->__offset(6);
         return $o != 0 ? $obj->init($this->__indirect($o + $this->bb_pos), $this->bb) : 0;
     }
 
@@ -44,7 +53,7 @@ class FridgeUser extends Table
      */
     public function getStart()
     {
-        $o = $this->__offset(6);
+        $o = $this->__offset(8);
         return $o != 0 ? $this->bb->getUint($o + $this->bb_pos) : 0;
     }
 
@@ -53,7 +62,7 @@ class FridgeUser extends Table
      */
     public function getFinish()
     {
-        $o = $this->__offset(8);
+        $o = $this->__offset(10);
         return $o != 0 ? $this->bb->getUint($o + $this->bb_pos) : 0;
     }
 
@@ -62,7 +71,7 @@ class FridgeUser extends Table
      */
     public function getBalance()
     {
-        $o = $this->__offset(10);
+        $o = $this->__offset(12);
         return $o != 0 ? $this->bb->getLong($o + $this->bb_pos) : 0;
     }
 
@@ -72,16 +81,17 @@ class FridgeUser extends Table
      */
     public static function startFridgeUser(FlatBufferBuilder $builder)
     {
-        $builder->StartObject(4);
+        $builder->StartObject(5);
     }
 
     /**
      * @param FlatBufferBuilder $builder
      * @return FridgeUser
      */
-    public static function createFridgeUser(FlatBufferBuilder $builder, $user, $start, $finish, $balance)
+    public static function createFridgeUser(FlatBufferBuilder $builder, $fridgeid, $user, $start, $finish, $balance)
     {
-        $builder->startObject(4);
+        $builder->startObject(5);
+        self::addFridgeid($builder, $fridgeid);
         self::addUser($builder, $user);
         self::addStart($builder, $start);
         self::addFinish($builder, $finish);
@@ -92,12 +102,22 @@ class FridgeUser extends Table
 
     /**
      * @param FlatBufferBuilder $builder
+     * @param ulong
+     * @return void
+     */
+    public static function addFridgeid(FlatBufferBuilder $builder, $fridgeid)
+    {
+        $builder->addUlongX(0, $fridgeid, 0);
+    }
+
+    /**
+     * @param FlatBufferBuilder $builder
      * @param int
      * @return void
      */
     public static function addUser(FlatBufferBuilder $builder, $user)
     {
-        $builder->addOffsetX(0, $user, 0);
+        $builder->addOffsetX(1, $user, 0);
     }
 
     /**
@@ -107,7 +127,7 @@ class FridgeUser extends Table
      */
     public static function addStart(FlatBufferBuilder $builder, $start)
     {
-        $builder->addUintX(1, $start, 0);
+        $builder->addUintX(2, $start, 0);
     }
 
     /**
@@ -117,7 +137,7 @@ class FridgeUser extends Table
      */
     public static function addFinish(FlatBufferBuilder $builder, $finish)
     {
-        $builder->addUintX(2, $finish, 0);
+        $builder->addUintX(3, $finish, 0);
     }
 
     /**
@@ -127,7 +147,7 @@ class FridgeUser extends Table
      */
     public static function addBalance(FlatBufferBuilder $builder, $balance)
     {
-        $builder->addLongX(3, $balance, 0);
+        $builder->addLongX(4, $balance, 0);
     }
 
     /**

@@ -108,13 +108,14 @@ function fb_fridgeuser(
     bs\User::addGeo($builder, bs\Geo::createGeo($builder, 0.0, 0.0, 0.0));
     $user = bs\User::EndUser($builder);
 
-	bs\Fridge::startFridgeUser($builder);
-    bs\Fridge::addUser($builder, $user);
-    bs\Fridge::addStart($builder, $start);
-    bs\Fridge::addFinish($builder, $finish);
-    bs\Fridge::addBalance($builder, $balance);
-    $u = bs\Fridge::EndFridgeUser($builder);
-    $builder->Finish($u);
+    bs\FridgeUser::startFridgeUser($builder);
+    bs\FridgeUser::addFridgeid($builder, $fridge_id);
+    bs\FridgeUser::addUser($builder, $user);
+    bs\FridgeUser::addStart($builder, $start);
+    bs\FridgeUser::addFinish($builder, $finish);
+    bs\FridgeUser::addBalance($builder, $balance);
+    $fu = bs\FridgeUser::EndFridgeUser($builder);
+    $builder->Finish($fu);
     return $builder->dataBuffer()->data();
 }
 

@@ -63,6 +63,7 @@ table FridgeMealCards
 // 
 table FridgeUser
 {
+	fridgeid: ulong;
 	user: User;
 	start: uint;
 	finish: uint;
