@@ -200,8 +200,10 @@ const FridgeUser *FBClient::add_fridge_user
 	const FridgeUser *ret_fridge;
 	
 	FlatBufferBuilder fbb;
-	flatbuffers::Offset<FridgeUser> u = CreateFridgeUser(fbb, 0, 0, 0, balance);
-	fbb.Finish(u);
+	
+	flatbuffers::Offset<User> u = CreateUser(fbb, user_id, 0, 0, 0, 0);
+	flatbuffers::Offset<FridgeUser> fu = CreateFridgeUser(fbb, fridge_id, u, 0, 0, balance);
+	fbb.Finish(fu);
 	
 	CURL *curl = postCurlUrl(url + "add_fridgeuser.php", fbb.GetBufferPointer(), fbb.GetSize());
 	if (perform(curl) == 200)

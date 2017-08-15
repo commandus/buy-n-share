@@ -147,7 +147,7 @@ int BuyNShareConfig::parseCmd
 	if (a_cost->count)
 		cost = *a_cost->ival;
 	else
-		lat = 0.0;
+		cost = 0.0;
 	if (a_lat->count)
 		lat = *a_lat->dval;
 	else
