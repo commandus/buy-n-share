@@ -5,21 +5,21 @@ require "buynshare.php";
 $user_id = $_GET['user_id'];
 $purchase_id = $_GET['purchase_id'];
 
-// Add vote
-$id = add_vote(
+// Remove vote
+$done = rm_vote(
 	$user_id,
 	$purchase_id
 );
 
-if (!$id)
+if (!$done)
 {
 	http_response_code(500);
 	header('Content-Type: text/plain');
-	echo 'Add error: ' . pg_last_error();
+	echo 'Remove error: ' . pg_last_error();
 }
 
 // Return purchase
 header('Content-Type: text/plain');
-echo $id;
+echo $done;
 
 ?>

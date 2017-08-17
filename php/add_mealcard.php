@@ -22,8 +22,9 @@ try
 
 // Create a new mealCard
 $id = add_mealcard(
-  $m->getCn(),
-  $m->getLocale()
+	$fridge_id,
+	$meal_id,
+	$qty
 );
 
 if (!$id)
@@ -39,7 +40,7 @@ header('Content-Type: application/octet-stream');
 echo fb_mealcard(
 	$fridge_id,
 	$meal_id,
-	x
+	$qty
 );
 
 ?>
