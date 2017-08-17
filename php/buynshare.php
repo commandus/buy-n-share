@@ -555,7 +555,60 @@ function add_meal
 }
 
 /**
+  * @brief Add meal card
+  */
+function add_mealcard
+(
+	$fridge_id,
+	$meal_id,
+	$qty
+)
+{
+    $conn = init();
+    $q = pg_query_params($conn, 
+		'SELECT id FROM "mealcard" WHERE fridge_id = $1 AND meal_id = $2', array($fridge_id, $meal_id)
+    );
+	if ($q)
+	{
+		$r = pg_fetch_row($q);
+		if ($r)
+		{
+            $q = pg_query_params($conn, 
+                'UPDATE  "meal" SET fridge_id = $1, meal_id = $2, qty = $3', array($fridge_id, $meal_id, $qty)
+            );
+            if (!$q)
+            {
+                done($conn);
+                return false;
+            }
+            return $r[0];
+        }
+	}
+    
+    $q = pg_query_params($conn, 
+        'INSERT INTO "meal" (fridge_id, meal_id, qty) VALUES ($1, $2, $3) RETURNING id', array($fridge_id, $meal_id, $qty)
+    );
+	if (!$q)
+	{
+	    done($conn);
+		return false;
+	}
+
+	$r = pg_fetch_row($q);
+	if (!$r)
+	{
+		done($conn);
+		return false;
+	}
+    
+    pg_free_result($q);
+    done($conn);
+    return $r[0];
+}
+
+/**
   * @brief Add purchase and votes
+  * @param votes array- user id list, true- all, false- none
   */
 function add_purchase
 (
@@ -581,18 +634,37 @@ function add_purchase
 	}
 
 	$purchase_id = $r[0];
-	for ($i = 0; $i < count($votes); $i++)
-	{
-		$q = pg_query_params($conn, 
-			'INSERT INTO "vote" (purchase_id, vote_id, val) VALUES ($1, $2, $3)', array($purchase_id, $votes[$i], 1)
-		);
-		if (!$q)
-		{
-			done($conn);
-			return false;
-		}
-		pg_free_result($q);
-	}
+    if (is_array($votes))
+    {
+        for ($i = 0; $i < count($votes); $i++)
+        {
+            $q = pg_query_params($conn, 
+                'INSERT INTO "vote" (purchase_id, user_id, val) VALUES ($1, $2, $3)', array($purchase_id, $votes[$i], 1)
+            );
+            if (!$q)
+            {
+                done($conn);
+                return false;
+            }
+            pg_free_result($q);
+        }
+    }
+    else
+    {
+        if ($votes)
+        {
+            // add all
+            $q = pg_query_params($conn, 
+                'INSERT INTO "vote" (purchase_id, user_id, val) SELECT $2, user_id, $3 FROM "fridgeuser" WHERE fridge_id = $1', array($fridge_id, $purchase_id, 1)
+            );
+            if (!$q)
+            {
+                done($conn);
+                return false;
+            }
+            pg_free_result($q);
+        }
+    }
     done($conn);
     return $purchase_id;
 }
