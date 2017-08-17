@@ -12,17 +12,27 @@ try
 {
 	http_response_code(500);
 	header('Content-Type: text/plain');
-  echo "Error: no input data\n";
+	echo "Error: no input data\n";
 	return;
 }
 
 $start = time(); // $f->getStart();
 $finish = $f->getFinish();
+$all = _GET['all'];
 
-$vs = array();
-for ($i = 0; $i < $f->getVotesLength(); $i++)
+if ($all)
 {
-  array_push($vs, $f->getVotes($i));
+	// force all
+	$vs = true;
+}
+else
+{
+	// as specified
+	$vs = array();
+	for ($i = 0; $i < $f->getVotesLength(); $i++)
+	{
+		array_push($vs, $f->getVotes($i));
+	}
 }
 
 // Create a new purchase
