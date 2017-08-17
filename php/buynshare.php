@@ -10,6 +10,7 @@ require "bs/FridgeMealCards.php";
 require "bs/FridgePurchases.php";
 require "bs/FridgeUsers.php";
 require "bs/MealCard.php";
+require "bs/MealCards.php";
 require "bs/Purchase.php";
 require "bs/Purchases.php";
 require "bs/User.php";
@@ -511,6 +512,9 @@ function ls_purchase
     return $r;
 }
 
+/**
+  * @brief Add meal
+  */
 function add_meal
 (
     $cn,
@@ -519,20 +523,40 @@ function add_meal
 {
     $conn = init();
     $q = pg_query_params($conn, 
+		'SELECT id FROM "meal" WHERE cn = $1 AND locale = $2', array($cn, $locale)
+    );
+	if ($q)
+	{
+		$r = pg_fetch_row($q);
+		if ($r)
+			return $r[0];
+	}
+    
+    $q = pg_query_params($conn, 
 		'INSERT INTO "meal" (cn, locale) VALUES ($1, $2) RETURNING id', 
 		array($cn, $locale)
     );
-    $r = pg_fetch_row($q);
 	if (!$q)
 	{
 	    done($conn);
 		return false;
 	}
+
+	$r = pg_fetch_row($q);
+	if (!$r)
+	{
+		done($conn);
+		return false;
+	}
+    
     pg_free_result($q);
     done($conn);
     return $r[0];
 }
 
+/**
+  * @brief Add purchase and votes
+  */
 function add_purchase
 (
     $user_id,
@@ -546,8 +570,8 @@ function add_purchase
 {
     $conn = init();
     $q = pg_query_params($conn, 
-		'INSERT INTO "meal" (cn, locale) VALUES ($1, $2) RETURNING id', 
-		array($cn, $locale)
+		'INSERT INTO "purchase" (user_id, fridge_id, meal_id, cost, start, finish) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id', 
+		array($user_id, $fridge_id, $meal_id, $cost, $start, $finish)
     );
     $r = pg_fetch_row($q);
 	if (!$q)
@@ -555,10 +579,106 @@ function add_purchase
 	    done($conn);
 		return false;
 	}
-    pg_free_result($q);
+
+	$purchase_id = $r[0];
+	for ($i = 0; $i < count($votes); $i++)
+	{
+		$q = pg_query_params($conn, 
+			'INSERT INTO "vote" (purchase_id, vote_id, val) VALUES ($1, $2, $3)', array($purchase_id, $votes[$i], 1)
+		);
+		if (!$q)
+		{
+			done($conn);
+			return false;
+		}
+		pg_free_result($q);
+	}
     done($conn);
-    return $r[0];
+    return $purchase_id;
 }
 
+/**
+  * @brief Add user vote for purchase
+  */
+function add_vote
+(
+    $user_id,
+    $purchase_id
+)
+{
+    $conn = init();
+	// Delete all prevoius votes is not necessary
+    $q = pg_query_params($conn, 
+		'DELETE FROM "vote" WHERE purchase_id = $1', array($purchase_id)
+    );
+	
+	if (!$q)
+	{
+		done($conn);
+		return false;
+	}
+	pg_free_result($q);
+	
+	$q = pg_query_params($conn, 
+		'INSERT INTO "vote" (purchase_id, user_id, val) VALUES ($1, $2, $3)', array($purchase_id, $user_id, 1)
+	);
+	if (!$q)
+	{
+		done($conn);
+		return false;
+	}
+	pg_free_result($q);
+
+	done($conn);
+    return $purchase_id;
+}
+
+/**
+  * @brief Remove user vote for purchase
+  */
+function rm_vote
+(
+    $user_id,
+    $purchase_id
+)
+{
+    $conn = init();
+	$q = pg_query_params($conn, 
+		'DELETE FROM "vote" WHERE purchase_id = $1 AND user_id = $2', array($purchase_id, $user_id)
+	);
+	if (!$q)
+	{
+		done($conn);
+		return false;
+	}
+	pg_free_result($q);
+
+	done($conn);
+    return $purchase_id;
+}
+
+/**
+  * @brief Clear all votes for purchase
+  */
+function clear_votes
+(
+    $purchase_id
+)
+{
+    $conn = init();
+	// Delete all prevoius votes is not necessary
+    $q = pg_query_params($conn, 
+		'DELETE FROM "vote" WHERE purchase_id = $1', array($purchase_id)
+    );
+	
+	if (!$q)
+	{
+		done($conn);
+		return false;
+	}
+	pg_free_result($q);
+	done($conn);
+    return $purchase_id;
+}
 
 ?>
