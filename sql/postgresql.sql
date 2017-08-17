@@ -30,7 +30,7 @@ CREATE TABLE fridge (
 );
 
 
-ALTER TABLE public.fridge OWNER TO commandus_buynshare1;
+ALTER TABLE public.fridge OWNER TO commandu;
 
 --
 -- Name: fridge_id_seq; Type: SEQUENCE; Schema: public; Owner: commandu
@@ -44,7 +44,7 @@ CREATE SEQUENCE fridge_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.fridge_id_seq OWNER TO commandus_buynshare1;
+ALTER TABLE public.fridge_id_seq OWNER TO commandu;
 
 --
 -- Name: fridge_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: commandu
@@ -67,28 +67,7 @@ CREATE TABLE fridgeuser (
 );
 
 
-ALTER TABLE public.fridgeuser OWNER TO commandus_buynshare1;
-
---
--- Name: fridgeuser_fridge_id_seq; Type: SEQUENCE; Schema: public; Owner: commandu
---
-
-CREATE SEQUENCE fridgeuser_fridge_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MAXVALUE
-    NO MINVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.fridgeuser_fridge_id_seq OWNER TO commandus_buynshare1;
-
---
--- Name: fridgeuser_fridge_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: commandu
---
-
-ALTER SEQUENCE fridgeuser_fridge_id_seq OWNED BY fridgeuser.fridge_id;
-
+ALTER TABLE public.fridgeuser OWNER TO commandu;
 
 --
 -- Name: fridgeuser_id_seq; Type: SEQUENCE; Schema: public; Owner: commandu
@@ -102,34 +81,13 @@ CREATE SEQUENCE fridgeuser_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.fridgeuser_id_seq OWNER TO commandus_buynshare1;
+ALTER TABLE public.fridgeuser_id_seq OWNER TO commandu;
 
 --
 -- Name: fridgeuser_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: commandu
 --
 
 ALTER SEQUENCE fridgeuser_id_seq OWNED BY fridgeuser.id;
-
-
---
--- Name: fridgeuser_user_id_seq; Type: SEQUENCE; Schema: public; Owner: commandu
---
-
-CREATE SEQUENCE fridgeuser_user_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MAXVALUE
-    NO MINVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.fridgeuser_user_id_seq OWNER TO commandus_buynshare1;
-
---
--- Name: fridgeuser_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: commandu
---
-
-ALTER SEQUENCE fridgeuser_user_id_seq OWNED BY fridgeuser.user_id;
 
 
 --
@@ -143,7 +101,7 @@ CREATE TABLE meal (
 );
 
 
-ALTER TABLE public.meal OWNER TO commandus_buynshare1;
+ALTER TABLE public.meal OWNER TO commandu;
 
 --
 -- Name: meal_id_seq; Type: SEQUENCE; Schema: public; Owner: commandu
@@ -157,7 +115,7 @@ CREATE SEQUENCE meal_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.meal_id_seq OWNER TO commandus_buynshare1;
+ALTER TABLE public.meal_id_seq OWNER TO commandu;
 
 --
 -- Name: meal_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: commandu
@@ -173,33 +131,12 @@ ALTER SEQUENCE meal_id_seq OWNED BY meal.id;
 CREATE TABLE mealcard (
     id bigint NOT NULL,
     fridge_id bigint NOT NULL,
-    user_id bigint NOT NULL,
+    meal_id bigint NOT NULL,
     qty integer
 );
 
 
-ALTER TABLE public.mealcard OWNER TO commandus_buynshare1;
-
---
--- Name: mealcard_fridge_id_seq; Type: SEQUENCE; Schema: public; Owner: commandu
---
-
-CREATE SEQUENCE mealcard_fridge_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MAXVALUE
-    NO MINVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.mealcard_fridge_id_seq OWNER TO commandus_buynshare1;
-
---
--- Name: mealcard_fridge_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: commandu
---
-
-ALTER SEQUENCE mealcard_fridge_id_seq OWNED BY mealcard.fridge_id;
-
+ALTER TABLE public.mealcard OWNER TO commandu;
 
 --
 -- Name: mealcard_id_seq; Type: SEQUENCE; Schema: public; Owner: commandu
@@ -213,34 +150,13 @@ CREATE SEQUENCE mealcard_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.mealcard_id_seq OWNER TO commandus_buynshare1;
+ALTER TABLE public.mealcard_id_seq OWNER TO commandu;
 
 --
 -- Name: mealcard_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: commandu
 --
 
 ALTER SEQUENCE mealcard_id_seq OWNED BY mealcard.id;
-
-
---
--- Name: mealcard_user_id_seq; Type: SEQUENCE; Schema: public; Owner: commandu
---
-
-CREATE SEQUENCE mealcard_user_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MAXVALUE
-    NO MINVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.mealcard_user_id_seq OWNER TO commandus_buynshare1;
-
---
--- Name: mealcard_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: commandu
---
-
-ALTER SEQUENCE mealcard_user_id_seq OWNED BY mealcard.user_id;
 
 
 --
@@ -258,28 +174,7 @@ CREATE TABLE purchase (
 );
 
 
-ALTER TABLE public.purchase OWNER TO commandus_buynshare1;
-
---
--- Name: purchase_fridge_id_seq; Type: SEQUENCE; Schema: public; Owner: commandu
---
-
-CREATE SEQUENCE purchase_fridge_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MAXVALUE
-    NO MINVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.purchase_fridge_id_seq OWNER TO commandus_buynshare1;
-
---
--- Name: purchase_fridge_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: commandu
---
-
-ALTER SEQUENCE purchase_fridge_id_seq OWNED BY purchase.fridge_id;
-
+ALTER TABLE public.purchase OWNER TO commandu;
 
 --
 -- Name: purchase_id_seq; Type: SEQUENCE; Schema: public; Owner: commandu
@@ -293,55 +188,13 @@ CREATE SEQUENCE purchase_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.purchase_id_seq OWNER TO commandus_buynshare1;
+ALTER TABLE public.purchase_id_seq OWNER TO commandu;
 
 --
 -- Name: purchase_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: commandu
 --
 
 ALTER SEQUENCE purchase_id_seq OWNED BY purchase.id;
-
-
---
--- Name: purchase_meal_id_seq; Type: SEQUENCE; Schema: public; Owner: commandu
---
-
-CREATE SEQUENCE purchase_meal_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MAXVALUE
-    NO MINVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.purchase_meal_id_seq OWNER TO commandus_buynshare1;
-
---
--- Name: purchase_meal_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: commandu
---
-
-ALTER SEQUENCE purchase_meal_id_seq OWNED BY purchase.meal_id;
-
-
---
--- Name: purchase_user_id_seq; Type: SEQUENCE; Schema: public; Owner: commandu
---
-
-CREATE SEQUENCE purchase_user_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MAXVALUE
-    NO MINVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.purchase_user_id_seq OWNER TO commandus_buynshare1;
-
---
--- Name: purchase_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: commandu
---
-
-ALTER SEQUENCE purchase_user_id_seq OWNED BY purchase.user_id;
 
 
 --
@@ -359,7 +212,7 @@ CREATE TABLE "user" (
 );
 
 
-ALTER TABLE public."user" OWNER TO commandus_buynshare1;
+ALTER TABLE public."user" OWNER TO commandu;
 
 --
 -- Name: user_id_seq; Type: SEQUENCE; Schema: public; Owner: commandu
@@ -373,7 +226,7 @@ CREATE SEQUENCE user_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.user_id_seq OWNER TO commandus_buynshare1;
+ALTER TABLE public.user_id_seq OWNER TO commandu;
 
 --
 -- Name: user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: commandu
@@ -394,7 +247,7 @@ CREATE TABLE vote (
 );
 
 
-ALTER TABLE public.vote OWNER TO commandus_buynshare1;
+ALTER TABLE public.vote OWNER TO commandu;
 
 --
 -- Name: vote_id_seq; Type: SEQUENCE; Schema: public; Owner: commandu
@@ -408,55 +261,13 @@ CREATE SEQUENCE vote_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.vote_id_seq OWNER TO commandus_buynshare1;
+ALTER TABLE public.vote_id_seq OWNER TO commandu;
 
 --
 -- Name: vote_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: commandu
 --
 
 ALTER SEQUENCE vote_id_seq OWNED BY vote.id;
-
-
---
--- Name: vote_purchase_id_seq; Type: SEQUENCE; Schema: public; Owner: commandu
---
-
-CREATE SEQUENCE vote_purchase_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MAXVALUE
-    NO MINVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.vote_purchase_id_seq OWNER TO commandus_buynshare1;
-
---
--- Name: vote_purchase_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: commandu
---
-
-ALTER SEQUENCE vote_purchase_id_seq OWNED BY vote.purchase_id;
-
-
---
--- Name: vote_user_id_seq; Type: SEQUENCE; Schema: public; Owner: commandu
---
-
-CREATE SEQUENCE vote_user_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MAXVALUE
-    NO MINVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.vote_user_id_seq OWNER TO commandus_buynshare1;
-
---
--- Name: vote_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: commandu
---
-
-ALTER SEQUENCE vote_user_id_seq OWNED BY vote.user_id;
 
 
 --
@@ -474,20 +285,6 @@ ALTER TABLE ONLY fridgeuser ALTER COLUMN id SET DEFAULT nextval('fridgeuser_id_s
 
 
 --
--- Name: fridge_id; Type: DEFAULT; Schema: public; Owner: commandu
---
-
-ALTER TABLE ONLY fridgeuser ALTER COLUMN fridge_id SET DEFAULT nextval('fridgeuser_fridge_id_seq'::regclass);
-
-
---
--- Name: user_id; Type: DEFAULT; Schema: public; Owner: commandu
---
-
-ALTER TABLE ONLY fridgeuser ALTER COLUMN user_id SET DEFAULT nextval('fridgeuser_user_id_seq'::regclass);
-
-
---
 -- Name: id; Type: DEFAULT; Schema: public; Owner: commandu
 --
 
@@ -502,45 +299,10 @@ ALTER TABLE ONLY mealcard ALTER COLUMN id SET DEFAULT nextval('mealcard_id_seq':
 
 
 --
--- Name: fridge_id; Type: DEFAULT; Schema: public; Owner: commandu
---
-
-ALTER TABLE ONLY mealcard ALTER COLUMN fridge_id SET DEFAULT nextval('mealcard_fridge_id_seq'::regclass);
-
-
---
--- Name: user_id; Type: DEFAULT; Schema: public; Owner: commandu
---
-
-ALTER TABLE ONLY mealcard ALTER COLUMN user_id SET DEFAULT nextval('mealcard_user_id_seq'::regclass);
-
-
---
 -- Name: id; Type: DEFAULT; Schema: public; Owner: commandu
 --
 
 ALTER TABLE ONLY purchase ALTER COLUMN id SET DEFAULT nextval('purchase_id_seq'::regclass);
-
-
---
--- Name: fridge_id; Type: DEFAULT; Schema: public; Owner: commandu
---
-
-ALTER TABLE ONLY purchase ALTER COLUMN fridge_id SET DEFAULT nextval('purchase_fridge_id_seq'::regclass);
-
-
---
--- Name: user_id; Type: DEFAULT; Schema: public; Owner: commandu
---
-
-ALTER TABLE ONLY purchase ALTER COLUMN user_id SET DEFAULT nextval('purchase_user_id_seq'::regclass);
-
-
---
--- Name: meal_id; Type: DEFAULT; Schema: public; Owner: commandu
---
-
-ALTER TABLE ONLY purchase ALTER COLUMN meal_id SET DEFAULT nextval('purchase_meal_id_seq'::regclass);
 
 
 --
@@ -555,20 +317,6 @@ ALTER TABLE ONLY "user" ALTER COLUMN id SET DEFAULT nextval('user_id_seq'::regcl
 --
 
 ALTER TABLE ONLY vote ALTER COLUMN id SET DEFAULT nextval('vote_id_seq'::regclass);
-
-
---
--- Name: purchase_id; Type: DEFAULT; Schema: public; Owner: commandu
---
-
-ALTER TABLE ONLY vote ALTER COLUMN purchase_id SET DEFAULT nextval('vote_purchase_id_seq'::regclass);
-
-
---
--- Name: user_id; Type: DEFAULT; Schema: public; Owner: commandu
---
-
-ALTER TABLE ONLY vote ALTER COLUMN user_id SET DEFAULT nextval('vote_user_id_seq'::regclass);
 
 
 --
@@ -752,7 +500,7 @@ ALTER TABLE ONLY vote
 --
 
 ALTER TABLE ONLY mealcard
-    ADD CONSTRAINT mealcard_user_id_fkey FOREIGN KEY (user_id) REFERENCES "user"(id);
+    ADD CONSTRAINT mealcard_user_id_fkey FOREIGN KEY (meal_id) REFERENCES "user"(id);
 
 
 --
@@ -763,6 +511,87 @@ REVOKE ALL ON SCHEMA public FROM PUBLIC;
 REVOKE ALL ON SCHEMA public FROM postgres;
 GRANT ALL ON SCHEMA public TO postgres;
 GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+--
+-- Name: fridge; Type: ACL; Schema: public; Owner: commandu
+--
+
+REVOKE ALL ON TABLE fridge FROM PUBLIC;
+REVOKE ALL ON TABLE fridge FROM commandu;
+GRANT ALL ON TABLE fridge TO commandu;
+GRANT ALL ON TABLE fridge TO commandu_buynshare;
+
+
+--
+-- Name: fridgeuser; Type: ACL; Schema: public; Owner: commandu
+--
+
+REVOKE ALL ON TABLE fridgeuser FROM PUBLIC;
+REVOKE ALL ON TABLE fridgeuser FROM commandu;
+GRANT ALL ON TABLE fridgeuser TO commandu;
+GRANT ALL ON TABLE fridgeuser TO commandu_buynshare;
+
+
+--
+-- Name: meal; Type: ACL; Schema: public; Owner: commandu
+--
+
+REVOKE ALL ON TABLE meal FROM PUBLIC;
+REVOKE ALL ON TABLE meal FROM commandu;
+GRANT ALL ON TABLE meal TO commandu;
+GRANT ALL ON TABLE meal TO commandu_buynshare;
+
+
+--
+-- Name: mealcard; Type: ACL; Schema: public; Owner: commandu
+--
+
+REVOKE ALL ON TABLE mealcard FROM PUBLIC;
+REVOKE ALL ON TABLE mealcard FROM commandu;
+GRANT ALL ON TABLE mealcard TO commandu;
+GRANT ALL ON TABLE mealcard TO commandu_buynshare;
+
+
+--
+-- Name: purchase; Type: ACL; Schema: public; Owner: commandu
+--
+
+REVOKE ALL ON TABLE purchase FROM PUBLIC;
+REVOKE ALL ON TABLE purchase FROM commandu;
+GRANT ALL ON TABLE purchase TO commandu;
+GRANT ALL ON TABLE purchase TO commandu_buynshare;
+
+
+--
+-- Name: user; Type: ACL; Schema: public; Owner: commandu
+--
+
+REVOKE ALL ON TABLE "user" FROM PUBLIC;
+REVOKE ALL ON TABLE "user" FROM commandu;
+GRANT ALL ON TABLE "user" TO commandu;
+GRANT ALL ON TABLE "user" TO commandu_buynshare;
+GRANT ALL ON TABLE "user" TO commandu_buynshare1;
+
+
+--
+-- Name: user_id_seq; Type: ACL; Schema: public; Owner: commandu
+--
+
+REVOKE ALL ON SEQUENCE user_id_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE user_id_seq FROM commandu;
+GRANT ALL ON SEQUENCE user_id_seq TO commandu;
+GRANT ALL ON SEQUENCE user_id_seq TO commandu_buynshare1;
+
+
+--
+-- Name: vote; Type: ACL; Schema: public; Owner: commandu
+--
+
+REVOKE ALL ON TABLE vote FROM PUBLIC;
+REVOKE ALL ON TABLE vote FROM commandu;
+GRANT ALL ON TABLE vote TO commandu;
+GRANT ALL ON TABLE vote TO commandu_buynshare;
 
 
 --
