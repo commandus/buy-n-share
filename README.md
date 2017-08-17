@@ -131,25 +131,26 @@ exit
 3. FridgeUser fu = add_fridgeuser([User, ]Fridge, FridgeUser[, Взнос]);  // добавляет пользователя в холодильник
 4. Meal m = add_meal([User, ]Meal);   // Новый продукт
 5. Purchase p = add_purchase([User, ]Purchase); // Добавляет также голос. Используется для проводок "Долг"
-6. Vote v = add_vote([User, ]Purchase); // Добавляет голос
+6. int id = add_vote([User, ]Purchase_id); // Добавляет голос, возвращает идентификатор голоса
+7. MealCard m = add_mealcard([User, ]fridge_id, MealCard);   // Добавить продукт в холодильник
 
 ### Remove
 
 1. rm_fridge([User, ]Fridge); // также удаляет всех пользователей- rm_fridgeuser()
 2. Balance = rm_fridgeuser([User, ]Fridge, FridgeUser);  // удаляет пользователя холодильника, вызывает calc() и выравнивает баланс проводками "Долг" add_purchase()
 3. rm_purchase([User, ]Purchase);   // сторнирование
-4. rm_vote([User, ]Purchase); // Отзывает голос
+4. rm_vote([User, ]Purchase_id); // Отзывает голос
 
 ### List
 
-1. ls_fridge([User, ]Fridge); // список холодильников пользователя
-2. ls_fridgeuser([User, ]Fridge, FridgeUser);  // список пользователей холодильника
-3. ls_purchase([User, ]Purchase); // список покупок пользователя
-4. ls_meal([User]); // список продуктов
-5. ls_mealcard([User, ]Fridge); // список продуктов в холодильнике
+1. Fridges f = ls_fridge([User, ]Fridge); // список холодильников пользователя
+2. FridgeUsers fu = ls_fridgeuser([User, ]Fridge, FridgeUser);  // список пользователей холодильника
+3. Purchaces p = ls_purchase([User, ]Purchase); // список покупок пользователя
+4. Meals m = ls_meal([User]); // список продуктов
+5. MealCards c = ls_mealcard([User, ]Fridge); // список продуктов в холодильнике
+6. UserFridges uf = ls_userfridge([User, ])
 
-### Calc
-1. Balance = calc([User, ]Fridge)
+Вызывается
 
 ## Building Windows using Visual Studio 2017
 

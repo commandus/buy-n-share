@@ -126,3 +126,8 @@ table Meals
 {
         meals: [Meal];
 }
+
+table MealCards
+{
+        mealcards: [MealCard];
+}
