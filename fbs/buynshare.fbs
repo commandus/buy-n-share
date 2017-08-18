@@ -114,20 +114,33 @@ table Users
 
 table Fridges
 {
-        fridges: [Fridge];
+	fridges: [Fridge];
 }
 
 table Purchases 
 {
-        purchases: [Purchase];
+	purchases: [Purchase];
 }
 
 table Meals
 {
-        meals: [Meal];
+	meals: [Meal];
 }
 
 table MealCards
 {
-        mealcards: [MealCard];
+	mealcards: [MealCard];
+}
+
+table Payment
+{
+	fridgeid: ulong;
+	userid: ulong;
+	start: uint;
+	total: int;
+}
+
+table Payments
+{
+	payments: [Payment];
 }

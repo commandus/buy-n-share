@@ -1,14 +1,12 @@
 <?php
 require "buynshare.php";
 
-// get user identifier
-$user_id = $_GET['user_id'];
-$purchase_id = $_GET['purchase_id'];
+// get fridge identifier
+$fridge_id = $_GET['fridge_id'];
 
-// Remove vote
-$done = rm_vote(
-	$user_id,
-	$purchase_id
+// Remove fridge
+$done = rm_fridge(
+	$fridge_id
 );
 
 if (!$done)
@@ -18,7 +16,7 @@ if (!$done)
 	echo 'Remove error: ' . pg_last_error();
 }
 
-// Return purchase
+// Return true or false
 header('Content-Type: text/plain');
 echo $done;
 
