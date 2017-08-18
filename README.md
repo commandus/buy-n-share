@@ -148,9 +148,16 @@ exit
 3. Purchaces p = ls_purchase([User, ]Purchase); // список покупок пользователя
 4. Meals m = ls_meal([User]); // список продуктов
 5. MealCards c = ls_mealcard([User, ]Fridge); // список продуктов в холодильнике
-6. UserFridges uf = ls_userfridge([User, ])
+6. UserFridges uf = ls_userfridge([User, ])	// список холодильников с едой
 
-Вызывается
+### Helper functions
+
+#### Расчет баланса
+
+Баланс считается для одного или всех пользователей холодильника
+
+1. $balance_array = calc_pg_user($conn, $fridge_id, $user_id);
+2. $balance_array = calc_pg_fridge($conn, $fridge_id);
 
 ## Building Windows using Visual Studio 2017
 
