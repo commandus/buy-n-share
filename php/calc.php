@@ -1,8 +1,9 @@
 <?php
 /**
-  * @brief Calc balance for user of the fridge
-  * @return array of fridge users balance 
+  * @brief Calc balance for user of the fridge: 
+  * @return array of $fridgeid, $userid, $start, $total
   * @see calc_pg_fridge()
+  * @see rm_fridgeuser()
   */
 function calc_pg_user
 (
@@ -24,9 +25,16 @@ function calc_pg_user
 		return false;
 	
 	$r = array();
+	$start = time();
 	//-------------------------------- VVV INSERT BRAIN HERE VVV --------------------------------
+
+	$total = 0;
 	
 	//-------------------------------- ^^^ INSERT BRAIN HERE ^^^ --------------------------------
+	array_push($r, $fridge_id);
+	array_push($r, $user_id);
+	array_push($r, $start);
+	array_push($r, $total);
 	return $r;
 }
 
