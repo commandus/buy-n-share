@@ -1,6 +1,5 @@
 <?php
 	require "env.php";
-	phpinfo();
 /*
     $conn = init();
     $locale ="ru";
