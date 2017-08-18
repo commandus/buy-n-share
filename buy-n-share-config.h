@@ -18,12 +18,15 @@
 #define CMD_ADD_FRIDGE_USER	12
 #define CMD_ADD_MEAL		13
 #define CMD_ADD_PURCHASE	14
+#define CMD_ADD_VOTE		15
+#define CMD_ADD_MEALCARD	16
 
 #define CMD_RM_USER			20
 #define CMD_RM_FRIDGE		21
 #define CMD_RM_FRIDGE_USER	22
 #define CMD_RM_MEAL			23
 #define CMD_RM_PURCHASE		24
+#define CMD_RM_VOTE			25
 
 #define CMD_LS_USER			30
 #define CMD_LS_FRIDGE		31
@@ -62,6 +65,7 @@ public:
 	int alt;										///< Altitoide
 	uint64_t fridge_id;
 	uint64_t meal_id;
+	uint64_t vote_purchase_id;						///< purchase id
 	
 	BuyNShareConfig();
 	BuyNShareConfig

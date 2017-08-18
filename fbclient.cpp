@@ -263,6 +263,34 @@ const Purchase *FBClient::add_purchase
 	return ret_purchase;
 }
 
+uint64_t FBClient::add_vote
+(
+	const uint64_t &user_id,
+	const uint64_t &purchase_id
+)
+{
+	const Purchase *ret_purchase;
+	
+	FlatBufferBuilder fbb;
+	flatbuffers::Offset<Meal> meal = CreateMeal(fbb, meal_id, 0, 0);
+
+	std::vector<uint64_t> vote;
+	vote.push_back(user_id);
+	flatbuffers::Offset<flatbuffers::Vector<uint64_t>> votes = fbb.CreateVector(vote);
+	
+	flatbuffers::Offset<Purchase> m = CreatePurchase(fbb, 0, user_id, fridge_id, meal, cost, 0, 0, votes);
+	fbb.Finish(m);
+	
+	std::string spurchase;
+	std::string suserid;
+	
+	CURL *curl = postCurlUrl(url + "add_vote.php?purchase_id=" + spurchase + "&user_id=" + suserid, fbb.GetBufferPointer(), fbb.GetSize());
+	if (perform(curl) == 200)
+		ret_purchase = GetPurchase(retval.c_str());
+	else
+		ret_purchase = NULL;
+	return ret_purchase;
+}
 
 const Fridges *FBClient::ls_fridge
 (

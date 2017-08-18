@@ -86,7 +86,19 @@ public:
 		const uint64_t &meal_id,
 		const uint64_t &cost
 	);
+	
+	uint64_t add_vote
+	(
+		const uint64_t &user_id,
+		const uint64_t &purchase_id
+	);
 
+	uint64_t rm_vote
+	(
+		const uint64_t &user_id,
+		const uint64_t &purchase_id
+	);
+	
 	const Users *ls_user
 	(
 		const std::string &locale

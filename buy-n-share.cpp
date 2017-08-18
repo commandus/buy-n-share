@@ -205,6 +205,45 @@ int main(int argc, char** argv)
 				}
 			}
 			break;
+		case CMD_ADD_VOTE:
+			{
+				uint64_t vote_id = cli.add_vote(config.user_id, config.vote_purchase_id);
+				if (vote_id)
+				{
+					std::cout << vote_id << std::endl;
+				}
+				else
+				{
+					std::cerr << cli.url << " HTTP code " << cli.code << ": " << cli.retval << std::endl;
+				}
+			}
+			break;
+		case CMD_RM_VOTE:
+			{
+				bool v = cli.rm_vote(config.user_id, config.vote_purchase_id);
+				if (v)
+				{
+					std::cout << "Vote deleted" << std::endl;
+				}
+				else
+				{
+					std::cerr << cli.url << " HTTP code " << cli.code << ": " << cli.retval << std::endl;
+				}
+			}
+			break;
+		case CMD_ADD_MEALCARD:
+			{
+				const Purchase *p = cli.add_purchase(config.user_id, config.fridge_id, config.meal_id, config.cost);
+				if (p)
+				{
+					std::cout << p->id() << "\t" << p->start() << "\t" << p->finish() << std::endl;
+				}
+				else
+				{
+					std::cerr << cli.url << " HTTP code " << cli.code << ": " << cli.retval << std::endl;
+				}
+			}
+			break;
 		default:
 		// case CMD_MEAL
 			break;
