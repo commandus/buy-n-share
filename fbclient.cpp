@@ -121,8 +121,8 @@ const User *FBClient::add_user
 	const std::string &cn,
 	const std::string &key,
 	const std::string &locale,
-	const double lat,
-	const double lon,
+	const float lat,
+	const float lon,
 	const int alt
 )
 {
@@ -167,8 +167,8 @@ const Fridge *FBClient::add_fridge
 	const std::string &cn,
 	const std::string &key,
 	const std::string &locale,
-	const double lat,
-	const double lon,
+	const float lat,
+	const float lon,
 	const int alt
 )
 {
@@ -269,26 +269,14 @@ uint64_t FBClient::add_vote
 	const uint64_t &purchase_id
 )
 {
-	const Purchase *ret_purchase;
-	
-	FlatBufferBuilder fbb;
-	flatbuffers::Offset<Meal> meal = CreateMeal(fbb, meal_id, 0, 0);
-
-	std::vector<uint64_t> vote;
-	vote.push_back(user_id);
-	flatbuffers::Offset<flatbuffers::Vector<uint64_t>> votes = fbb.CreateVector(vote);
-	
-	flatbuffers::Offset<Purchase> m = CreatePurchase(fbb, 0, user_id, fridge_id, meal, cost, 0, 0, votes);
-	fbb.Finish(m);
-	
-	std::string spurchase;
-	std::string suserid;
-	
-	CURL *curl = postCurlUrl(url + "add_vote.php?purchase_id=" + spurchase + "&user_id=" + suserid, fbb.GetBufferPointer(), fbb.GetSize());
+	uint64_t ret_purchase;
+	std::stringstream ss;
+	ss << url << "add_vote.php?purchase_id=" << purchase_id + "&user_id=" << user_id;
+	CURL *curl = postCurlUrl(ss.str(), NULL, 0);
 	if (perform(curl) == 200)
-		ret_purchase = GetPurchase(retval.c_str());
+		ret_purchase = strtol(retval.c_str(), NULL, 10);
 	else
-		ret_purchase = NULL;
+		ret_purchase = 0;
 	return ret_purchase;
 }
 
@@ -366,3 +354,21 @@ const Purchases *FBClient::ls_purchase
 		ret_purchases = NULL;
 	return ret_purchases;
 }
+
+bool FBClient::rm_vote
+(
+	const uint64_t &user_id,
+	const uint64_t &purchase_id
+)
+{
+	bool ret_vote;
+	std::stringstream ss;
+	ss << url << "rm_vote.php?purchase_id=" << purchase_id + "&user_id=" << user_id;
+	CURL *curl = postCurlUrl(ss.str(), NULL, 0);
+	if (perform(curl) == 200)
+		ret_vote = (retval == "1") || (retval == "true");
+	else
+		ret_vote = 0;
+	return ret_vote;
+}
+

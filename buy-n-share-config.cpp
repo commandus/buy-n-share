@@ -9,7 +9,7 @@ static const char* progname = "buy-n-share";
 
 BuyNShareConfig::BuyNShareConfig()
 	: base_url(DEF_BASE_URL), cmd(CMD_NONE), user_id(0), key(""), cn(""), locale(""),
-	cost(0.0), lat(0.0), lon(0.0), alt(0), fridge_id(0), meal_id(0)
+	cost(0), lat(0.0), lon(0.0), alt(0), fridge_id(0), meal_id(0)
 {
 }
 
@@ -158,7 +158,7 @@ int BuyNShareConfig::parseCmd
 	if (a_cost->count)
 		cost = *a_cost->ival;
 	else
-		cost = 0.0;
+		cost = 0;
 	if (a_lat->count)
 		lat = *a_lat->dval;
 	else

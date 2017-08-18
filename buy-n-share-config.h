@@ -60,8 +60,8 @@ public:
 	std::string cn;									///< common name
 	std::string locale;								///< Locale name
 	uint64_t cost;									///< Cost
-	double lat;										///< Latitude
-	double lon;										///< Longitude
+	float lat;										///< Latitude
+	float lon;										///< Longitude
 	int alt;										///< Altitoide
 	uint64_t fridge_id;
 	uint64_t meal_id;

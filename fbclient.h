@@ -51,8 +51,8 @@ public:
 		const std::string &cn,
 		const std::string &key,
 		const std::string &locale,
-		const double lat,
-		const double lon,
+		const float lat,
+		const float lon,
 		const int alt
 	);
 
@@ -61,8 +61,8 @@ public:
 		const std::string &cn,
 		const std::string &key,
 		const std::string &locale,
-		const double lat,
-		const double lon,
+		const float lat,
+		const float lon,
 		const int alt
 	);
 
@@ -93,7 +93,7 @@ public:
 		const uint64_t &purchase_id
 	);
 
-	uint64_t rm_vote
+	bool rm_vote
 	(
 		const uint64_t &user_id,
 		const uint64_t &purchase_id
