@@ -307,7 +307,7 @@ const FridgeUsers *FBClient::ls_fridgeuser
 	
 	std::stringstream sfridge_id;
 	sfridge_id << fridge_id;
-	CURL *curl = postCurlUrl(url + "ls_fridgeuser.php?fridge=" + sfridge_id.str(), NULL, 0);
+	CURL *curl = postCurlUrl(url + "ls_fridgeuser.php?fridge_id=" + sfridge_id.str(), NULL, 0);
 	if (!curl)
 		return 0;
 
@@ -366,7 +366,7 @@ bool FBClient::rm_vote
 	ss << url << "rm_vote.php?purchase_id=" << purchase_id + "&user_id=" << user_id;
 	CURL *curl = postCurlUrl(ss.str(), NULL, 0);
 	if (perform(curl) == 200)
-		ret_vote = (retval == "1") || (retval == "true");
+		ret_vote = (retval == "1");
 	else
 		ret_vote = 0;
 	return ret_vote;
