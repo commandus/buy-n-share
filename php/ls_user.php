@@ -1,6 +1,6 @@
 <?php
 	require "buynshare.php";
-
+	header('Content-Type: application/octet-stream');
 	// List of users
 	/*
 	$bb = Google\FlatBuffers\ByteBuffer::wrap(file_get_contents('php://input'));
@@ -23,8 +23,6 @@
 	// User list
 	$locale = "ru";
 	$users = ls_user($locale);
-
-	header('Content-Type: application/octet-stream');
 	echo fb_users( $users);
 
 ?>

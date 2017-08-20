@@ -39,13 +39,13 @@
 
 	// Create a new purchase
 	$id = add_purchase(
-	$f->getUserid(),
-	$f->getFridgeid(),
-	$f->getMeal()->getId(),
-	$f->getCost(),
-	$start,
-	$finish,
-	$vs
+		$f->getUserid(),
+		$f->getFridgeid(),
+		$f->getMeal()->getId(),
+		$f->getCost(),
+		$start,
+		$finish,
+		$vs
 	);
 
 	if (!$id)

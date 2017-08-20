@@ -5,7 +5,7 @@
 	if (isset($_REQUEST['locale']))
 		$locale = $_REQUEST ['locale'];
 	else
-		$locale = 0;
+		$locale = 'ru';
 	$meals = ls_meal($locale);
 	echo fb_meals($meals);
 ?>

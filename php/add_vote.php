@@ -19,12 +19,8 @@
 	);
 
 	if (!$id)
-	{
 		http_response_code(500);
-		echo false;
-		return;
-	}
-	// Return purchase
+	// Return vote id
 	echo $id;
 
 ?>

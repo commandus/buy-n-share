@@ -3,7 +3,7 @@
 
 	// Read meal
 	$bb = Google\FlatBuffers\ByteBuffer::wrap(file_get_contents('php://input'));
-
+	header('Content-Type: application/octet-stream');
 	try
 	{
 		$m = bs\Meal::getRootAsMeal($bb);
@@ -11,30 +11,28 @@
 		catch(Exception $e) 
 	{
 		http_response_code(500);
-		header('Content-Type: text/plain');
-	echo "Error: no input data\n";
+		echo false;
 		return;
 	}
 
 	// Create a new meal
 	$id = add_meal(
-	$m->getCn(),
-	$m->getLocale()
+		$m->getCn(),
+		$m->getLocale()
 	);
 
 	if (!$id)
 	{
 		http_response_code(500);
-		header('Content-Type: text/plain');
-		echo 'Add error: ' . pg_last_error();
+		echo false;
+		return;
 	}
 
 	// Return meal
-	header('Content-Type: application/octet-stream');
 	echo fb_meal(
-	$id,
-	$m->getCn(),
-	$m->getLocale()
+		$id,
+		$m->getCn(),
+		$m->getLocale()
 	);
 
 ?>
