@@ -817,6 +817,8 @@
 		$purchase_id
 	)
 	{
+		if (!($purchase_id && $user_id))
+			return false;
 		$conn = init();
 		$q = pg_query_params($conn, 
 			'DELETE FROM "vote" WHERE purchase_id = $1 AND user_id = $2', array($purchase_id, $user_id)
