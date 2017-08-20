@@ -146,5 +146,56 @@
     <None Include="..\php\ls_user.php">
       <Filter>php</Filter>
     </None>
+    <None Include="..\php\add_fridge.php">
+      <Filter>php</Filter>
+    </None>
+    <None Include="..\php\add_fridgeuser.php">
+      <Filter>php</Filter>
+    </None>
+    <None Include="..\php\add_meal.php">
+      <Filter>php</Filter>
+    </None>
+    <None Include="..\php\add_mealcard.php">
+      <Filter>php</Filter>
+    </None>
+    <None Include="..\php\add_purchase.php">
+      <Filter>php</Filter>
+    </None>
+    <None Include="..\php\add_vote.php">
+      <Filter>php</Filter>
+    </None>
+    <None Include="..\php\calc.php">
+      <Filter>php</Filter>
+    </None>
+    <None Include="..\php\ls_fridge.php">
+      <Filter>php</Filter>
+    </None>
+    <None Include="..\php\ls_fridgeuser.php">
+      <Filter>php</Filter>
+    </None>
+    <None Include="..\php\ls_meal.php">
+      <Filter>php</Filter>
+    </None>
+    <None Include="..\php\ls_mealcard.php">
+      <Filter>php</Filter>
+    </None>
+    <None Include="..\php\ls_purchase.php">
+      <Filter>php</Filter>
+    </None>
+    <None Include="..\php\ls_userfridge.php">
+      <Filter>php</Filter>
+    </None>
+    <None Include="..\php\rm_fridge.php">
+      <Filter>php</Filter>
+    </None>
+    <None Include="..\php\rm_fridgeuser.php">
+      <Filter>php</Filter>
+    </None>
+    <None Include="..\php\rm_purchase.php">
+      <Filter>php</Filter>
+    </None>
+    <None Include="..\php\rm_vote.php">
+      <Filter>php</Filter>
+    </None>
   </ItemGroup>
 </Project>
