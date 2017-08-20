@@ -1,10 +1,11 @@
 <?php
 	require "buynshare.php";
-
-	// List of meal
-	$locale = $_GET['locale'];
-	$meals = ls_meal($locale);
-
 	header('Content-Type: application/octet-stream');
+	// List of meal
+	if (isset($_REQUEST['locale']))
+		$locale = $_REQUEST ['locale'];
+	else
+		$locale = 0;
+	$meals = ls_meal($locale);
 	echo fb_meals($meals);
 ?>

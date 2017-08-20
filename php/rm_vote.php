@@ -1,9 +1,16 @@
 <?php
 	require "buynshare.php";
-
+	header('Content-Type: text/plain');
+	
 	// get user identifier
-	$user_id = $_GET['user_id'];
-	$purchase_id = $_GET['purchase_id'];
+	if (isset($_REQUEST['user_id']))
+		$user_id = $_REQUEST ['user_id'];
+	else
+		$user_id = 0;
+	if (isset($_REQUEST ['purchase_id']))
+		$purchase_id = $_REQUEST ['purchase_id'];
+	else
+		$purchase_id = 0;
 
 	// Remove vote
 	$done = rm_vote(
@@ -14,12 +21,7 @@
 	if (!$done)
 	{
 		http_response_code(500);
-		header('Content-Type: text/plain');
-		echo 'Remove error: ' . pg_last_error();
 	}
-
 	// Return purchase
-	header('Content-Type: text/plain');
 	echo $done;
-
 ?>

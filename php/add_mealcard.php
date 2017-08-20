@@ -1,12 +1,22 @@
 <?php
 	require "buynshare.php";
+	header('Content-Type: application/octet-stream');
 
 	// Read meal
 	$bb = Google\FlatBuffers\ByteBuffer::wrap(file_get_contents('php://input'));
 
-	$qty = _GET['qty'];
-	$fridge_id = _GET['fridge_id'];
-	$meal_id = _GET['meal_id'];
+	if (isset($_REQUEST['qty']))
+		$qty = $_REQUEST ['qty'];
+	else
+		$qty = 0;
+	if (isset($_REQUEST['fridge_id']))
+		$fridge_id = $_REQUEST ['fridge_id'];
+	else
+		$fridge_id = 0;
+	if (isset($_REQUEST['meal_id']))
+		$meal_id = $_REQUEST ['meal_id'];
+	else
+		$meal_id = 0;
 
 	try
 	{
@@ -15,8 +25,7 @@
 		catch(Exception $e) 
 	{
 		http_response_code(500);
-		header('Content-Type: text/plain');
-		echo "Error: no input data\n";
+		echo false;
 		return;
 	}
 
@@ -30,13 +39,11 @@
 	if (!$id)
 	{
 		http_response_code(500);
-		header('Content-Type: text/plain');
-		echo 'Add error: ' . pg_last_error();
+		echo false;
+		return;
 	}
 
-
 	// Return meal card
-	header('Content-Type: application/octet-stream');
 	echo fb_mealcard(
 		$fridge_id,
 		$meal_id,

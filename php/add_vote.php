@@ -1,9 +1,16 @@
 <?php
 	require "buynshare.php";
+	header('Content-Type: text/plain');
 
 	// get user identifier
-	$user_id = $_GET['user_id'];
-	$purchase_id = $_GET['purchase_id'];
+	if (isset($_REQUEST['user_id']))
+		$user_id = $_REQUEST ['user_id'];
+	else
+		$user_id = 0;
+	if (isset($_REQUEST['purchase_id']))
+		$purchase_id = $_REQUEST ['purchase_id'];
+	else
+		$purchase_id = 0;
 
 	// Add vote
 	$id = add_vote(
@@ -14,12 +21,10 @@
 	if (!$id)
 	{
 		http_response_code(500);
-		header('Content-Type: text/plain');
-		echo 'Add error: ' . pg_last_error();
+		echo false;
+		return;
 	}
-
 	// Return purchase
-	header('Content-Type: text/plain');
 	echo $id;
 
 ?>

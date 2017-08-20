@@ -1,8 +1,11 @@
 <?php
 	require "buynshare.php";
-
+	header('Content-Type: text/plain');
 	// get purchase identifier
-	$purchase_id = $_GET['purchase_id'];
+	if (isset($_REQUEST['purchase_id']))
+		$purchase_id = $_REQUEST['purchase_id'];
+	else
+		$purchase_id = 0;
 
 	// Remove purchase by identifier
 	$done = rm_purchase(
@@ -10,13 +13,7 @@
 	);
 
 	if (!$done)
-	{
 		http_response_code(500);
-		header('Content-Type: text/plain');
-		echo 'Remove error: ' . pg_last_error();
-	}
-
 	// Return true or false
-	header('Content-Type: text/plain');
 	echo $done;
 ?>

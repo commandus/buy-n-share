@@ -1,9 +1,15 @@
 <?php
 	require "buynshare.php";
-
+	header('Content-Type: application/octet-stream');
 	// get user, fridge identifiers
-	$user_id = $_GET['user_id'];
-	$fridge_id = $_GET['fridge_id'];
+	if (isset($_REQUEST['user_id']))
+		$user_id = $_REQUEST['user_id'];
+	else
+		$user_id = 0;
+	if (isset($_REQUEST['fridge_id']))
+		$fridge_id = $_REQUEST['fridge_id'];
+	else
+		$fridge_id = 0;
 
 	// Remove fridge user and get final balance
 	$balance_array = rm_fridgeuser(
@@ -14,12 +20,10 @@
 	if (!$balance_array)
 	{
 		http_response_code(500);
-		header('Content-Type: text/plain');
-		echo 'Remove error: ' . pg_last_error();
+		return false;
 	}
 
-	// Return true or false
-	header('Content-Type: text/plain');
+	// Return balance
 	echo fb_payments($balance_array);
 
 ?>

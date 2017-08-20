@@ -1,6 +1,6 @@
 <?php
 	require "buynshare.php";
-
+	header('Content-Type: application/octet-stream');
 	// Read purchase
 	$bb = Google\FlatBuffers\ByteBuffer::wrap(file_get_contents('php://input'));
 
@@ -11,14 +11,16 @@
 		catch(Exception $e) 
 	{
 		http_response_code(500);
-		header('Content-Type: text/plain');
-		echo "Error: no input data\n";
+		echo false;
 		return;
 	}
 
 	$start = time(); // $f->getStart();
 	$finish = $f->getFinish();
-	$all = _GET['all'];
+	if (isset($_REQUEST['all']))
+		$all = $_REQUEST ['all'];
+	else
+		$all = 0;
 
 	if ($all)
 	{
@@ -49,21 +51,20 @@
 	if (!$id)
 	{
 		http_response_code(500);
-		header('Content-Type: text/plain');
-		echo 'Add error: ' . pg_last_error();
+		echo false;
+		return;
 	}
 
 	// Return purchase
-	header('Content-Type: application/octet-stream');
 	echo fb_purchase(
-	$id,
-	$f->getUserid(),
-	$f->getFridgeid(),
-	$f->getMeal()->getId(),
-	$f->getCost(),
-	$start,
-	$finish,
-	$vs
+		$id,
+		$f->getUserid(),
+		$f->getFridgeid(),
+		$f->getMeal()->getId(),
+		$f->getCost(),
+		$start,
+		$finish,
+		$vs
 	);
 
 ?>
