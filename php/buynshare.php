@@ -428,12 +428,14 @@
 	*/
 	function add_fridge
 	(
+		$user_id,
 		$cn,
 		$key,
 		$locale,
 		$lat,
 		$lon,
-		$alt
+		$alt,
+		$balance
 	)
 	{
 		$conn = init();
@@ -447,9 +449,23 @@
 			done($conn);
 			return false;
 		}
+		$fridge_id = $r[0];
 		pg_free_result($q);
+
+		$q = pg_query_params($conn, 
+			'INSERT INTO "fridgeuser" (fridge_id, user_id, start, balance) VALUES ($1, $2, $3, $4) RETURNING id', 
+			array($fridge_id, $user_id, time(), $balance)
+		);
+		$r = pg_fetch_row($q);
+		if (!$q)
+		{
+			done($conn);
+			return false;
+		}
+		pg_free_result($q);
+
 		done($conn);
-		return $r[0];
+		return $fridge_id;
 	}
 
 	/**

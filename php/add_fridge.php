@@ -1,6 +1,11 @@
 <?php
 	require "buynshare.php";
 	header('Content-Type: application/octet-stream');
+	$options = array('user_id', 'balance');
+	$opt = getopt("", $options);
+	$user_id = getOption($options[0], $opt, 0);  // mandatory
+	$balance = getOption($options[1], $opt, 0);  // optional
+
 	// Read fridge
 	$bb = Google\FlatBuffers\ByteBuffer::wrap(file_get_contents('php://input'));
 
@@ -21,12 +26,14 @@
 
 	// Create  a new fridge
 	$id = add_fridge(
+		$user_id,
 		$f->getCn(),
 		$key,
 		$f->getLocale(),
 		$f->getGeo()->getLat(),
 		$f->getGeo()->getLon(),
-		$f->getGeo()->getAlt()
+		$f->getGeo()->getAlt(),
+		$balance
 	);
 
 	if (!$id)
