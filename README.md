@@ -159,6 +159,29 @@ exit
 1. $balance_array = calc_pg_user($conn, $fridge_id, $user_id);
 2. $balance_array = calc_pg_fridge($conn, $fridge_id);
 
+## Command line interface tool
+
+### Тестовый сервер
+
+Опция -u
+
+```
+-u "http://localhost:8080/" 
+```
+### Добавить
+
+Пользователя:
+
+```
+buy-n-share --add user -e ru -n "Alice" -l 62.028098 -o 129.732555 -a 100
+```
+
+Холодильник:
+
+```
+buy-n-share --add fridge -e ru -n "Alice's fridge" -l 62.028098 -o 129.732555 -a 100
+```
+
 ## Building Windows using Visual Studio 2017
 
 - cmake 

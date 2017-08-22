@@ -143,7 +143,10 @@ int main(int argc, char** argv)
 				{
 					config.user_id = u->id();
 					config.key = u->key()->str();
-					std::cout << u->id() << "\t" << u->key()->str() << std::endl;
+					std::cout 
+						<< u->id() 
+						<< "\t" << u->key()->str() 
+						<< std::endl;
 				}
 				else
 				{
@@ -158,7 +161,9 @@ int main(int argc, char** argv)
 				{
 					config.user_id = f->id();
 					config.key = f->key()->str();
-					std::cout << f->id() << "\t" << f->key()->str() << std::endl;
+					std::cout << f->id() 
+						<< "\t" << f->key()->str() 
+						<< std::endl;
 				}
 				else
 				{
