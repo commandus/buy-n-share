@@ -339,6 +339,28 @@
 
 	// ------------------------------------ Helper routines ---------------------------------
 
+	function getOption(
+		$name,
+		&$argv,
+		$default
+	) 
+	{
+		if (isset($_REQUEST[$name]))
+			$r = $_REQUEST [$name];
+		else
+		{
+			if (array_key_exists($name, $argv))
+			{
+				$r = $argv[$name];
+			}
+			else 
+			{
+				$r = $default;
+			}
+		}
+		return $r;
+	}
+
 	/**
 	* @brief Generate random "password" string
 	* @link https://stackoverflow.com/questions/4356289/php-random-string-generator

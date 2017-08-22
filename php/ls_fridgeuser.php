@@ -1,11 +1,10 @@
 <?php
 	require "buynshare.php";
 	header('Content-Type: application/octet-stream');
+	$options = array('fridge_id');
+	$opt = getopt("", $options);
+	$fridge_id = getOption($options[0], $opt, 0);
 	// List of fridge users
-	if (isset($_REQUEST['fridge_id']))
-		$fridge_id = $_REQUEST ['fridge_id'];
-	else
-		$fridge_id = 0;
 	$fridgeusers = ls_fridgeuser($fridge_id);
 	echo fb_fridgeusers($fridgeusers);
 ?>

@@ -1,12 +1,10 @@
 <?php
-require "buynshare.php";
-header('Content-Type: application/octet-stream');
-// List of purchases
-if (isset($_REQUEST['user_id']))
-	$user_id = $_REQUEST['user_id'];
-else
-	$user_id = 0;
-$purchases  = ls_purchase($user_id);
-echo fb_purchases($purchases);
-
+	require "buynshare.php";
+	header('Content-Type: application/octet-stream');
+	$options = array('user_id');
+	$opt = getopt("", $options);
+	$user_id = getOption($options[0], $opt, 0);
+	// List of purchases
+	$purchases  = ls_purchase($user_id);
+	echo fb_purchases($purchases);
 ?>

@@ -2,14 +2,10 @@
 	require "buynshare.php";
 	header('Content-Type: application/octet-stream');
 	// get user, fridge identifiers
-	if (isset($_REQUEST['user_id']))
-		$user_id = $_REQUEST['user_id'];
-	else
-		$user_id = 0;
-	if (isset($_REQUEST['fridge_id']))
-		$fridge_id = $_REQUEST['fridge_id'];
-	else
-		$fridge_id = 0;
+	$options = array('user_id', 'fridge_id');
+	$opt = getopt("", $options);
+	$user_id = getOption($options[0], $opt, 0);
+	$fridge_id = getOption($options[1], $opt, 0);
 
 	// Remove fridge user and get final balance
 	$balance_array = rm_fridgeuser(
