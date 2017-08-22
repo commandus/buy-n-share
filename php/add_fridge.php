@@ -6,7 +6,7 @@
 
 	try
 	{
-		$f = bs\Fridge::getRootAsUser($bb);
+		$f = bs\Fridge::getRootAsFridge($bb);
 	}
 		catch(Exception $e) 
 	{
@@ -15,10 +15,14 @@
 		return;
 	}
 
+	$key = $f->getKey();
+	if (empty($key))
+		$key = generateRandomString();
+
 	// Create  a new fridge
 	$id = add_fridge(
 		$f->getCn(),
-		$f->getKey(),
+		$key,
 		$f->getLocale(),
 		$f->getGeo()->getLat(),
 		$f->getGeo()->getLon(),
@@ -36,7 +40,7 @@
 	echo fb_fridge(
 		$id,
 		$f->getCn(),
-		$f->getKey(),
+		$key,
 		$f->getLocale(),
 		$f->getGeo()->getLat(),
 		$f->getGeo()->getLon(),

@@ -14,10 +14,14 @@
 		return;
 	}
 
+	$key = $u->getKey();
+	if (empty($key))
+		$key = generateRandomString();
+
 	// Create  a new user
 	$id = add_user(
 		$u->getCn(),
-		$u->getKey(),
+		$key,
 		$u->getLocale(),
 		$u->getGeo()->getLat(),
 		$u->getGeo()->getLon(),
@@ -35,7 +39,7 @@
 	echo fb_user(
 		$id,
 		$u->getCn(),
-		$u->getKey(),
+		$key,
 		$u->getLocale(),
 		$u->getGeo()->getLat(),
 		$u->getGeo()->getLon(),
