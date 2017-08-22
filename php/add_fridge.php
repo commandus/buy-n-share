@@ -25,6 +25,7 @@
 		$key = generateRandomString();
 
 	// Create  a new fridge
+
 	$id = add_fridge(
 		$user_id,
 		$f->getCn(),
