@@ -5,30 +5,11 @@
 	// Read meal
 	$bb = Google\FlatBuffers\ByteBuffer::wrap(file_get_contents('php://input'));
 
-	if (isset($_REQUEST['qty']))
-		$qty = $_REQUEST ['qty'];
-	else
-		$qty = 0;
-	if (isset($_REQUEST['fridge_id']))
-		$fridge_id = $_REQUEST ['fridge_id'];
-	else
-		$fridge_id = 0;
-	if (isset($_REQUEST['meal_id']))
-		$meal_id = $_REQUEST ['meal_id'];
-	else
-		$meal_id = 0;
-
-	try
-	{
-		$m = bs\Meal::getRootAsMealCard($bb);
-	}
-		catch(Exception $e) 
-	{
-		http_response_code(500);
-		echo false;
-		return;
-	}
-
+	$options = array('qty', 'fridge_id', 'meal_id');
+	$opt = getopt("", $options);
+	$qty = getOption($options[0], $opt, 1);
+	$fridge_id = getOption($options[1], $opt, 0);
+	$meal_id = getOption($options[2], $opt, 0);
 	// Create a new mealCard
 	$id = add_mealcard(
 		$fridge_id,

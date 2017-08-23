@@ -17,6 +17,7 @@
 #include "fridgeusers_generated.h"
 #include "meal_generated.h"
 #include "meals_generated.h"
+#include "mealcard_generated.h"
 #include "purchase_generated.h"
 #include "purchases_generated.h"
 
@@ -58,19 +59,21 @@ public:
 
 	const Fridge *add_fridge
 	(
+		const uint64_t &user_id,
 		const std::string &cn,
 		const std::string &key,
 		const std::string &locale,
 		const float lat,
 		const float lon,
-		const int alt
+		const int alt,
+		int64_t balance
 	);
 
 	const FridgeUser *add_fridge_user
 	(
 		const uint64_t &user_id,
 		const uint64_t &fridge_id,
-		const uint64_t &cost
+		const int64_t &cost
 	);
 
 	const Meal *add_meal
@@ -79,12 +82,19 @@ public:
 		const std::string &locale
 	);
 
+	const MealCard *add_mealcard
+	(
+		const uint64_t &fridge_id,
+		const uint64_t &meal_id,
+		const int64_t &qty
+	);
+
 	const Purchase *add_purchase
 	(
 		const uint64_t &user_id,
 		const uint64_t &fridge_id,
 		const uint64_t &meal_id,
-		const uint64_t &cost
+		const uint32_t &cost
 	);
 	
 	uint64_t add_vote

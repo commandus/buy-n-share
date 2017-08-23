@@ -164,12 +164,14 @@ const Users *FBClient::ls_user
 
 const Fridge *FBClient::add_fridge
 (
+	const uint64_t &user_id,
 	const std::string &cn,
 	const std::string &key,
 	const std::string &locale,
 	const float lat,
 	const float lon,
-	const int alt
+	const int alt,
+	int64_t balance
 )
 {
 	const Fridge *ret_fridge;
@@ -182,7 +184,9 @@ const Fridge *FBClient::add_fridge
 	flatbuffers::Offset<Fridge> u = CreateFridge(fbb, 0, scn, skey, slocale, &geo);
 	fbb.Finish(u);
 	
-	CURL *curl = postCurlUrl(url + "add_fridge.php", fbb.GetBufferPointer(), fbb.GetSize());
+	std::stringstream ss;
+	ss << url << "add_fridge.php?user_id=" << user_id << "&balance=" << balance;
+	CURL *curl = postCurlUrl(ss.str(), fbb.GetBufferPointer(), fbb.GetSize());
 	if (perform(curl) == 200)
 		ret_fridge = GetFridge(retval.c_str());
 	else
@@ -194,7 +198,7 @@ const FridgeUser *FBClient::add_fridge_user
 (
 	const uint64_t &user_id,
 	const uint64_t &fridge_id,
-	const uint64_t &balance
+	const int64_t &balance
 )
 {
 	const FridgeUser *ret_fridge;
@@ -235,12 +239,31 @@ const Meal *FBClient::add_meal
 	return ret_meal;
 }
 
+const MealCard *FBClient::add_mealcard
+(
+	const uint64_t &fridge_id,
+	const uint64_t &meal_id,
+	const int64_t &qty
+)
+{
+	const MealCard *ret_mealcard;
+
+	std::stringstream ss;
+	ss << url << "add_mealcard.php?fridge_id=" << fridge_id << "&meal_id=" << meal_id << "&qty=" << qty;
+	CURL *curl = postCurlUrl(ss.str(), NULL, 0);
+	if (perform(curl) == 200)
+		ret_mealcard = GetMealCard(retval.c_str());
+	else
+		ret_mealcard = NULL;
+	return ret_mealcard;
+}
+
 const Purchase *FBClient::add_purchase
 (
 	const uint64_t &user_id,
 	const uint64_t &fridge_id,
 	const uint64_t &meal_id,
-	const uint64_t &cost
+	const uint32_t &cost
 )
 {
 	const Purchase *ret_purchase;

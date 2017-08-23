@@ -143,6 +143,22 @@
 	}
 
 	/**
+	* @brief Serialize mealcard
+	*/
+	function fb_mealcard(
+		$fridge_id,
+		$meal_id,
+		$qty
+	)
+	{
+		$builder = new Google\FlatBuffers\FlatbufferBuilder(0);
+		$meal = bs\Meal::createMeal($builder, $meal_id, 0, 0);
+		$mealcard = bs\MealCard::createMealCard($builder, $meal, $qty);
+		$builder->Finish($mealcard);
+		return $builder->dataBuffer()->data();
+	}
+
+	/**
 	* @brief Serialize meal
 	*/
 	function fb_purchase(
@@ -481,16 +497,35 @@
 	)
 	{
 		$conn = init();
+		// check
 		$q = pg_query_params($conn, 
-			'INSERT INTO "fridgeuser" (fridge_id, user_id, start, finish, balance) VALUES ($1, $2, $3, $4, $5) RETURNING id', 
-			array($fridge_id, $user_id, $start, $finish, $balance)
+			'SELECT id FROM "fridgeuser" WHERE fridge_id = $1 AND user_id = $2', 
+				array($fridge_id, $user_id)
 		);
-		$r = pg_fetch_row($q);
 		if (!$q)
 		{
 			done($conn);
 			return false;
 		}
+		$r = pg_fetch_row($q);
+		pg_free_result($q);
+		if ($r)
+		{
+			done($conn);
+			return $r[0];
+		}
+
+		// add
+		$q = pg_query_params($conn, 
+			'INSERT INTO "fridgeuser" (fridge_id, user_id, start, finish, balance) VALUES ($1, $2, $3, $4, $5) RETURNING id', 
+			array($fridge_id, $user_id, $start, $finish, $balance)
+		);
+		if (!$q)
+		{
+			done($conn);
+			return false;
+		}
+		$r = pg_fetch_row($q);
 		pg_free_result($q);
 		done($conn);
 		return $r[0];
@@ -558,7 +593,7 @@
 			if ($r)
 			{
 				$q = pg_query_params($conn, 
-					'UPDATE  "meal" SET fridge_id = $1, meal_id = $2, qty = $3', array($fridge_id, $meal_id, $qty)
+					'UPDATE  "mealcard" SET fridge_id = $1, meal_id = $2, qty = $3', array($fridge_id, $meal_id, $qty)
 				);
 				if (!$q)
 				{
@@ -568,9 +603,8 @@
 				return $r[0];
 			}
 		}
-		
 		$q = pg_query_params($conn, 
-			'INSERT INTO "meal" (fridge_id, meal_id, qty) VALUES ($1, $2, $3) RETURNING id', array($fridge_id, $meal_id, $qty)
+			'INSERT INTO "mealcard" (fridge_id, meal_id, qty) VALUES ($1, $2, $3) RETURNING id', array($fridge_id, $meal_id, $qty)
 		);
 		if (!$q)
 		{
@@ -581,6 +615,7 @@
 		$r = pg_fetch_row($q);
 		if (!$r)
 		{
+			pg_free_result($q);
 			done($conn);
 			return false;
 		}
