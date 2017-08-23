@@ -20,7 +20,6 @@
 #define CMD_ADD_MEALCARD	14
 #define CMD_ADD_PURCHASE	15
 #define CMD_ADD_VOTE		16
-#define CMD_ADD_MEALCARD	17
 
 #define CMD_RM_USER			20
 #define CMD_RM_FRIDGE		21
