@@ -263,7 +263,8 @@ const Purchase *FBClient::add_purchase
 	const uint64_t &user_id,
 	const uint64_t &fridge_id,
 	const uint64_t &meal_id,
-	const uint32_t &cost
+	const uint32_t &cost,
+	const int64_t &qty
 )
 {
 	const Purchase *ret_purchase;
@@ -274,11 +275,13 @@ const Purchase *FBClient::add_purchase
 	std::vector<uint64_t> vote;
 	vote.push_back(user_id);
 	flatbuffers::Offset<flatbuffers::Vector<uint64_t>> votes = fbb.CreateVector(vote);
-	
+
 	flatbuffers::Offset<Purchase> m = CreatePurchase(fbb, 0, user_id, fridge_id, meal, cost, 0, 0, votes);
 	fbb.Finish(m);
-	
-	CURL *curl = postCurlUrl(url + "add_purchase.php", fbb.GetBufferPointer(), fbb.GetSize());
+
+	std::stringstream ss;
+	ss << url << "add_purchase.php?qty=" << qty;
+	CURL *curl = postCurlUrl(ss.str(), fbb.GetBufferPointer(), fbb.GetSize());
 	if (perform(curl) == 200)
 		ret_purchase = GetPurchase(retval.c_str());
 	else

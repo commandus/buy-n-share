@@ -17,10 +17,11 @@
 
 	$start = time(); // $f->getStart();
 	$finish = $f->getFinish();
-	if (isset($_REQUEST['all']))
-		$all = $_REQUEST ['all'];
-	else
-		$all = 0;
+
+	$options = array('qty', 'all');
+	$opt = getopt("", $options);
+	$qty = getOption($options[0], $opt, 1);
+	$all = getOption($options[1], $opt, false);
 
 	if ($all)
 	{
@@ -43,6 +44,7 @@
 		$f->getFridgeid(),
 		$f->getMeal()->getId(),
 		$f->getCost(),
+		$qty,
 		$start,
 		$finish,
 		$vs

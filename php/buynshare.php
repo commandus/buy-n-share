@@ -174,8 +174,8 @@
 	{
 		$builder = new Google\FlatBuffers\FlatbufferBuilder(0);
 		$meal = bs\Meal::createMeal($builder, $meal_id, 0, 0);
-		$vvotes = bs\Votes::CreateVotesVector($builder, $votes);
-		$p = bs\Purchase::createPurchase($id, $user_id, $fridge_id, $meal, $cost, $start, $finish, $vvotes);
+		$vvotes = bs\Purchase::CreateVotesVector($builder, $votes);
+		$p = bs\Purchase::createPurchase($builder, $id, $user_id, $fridge_id, $meal, $cost, $start, $finish, $vvotes);
 		$builder->Finish($p);
 		return $builder->dataBuffer()->data();
 	}
@@ -576,28 +576,30 @@
 	/**
 	* @brief Add meal card
 	*/
-	function add_mealcard
+	function pg_add_mealcard
 	(
+		$conn,
 		$fridge_id,
 		$meal_id,
-		$qty
+		$qty,
+		$increment_qty
 	)
 	{
-		$conn = init();
 		$q = pg_query_params($conn, 
-			'SELECT id FROM "mealcard" WHERE fridge_id = $1 AND meal_id = $2', array($fridge_id, $meal_id)
+			'SELECT id, qty FROM "mealcard" WHERE fridge_id = $1 AND meal_id = $2', array($fridge_id, $meal_id)
 		);
 		if ($q)
 		{
 			$r = pg_fetch_row($q);
 			if ($r)
 			{
+				if ($increment_qty)
+					$qty += $r[1];
 				$q = pg_query_params($conn, 
 					'UPDATE  "mealcard" SET fridge_id = $1, meal_id = $2, qty = $3', array($fridge_id, $meal_id, $qty)
 				);
 				if (!$q)
 				{
-					done($conn);
 					return false;
 				}
 				return $r[0];
@@ -607,23 +609,34 @@
 			'INSERT INTO "mealcard" (fridge_id, meal_id, qty) VALUES ($1, $2, $3) RETURNING id', array($fridge_id, $meal_id, $qty)
 		);
 		if (!$q)
-		{
-			done($conn);
 			return false;
-		}
 
 		$r = pg_fetch_row($q);
 		if (!$r)
 		{
 			pg_free_result($q);
-			done($conn);
 			return false;
 		}
 		
 		pg_free_result($q);
-		done($conn);
 		return $r[0];
 	}
+
+	/**
+	* @brief Add meal card
+	*/
+	function add_mealcard
+	(
+		$fridge_id,
+		$meal_id,
+		$qty
+	)
+	{
+		$conn = init();
+		$id = pg_add_mealcard($conn, $fridge_id, $meal_id, $qty, false);
+		done($conn);
+	}
+
 
 	/**
 	* @brief Add purchase and votes
@@ -635,6 +648,7 @@
 		$fridge_id,
 		$meal_id,
 		$cost,
+		$qty,
 		$start,
 		$finish,
 		$votes
@@ -684,6 +698,8 @@
 				pg_free_result($q);
 			}
 		}
+		// add meal card
+		$mealcard_id = pg_add_mealcard($conn, $fridge_id, $meal_id, $qty, true);
 		done($conn);
 		return $purchase_id;
 	}

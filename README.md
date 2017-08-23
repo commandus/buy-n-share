@@ -207,13 +207,14 @@ buy-n-share --add mealcard -m 2 -f 2 -q 3
 
 Купить продукт для холодильника, параметры:
 
+- i идентификатор пользователя
 - m идентификатор продукта
 - f идентификатор холодильника
 - q количество
 - c стоимость
 
 ```
-buy-n-share --add purchase -m 2 -f 2 -q 3 -c 100
+buy-n-share --add purchase -i 2 -m 2 -f 2 -q 3 -c 100
 ```
 
 ## Building Windows using Visual Studio 2017

@@ -94,7 +94,8 @@ public:
 		const uint64_t &user_id,
 		const uint64_t &fridge_id,
 		const uint64_t &meal_id,
-		const uint32_t &cost
+		const uint32_t &cost,
+		const int64_t &qty
 	);
 	
 	uint64_t add_vote
