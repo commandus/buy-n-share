@@ -9,6 +9,7 @@
 #include "fridgemealcards_generated.h"
 #include "fridgeuser_generated.h"
 #include "mealcard_generated.h"
+#include "mealcards_generated.h"
 #include "purchase_generated.h"
 #include "user_generated.h"
 
