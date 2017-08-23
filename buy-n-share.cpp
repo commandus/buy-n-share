@@ -218,7 +218,7 @@ int main(int argc, char** argv)
 		break;
 		case CMD_ADD_PURCHASE:
 			{
-				const Purchase *p = cli.add_purchase(config.user_id, config.fridge_id, config.meal_id, config.cost);
+				const Purchase *p = cli.add_purchase(config.user_id, config.fridge_id, config.meal_id, config.cost, config.qty);
 				if (p)
 				{
 					std::cout << p->id() << "\t" << p->start() << "\t" << p->finish() << std::endl;
