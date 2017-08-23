@@ -18,6 +18,7 @@
 #include "meal_generated.h"
 #include "meals_generated.h"
 #include "mealcard_generated.h"
+#include "mealcards_generated.h"
 #include "purchase_generated.h"
 #include "purchases_generated.h"
 
@@ -135,10 +136,16 @@ public:
 	(
 		const std::string &locale
 	);
+	
+	const MealCards *ls_mealcard
+	(
+		const uint64_t fridge_id
+	);
 
 	const Purchases *ls_purchase
 	(
-		const uint64_t &user_id
+		const uint64_t &user_id,
+		const uint64_t &fridge_id
 	);
 	
 };

@@ -35,6 +35,7 @@
 #define CMD_LS_MEAL			33
 #define CMD_LS_MEALCARD		34
 #define CMD_LS_PURCHASE		35
+#define CMD_LS_VOTE			36
 
 /**
  * Command line interface (CLI) tool configuration structure

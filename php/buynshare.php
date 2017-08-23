@@ -181,6 +181,32 @@
 	}
 
 	/**
+	* @brief Serialize purchases
+	*/
+	function fb_purchases(
+		&$purchases
+	)
+	{
+		$builder = new Google\FlatBuffers\FlatbufferBuilder(0);
+		$pa = array();
+		foreach ($purchases as $purchase)
+		{
+			$scn = $builder->createString($purchase[4]);
+			$slocale = $builder->createString($purchase[5]);
+			$meal = bs\Meal::createMeal($builder, $purchase[3], $scn, $slocale);
+			$vvotes = 0;
+			$purchase = bs\Purchase::createPurchase($builder, $purchase[0], $purchase[1], $purchase[2], $meal, $purchase[5], $purchase[6], $purchase[7], $vvotes);
+			array_push($pa, $purchase);
+		}
+		$pv = bs\Purchases::CreatePurchasesVector($builder, $pa);
+		bs\Purchases::startPurchases($builder);
+		bs\Purchases::addPurchases($builder, $pv);
+		$ff = bs\Purchases::EndPurchases($builder);
+		$builder->Finish($ff);
+		return $builder->dataBuffer()->data();
+	}
+
+	/**
 	* @brief Serialize users array
 	*/
 	function fb_users
@@ -311,13 +337,8 @@
 			$scn = $builder->createString($meal[1]);
 			$slocale = $builder->createString($meal[2]);
 
-			bs\Meal::startFridge($builder);
-			bs\Meal::addId($builder, $meal[0]);
-			bs\Meal::addCn($builder, $scn);
-			bs\Meal::addLocale($builder, $slocale);
-
-			$f = bs\Fridge::EndFridge($builder);
-			array_push($ma, $f);
+			$m = bs\Meal::createMeal($builder, $meal[0], $scn, $slocale);
+			array_push($ma, $m);
 		}
 		$mv = bs\Meals::CreateMealsVector($builder, $ma);
 		bs\Meals::startMeals($builder);
@@ -327,6 +348,32 @@
 		return $builder->dataBuffer()->data();
 	}
 
+	/**
+	* @brief Serialize meal card array
+	*/
+	function fb_mealcards
+	(
+		&$mealcards
+	)
+	{
+		$builder = new Google\FlatBuffers\FlatbufferBuilder(0);
+		$ma = array();
+		foreach ($mealcards as $mealcard)
+		{
+			$scn = $builder->createString($mealcard[1]);
+			$slocale = $builder->createString($mealcard[2]);
+
+			$meal = bs\Meal::createMeal($builder, $mealcard[0], $scn, $slocale);
+			$mealcard = bs\MealCard::createMealCard($builder, $meal, $mealcard[3]);
+			array_push($ma, $mealcard);
+		}
+		$mv = bs\MealCards::CreateMealCardsVector($builder, $ma);
+		bs\MealCards::startMealCards($builder);
+		bs\MealCards::addMealCards($builder, $mv);
+		$ff = bs\MealCards::EndMealCards($builder);
+		$builder->Finish($ff);
+		return $builder->dataBuffer()->data();
+	}
 
 	/**
 	* @brief Serialize payments array
@@ -716,26 +763,18 @@
 		$conn = init();
 		// Delete all prevoius votes is not necessary
 		$q = pg_query_params($conn, 
-			'DELETE FROM "vote" WHERE purchase_id = $1', array($purchase_id)
+			'DELETE FROM "vote" WHERE purchase_id = $1 AND user_id = $2', array($purchase_id, $user_id)
 		);
 		
-		if (!$q)
-		{
-			done($conn);
-			return false;
-		}
-		pg_free_result($q);
-		
+		if ($q)
+			pg_free_result($q);
 		$q = pg_query_params($conn, 
 			'INSERT INTO "vote" (purchase_id, user_id, val) VALUES ($1, $2, $3)', array($purchase_id, $user_id, 1)
 		);
 		if (!$q)
-		{
-			done($conn);
-			return false;
-		}
-		pg_free_result($q);
-
+			$purchase_id = false;
+		else
+			pg_free_result($q);
 		done($conn);
 		return $purchase_id;
 	}
@@ -861,25 +900,67 @@
 	}
 
 	/**
+	* @brief List meal cards in the fridge
+	* @param $fridge_id 
+	* @return meal cards array
+	*/
+	function ls_mealcard
+	(
+		$fridge_id
+	)
+	{
+		$conn = init();
+		$q = pg_query_params($conn, 
+			"SELECT m.id, m.cn, m.locale, mc.qty
+			FROM \"meal\" m, \"mealcard\" mc WHERE mc.fridge_id = $1 AND mc.meal_id = m.id ORDER BY m.cn", array($fridge_id)
+		);
+		if (!$q)
+		{
+			done($conn);
+			return false;
+		}
+		$r = array();
+		while($row = pg_fetch_row($q))
+		{
+			array_push($r, $row);
+		}
+		pg_free_result($q);
+		done($conn);
+		return $r;
+	}
+
+	/**
 	* @brief List user's purchases
 	* @param $user_id
 	* @return purchases
 	*/
 	function ls_purchase
 	(
-		$user_id
+		$user_id,
+		$fridge_id = false
 	)
 	{
 		$conn = init();
-		$q = pg_query_params($conn, 
-			"SELECT p.id, p.fridge_id, p.user_id, p.meal_id, p.cost, p.start, p.finish,
-			f.cn, '' as fkey, f.locale, f.lat, f.lon, f.alt,
-			u.cn, '' as ukey, u.locale, u.lat, u.lon, u.alt,
-			m.cn, m.locale
-			FROM \"purchase\" p, \"user\" u, \"fridge\" f, \"meal\" m WHERE p.fridge_id = f.id AND 
-			p.user_id = u.id AND p.meal_id = m.id AND p.user_id = $1 
-			ORDER BY p.id", array($user_id)
-		);
+		if ($fridge_id)
+			$q = pg_query_params($conn, 
+				"SELECT p.id, p.user_id, p.fridge_id, 
+				p.meal_id, m.cn, m.locale,
+				p.cost, p.start, p.finish,
+				f.cn, '' as fkey, f.locale, f.lat, f.lon, f.alt,
+				u.cn, '' as ukey, u.locale, u.lat, u.lon, u.alt
+				FROM \"purchase\" p, \"user\" u, \"fridge\" f, \"meal\" m WHERE f.id = $2 AND p.fridge_id = f.id AND 
+				p.user_id = u.id AND p.meal_id = m.id AND p.user_id = $1 
+				ORDER BY p.start DESC", array($user_id, $fridge_id));
+		else
+			$q = pg_query_params($conn, 
+				"SELECT p.id, p.user_id, p.fridge_id, 
+				p.meal_id, m.cn, m.locale,
+				p.cost, p.start, p.finish,
+				f.cn, '' as fkey, f.locale, f.lat, f.lon, f.alt,
+				u.cn, '' as ukey, u.locale, u.lat, u.lon, u.alt
+				FROM \"purchase\" p, \"user\" u, \"fridge\" f, \"meal\" m WHERE p.fridge_id = f.id AND 
+				p.user_id = u.id AND p.meal_id = m.id AND p.user_id = $1 
+				ORDER BY p.start DESC", array($user_id));
 		if (!$q)
 		{
 			done($conn);

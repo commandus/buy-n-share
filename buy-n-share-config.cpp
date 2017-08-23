@@ -7,7 +7,7 @@
 #define DEF_LOCALE		"ru"
 static const char* progname = "buy-n-share";
 
-static const char* OBJECT_LIST = "<user|fridge|fridgeuser|meal|mealcard|purchase>";
+static const char* OBJECT_LIST = "<user|fridge|fridgeuser|meal|mealcard|purchase|vote>";
 
 BuyNShareConfig::BuyNShareConfig()
 	: base_url(DEF_BASE_URL), cmd(CMD_NONE), user_id(0), key(""), cn(""), locale(""),
@@ -57,7 +57,8 @@ int BuyNShareConfig::parseCmd
 	
 	struct arg_int *a_fridge_id = arg_int0("f", "fid", "<number>", "Fridge identifier");
 	struct arg_int *a_meal_id = arg_int0("m", "mid", "<number>", "Meal identifier");
-	
+	struct arg_int *a_vote_purchase_id = arg_int0("p", "purchase_id", "<number>", "Purchase identifier");
+		
 	struct arg_lit *a_help = arg_lit0("h", "help", "Show this help");
 	struct arg_end *a_end = arg_end(20);
 
@@ -65,8 +66,8 @@ int BuyNShareConfig::parseCmd
 		a_base_url,
 		// commands
 		a_meal, a_balance, a_add, a_rm, a_ls,
-		// identification
-		a_user_id, a_fridge_id, a_meal_id, a_user_key,
+		// identifiers
+		a_user_id, a_fridge_id, a_meal_id, a_vote_purchase_id, a_user_key,
 		// options
 		a_cn, a_locale, a_cost, a_qty, a_lat, a_lon, a_alt,
 		// others
@@ -106,6 +107,8 @@ int BuyNShareConfig::parseCmd
 			cmd = CMD_ADD_MEALCARD;
 		if (strcmp(*a_add->sval, "purchase") == 0)
 			cmd = CMD_ADD_PURCHASE;
+		if (strcmp(*a_add->sval, "vote") == 0)
+			cmd = CMD_ADD_VOTE;
 	}
 
 	if (a_rm->count)
@@ -122,6 +125,8 @@ int BuyNShareConfig::parseCmd
 			cmd = CMD_RM_MEALCARD;
 		if (strcmp(*a_rm->sval, "purchase") == 0)
 			cmd = CMD_RM_PURCHASE;
+		if (strcmp(*a_rm->sval, "vote") == 0)
+			cmd = CMD_RM_VOTE;
 	}
 
 	if (a_ls->count)
@@ -138,6 +143,8 @@ int BuyNShareConfig::parseCmd
 			cmd = CMD_LS_MEALCARD;
 		if (strcmp(*a_ls->sval, "purchase") == 0)
 			cmd = CMD_LS_PURCHASE;
+		if (strcmp(*a_ls->sval, "vote") == 0)
+			cmd = CMD_LS_VOTE;
 	}
 
 	if (a_user_id->count)
@@ -152,6 +159,11 @@ int BuyNShareConfig::parseCmd
 		meal_id = *a_meal_id->ival;
 	else
 		meal_id = 0;
+	
+	if (a_vote_purchase_id->count)
+		vote_purchase_id = *a_vote_purchase_id->ival;
+	else
+		vote_purchase_id = 0;
 	if (a_user_key->count)
 		key = *a_user_key->sval;
 	else

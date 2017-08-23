@@ -297,7 +297,7 @@ uint64_t FBClient::add_vote
 {
 	uint64_t ret_purchase;
 	std::stringstream ss;
-	ss << url << "add_vote.php?purchase_id=" << purchase_id + "&user_id=" << user_id;
+	ss << url << "add_vote.php?purchase_id=" << purchase_id << "&user_id=" << user_id;
 	CURL *curl = postCurlUrl(ss.str(), NULL, 0);
 	if (perform(curl) == 200)
 		ret_purchase = strtol(retval.c_str(), NULL, 10);
@@ -362,15 +362,35 @@ const Meals  *FBClient::ls_meal
 	return ret_meals;
 }
 
+const MealCards *FBClient::ls_mealcard
+(
+	const uint64_t fridge_id
+)
+{
+	const MealCards *ret_mealcards;
+	std::stringstream ss;
+	ss << url << "ls_mealcard.php?fridge_id=" << fridge_id;
+	CURL *curl = postCurlUrl(ss.str(), NULL, 0);
+	if (!curl)
+		return 0;
+
+	if (perform(curl) == 200)
+		ret_mealcards = GetMealCards(retval.c_str());
+	else
+		ret_mealcards = NULL;
+	return ret_mealcards;
+}
+
 const Purchases *FBClient::ls_purchase
 (
-	const uint64_t &user_id
+	const uint64_t &user_id,
+	const uint64_t &fridge_id
 )
 {
 	const Purchases *ret_purchases;
-	std::stringstream suser_id;
-	suser_id << user_id;
-	CURL *curl = postCurlUrl(url + "ls_purchase.php?user_id=" + suser_id.str(), NULL, 0);
+	std::stringstream ss;
+	ss << url << "ls_purchase.php?user_id=" << user_id << "&fridge_id=" << fridge_id;
+	CURL *curl = postCurlUrl(ss.str(), NULL, 0);
 	if (!curl)
 		return 0;
 

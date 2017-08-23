@@ -117,14 +117,37 @@ int main(int argc, char** argv)
 				}
 			}
 			break;
+		case CMD_LS_MEALCARD:
+		{
+			const MealCards *m = cli.ls_mealcard(config.fridge_id);
+			if (m)
+			{
+				for (auto it(m->mealcards()->begin()); it != m->mealcards()->end(); ++it)
+				{
+					std::cout 
+						<< it->meal()->id() << "\t"
+						<< it->meal()->cn()->str() << "\t"
+						<< (int) it->qty() << "\t"
+						<< std::endl;
+				}
+			}
+			else
+			{
+				std::cerr << cli.url << " HTTP code " << cli.code << ": " << cli.retval << std::endl;
+			}
+		}
+		break;
 		case CMD_LS_PURCHASE:
 			{
-				const Purchases *p = cli.ls_purchase(config.user_id);
+				const Purchases *p = cli.ls_purchase(config.user_id, config.fridge_id);
 				if (p)
 				{
 					for (auto it(p->purchases()->begin()); it != p->purchases()->end(); ++it)
 					{
-						std::cout << it->id() << "\t"
+						std::cout 
+							<< it->id() << "\t"
+							<< it->meal()->cn()->str() << "\t"
+							<< it->fridgeid() << "\t"
 							<< it->start() << "\t"
 							<< it->finish() << "\t"
 							<< std::endl;
