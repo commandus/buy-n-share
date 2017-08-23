@@ -17,22 +17,25 @@
 #define CMD_ADD_FRIDGE		11
 #define CMD_ADD_FRIDGE_USER	12
 #define CMD_ADD_MEAL		13
-#define CMD_ADD_PURCHASE	14
-#define CMD_ADD_VOTE		15
-#define CMD_ADD_MEALCARD	16
+#define CMD_ADD_MEALCARD	14
+#define CMD_ADD_PURCHASE	15
+#define CMD_ADD_VOTE		16
+#define CMD_ADD_MEALCARD	17
 
 #define CMD_RM_USER			20
 #define CMD_RM_FRIDGE		21
 #define CMD_RM_FRIDGE_USER	22
 #define CMD_RM_MEAL			23
-#define CMD_RM_PURCHASE		24
-#define CMD_RM_VOTE			25
+#define CMD_RM_MEALCARD		24
+#define CMD_RM_PURCHASE		25
+#define CMD_RM_VOTE			26
 
 #define CMD_LS_USER			30
 #define CMD_LS_FRIDGE		31
 #define CMD_LS_FRIDGE_USER	32
 #define CMD_LS_MEAL			33
-#define CMD_LS_PURCHASE		34
+#define CMD_LS_MEALCARD		34
+#define CMD_LS_PURCHASE		35
 
 /**
  * Command line interface (CLI) tool configuration structure
@@ -59,7 +62,8 @@ public:
 	std::string key;								///< password
 	std::string cn;									///< common name
 	std::string locale;								///< Locale name
-	uint64_t cost;									///< Cost
+	int64_t cost;									///< Cost
+	int64_t qty;									///< Quantity
 	float lat;										///< Latitude
 	float lon;										///< Longitude
 	int alt;										///< Altitoide

@@ -7,9 +7,11 @@
 #define DEF_LOCALE		"ru"
 static const char* progname = "buy-n-share";
 
+static const char* OBJECT_LIST = "<user|fridge|fridgeuser|meal|mealcard|purchase>";
+
 BuyNShareConfig::BuyNShareConfig()
 	: base_url(DEF_BASE_URL), cmd(CMD_NONE), user_id(0), key(""), cn(""), locale(""),
-	cost(0), lat(0.0), lon(0.0), alt(0), fridge_id(0), meal_id(0)
+	cost(0), qty(0), lat(0.0), lon(0.0), alt(0), fridge_id(0), meal_id(0)
 {
 }
 
@@ -38,9 +40,9 @@ int BuyNShareConfig::parseCmd
 	// commands
 	struct arg_lit *a_meal = arg_lit0(NULL, "meal", "print fridge meals");
 	struct arg_lit *a_balance = arg_lit0(NULL, "balance", "print fridge purchase balance by user");
-	struct arg_str *a_add = arg_str0(NULL, "add", "<user|fridge|fridgeuser|meal|purchase>", "Add a new object");
-	struct arg_str *a_rm = arg_str0(NULL, "rm", "<user|fridge|fridgeuser|meal|purchase>", "Remove an object");
-	struct arg_str *a_ls = arg_str0(NULL, "ls", "<user|fridge|fridgeuser|meal|purchase>", "List");
+	struct arg_str *a_add = arg_str0(NULL, "add", OBJECT_LIST, "Add a new object");
+	struct arg_str *a_rm = arg_str0(NULL, "rm", OBJECT_LIST, "Remove an object");
+	struct arg_str *a_ls = arg_str0(NULL, "ls", OBJECT_LIST, "List");
 
 	struct arg_int *a_user_id = arg_int0("i", "id", "<number>", "User identifier");
 	struct arg_str *a_user_key = arg_str0("k", "key", "<secret>", "Password");
@@ -48,6 +50,7 @@ int BuyNShareConfig::parseCmd
 	struct arg_str *a_cn = arg_str0("n", "cn", "<string>", "common name");
 	struct arg_str *a_locale = arg_str0("e", "locale", "<ru|en>", "Locale name");
 	struct arg_int *a_cost = arg_int0("c", "cost", "<number>", "Cost");
+	struct arg_int *a_qty = arg_int0("q", "qty", "<number>", "Quantity");
 	struct arg_dbl *a_lat = arg_dbl0("l", "lat", "<number>", "Latitude");
 	struct arg_dbl *a_lon = arg_dbl0("o", "lon", "<number>", "Longitude");
 	struct arg_int *a_alt = arg_int0("a", "alt", "<number>", "Altitude");
@@ -65,7 +68,7 @@ int BuyNShareConfig::parseCmd
 		// identification
 		a_user_id, a_fridge_id, a_meal_id, a_user_key,
 		// options
-		a_cn, a_locale, a_cost, a_lat, a_lon, a_alt,
+		a_cn, a_locale, a_cost, a_qty, a_lat, a_lon, a_alt,
 		// others
 		a_help, a_end 
 	};
@@ -99,6 +102,8 @@ int BuyNShareConfig::parseCmd
 			cmd = CMD_ADD_FRIDGE_USER;
 		if (strcmp(*a_add->sval, "meal") == 0)
 			cmd = CMD_ADD_MEAL;
+		if (strcmp(*a_add->sval, "mealcard") == 0)
+			cmd = CMD_ADD_MEALCARD;
 		if (strcmp(*a_add->sval, "purchase") == 0)
 			cmd = CMD_ADD_PURCHASE;
 	}
@@ -113,6 +118,8 @@ int BuyNShareConfig::parseCmd
 			cmd = CMD_RM_FRIDGE_USER;
 		if (strcmp(*a_rm->sval, "meal") == 0)
 			cmd = CMD_RM_MEAL;
+		if (strcmp(*a_rm->sval, "mealcard") == 0)
+			cmd = CMD_RM_MEALCARD;
 		if (strcmp(*a_rm->sval, "purchase") == 0)
 			cmd = CMD_RM_PURCHASE;
 	}
@@ -127,6 +134,8 @@ int BuyNShareConfig::parseCmd
 			cmd = CMD_LS_FRIDGE_USER;
 		if (strcmp(*a_ls->sval, "meal") == 0)
 			cmd = CMD_LS_MEAL;
+		if (strcmp(*a_ls->sval, "mealcard") == 0)
+			cmd = CMD_LS_MEALCARD;
 		if (strcmp(*a_ls->sval, "purchase") == 0)
 			cmd = CMD_LS_PURCHASE;
 	}
@@ -159,6 +168,10 @@ int BuyNShareConfig::parseCmd
 		cost = *a_cost->ival;
 	else
 		cost = 0;
+	if (a_qty->count)
+		qty = *a_qty->ival;
+	else
+		qty = 0;
 	if (a_lat->count)
 		lat = *a_lat->dval;
 	else

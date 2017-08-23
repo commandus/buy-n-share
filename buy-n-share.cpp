@@ -156,7 +156,8 @@ int main(int argc, char** argv)
 			break;
 		case CMD_ADD_FRIDGE:
 			{
-				const Fridge *f = cli.add_fridge(config.cn, config.key, config.locale, config.lat, config.lon, config.alt);
+				const Fridge *f = cli.add_fridge(config.user_id, config.cn, config.key, config.locale,
+					config.lat, config.lon, config.alt, config.cost);
 				if (f)
 				{
 					config.user_id = f->id();
@@ -176,7 +177,11 @@ int main(int argc, char** argv)
 				const FridgeUser *f = cli.add_fridge_user(config.user_id, config.fridge_id, config.cost);
 				if (f)
 				{
-					std::cout << f->start() << "\t" << f->finish() << std::endl;
+					std::cout 
+						<< f->fridgeid() << "\t"
+						<< f->user()->id() << "\t"
+						<< f->start() << "\t" 
+						<< f->finish() << std::endl;
 				}
 				else
 				{
@@ -197,6 +202,20 @@ int main(int argc, char** argv)
 				}
 			}
 			break;
+		case CMD_ADD_MEALCARD:
+		{
+			const MealCard *mc = cli.add_mealcard(config.fridge_id, config.meal_id, config.qty);
+			if (mc)
+			{
+				std::cout << mc->meal()->id() << "\t" 
+					<< (int) mc->qty() << std::endl;
+			}
+			else
+			{
+				std::cerr << cli.url << " HTTP code " << cli.code << ": " << cli.retval << std::endl;
+			}
+		}
+		break;
 		case CMD_ADD_PURCHASE:
 			{
 				const Purchase *p = cli.add_purchase(config.user_id, config.fridge_id, config.meal_id, config.cost);
@@ -229,19 +248,6 @@ int main(int argc, char** argv)
 				if (v)
 				{
 					std::cout << "Vote deleted" << std::endl;
-				}
-				else
-				{
-					std::cerr << cli.url << " HTTP code " << cli.code << ": " << cli.retval << std::endl;
-				}
-			}
-			break;
-		case CMD_ADD_MEALCARD:
-			{
-				const Purchase *p = cli.add_purchase(config.user_id, config.fridge_id, config.meal_id, config.cost);
-				if (p)
-				{
-					std::cout << p->id() << "\t" << p->start() << "\t" << p->finish() << std::endl;
 				}
 				else
 				{
