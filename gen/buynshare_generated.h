@@ -40,6 +40,12 @@ struct Purchases;
 
 struct Meals;
 
+struct MealCards;
+
+struct Payment;
+
+struct Payments;
+
 MANUALLY_ALIGNED_STRUCT(4) Geo FLATBUFFERS_FINAL_CLASS {
  private:
   float lat_;
@@ -1135,6 +1141,176 @@ inline flatbuffers::Offset<Meals> CreateMealsDirect(
   return bs::CreateMeals(
       _fbb,
       meals ? _fbb.CreateVector<flatbuffers::Offset<Meal>>(*meals) : 0);
+}
+
+struct MealCards FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  enum {
+    VT_MEALCARDS = 4
+  };
+  const flatbuffers::Vector<flatbuffers::Offset<MealCard>> *mealcards() const {
+    return GetPointer<const flatbuffers::Vector<flatbuffers::Offset<MealCard>> *>(VT_MEALCARDS);
+  }
+  bool Verify(flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyOffset(verifier, VT_MEALCARDS) &&
+           verifier.Verify(mealcards()) &&
+           verifier.VerifyVectorOfTables(mealcards()) &&
+           verifier.EndTable();
+  }
+};
+
+struct MealCardsBuilder {
+  flatbuffers::FlatBufferBuilder &fbb_;
+  flatbuffers::uoffset_t start_;
+  void add_mealcards(flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<MealCard>>> mealcards) {
+    fbb_.AddOffset(MealCards::VT_MEALCARDS, mealcards);
+  }
+  MealCardsBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  MealCardsBuilder &operator=(const MealCardsBuilder &);
+  flatbuffers::Offset<MealCards> Finish() {
+    const auto end = fbb_.EndTable(start_, 1);
+    auto o = flatbuffers::Offset<MealCards>(end);
+    return o;
+  }
+};
+
+inline flatbuffers::Offset<MealCards> CreateMealCards(
+    flatbuffers::FlatBufferBuilder &_fbb,
+    flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<MealCard>>> mealcards = 0) {
+  MealCardsBuilder builder_(_fbb);
+  builder_.add_mealcards(mealcards);
+  return builder_.Finish();
+}
+
+inline flatbuffers::Offset<MealCards> CreateMealCardsDirect(
+    flatbuffers::FlatBufferBuilder &_fbb,
+    const std::vector<flatbuffers::Offset<MealCard>> *mealcards = nullptr) {
+  return bs::CreateMealCards(
+      _fbb,
+      mealcards ? _fbb.CreateVector<flatbuffers::Offset<MealCard>>(*mealcards) : 0);
+}
+
+struct Payment FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  enum {
+    VT_FRIDGEID = 4,
+    VT_USERID = 6,
+    VT_START = 8,
+    VT_TOTAL = 10
+  };
+  uint64_t fridgeid() const {
+    return GetField<uint64_t>(VT_FRIDGEID, 0);
+  }
+  uint64_t userid() const {
+    return GetField<uint64_t>(VT_USERID, 0);
+  }
+  uint32_t start() const {
+    return GetField<uint32_t>(VT_START, 0);
+  }
+  int32_t total() const {
+    return GetField<int32_t>(VT_TOTAL, 0);
+  }
+  bool Verify(flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyField<uint64_t>(verifier, VT_FRIDGEID) &&
+           VerifyField<uint64_t>(verifier, VT_USERID) &&
+           VerifyField<uint32_t>(verifier, VT_START) &&
+           VerifyField<int32_t>(verifier, VT_TOTAL) &&
+           verifier.EndTable();
+  }
+};
+
+struct PaymentBuilder {
+  flatbuffers::FlatBufferBuilder &fbb_;
+  flatbuffers::uoffset_t start_;
+  void add_fridgeid(uint64_t fridgeid) {
+    fbb_.AddElement<uint64_t>(Payment::VT_FRIDGEID, fridgeid, 0);
+  }
+  void add_userid(uint64_t userid) {
+    fbb_.AddElement<uint64_t>(Payment::VT_USERID, userid, 0);
+  }
+  void add_start(uint32_t start) {
+    fbb_.AddElement<uint32_t>(Payment::VT_START, start, 0);
+  }
+  void add_total(int32_t total) {
+    fbb_.AddElement<int32_t>(Payment::VT_TOTAL, total, 0);
+  }
+  PaymentBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  PaymentBuilder &operator=(const PaymentBuilder &);
+  flatbuffers::Offset<Payment> Finish() {
+    const auto end = fbb_.EndTable(start_, 4);
+    auto o = flatbuffers::Offset<Payment>(end);
+    return o;
+  }
+};
+
+inline flatbuffers::Offset<Payment> CreatePayment(
+    flatbuffers::FlatBufferBuilder &_fbb,
+    uint64_t fridgeid = 0,
+    uint64_t userid = 0,
+    uint32_t start = 0,
+    int32_t total = 0) {
+  PaymentBuilder builder_(_fbb);
+  builder_.add_userid(userid);
+  builder_.add_fridgeid(fridgeid);
+  builder_.add_total(total);
+  builder_.add_start(start);
+  return builder_.Finish();
+}
+
+struct Payments FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  enum {
+    VT_PAYMENTS = 4
+  };
+  const flatbuffers::Vector<flatbuffers::Offset<Payment>> *payments() const {
+    return GetPointer<const flatbuffers::Vector<flatbuffers::Offset<Payment>> *>(VT_PAYMENTS);
+  }
+  bool Verify(flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyOffset(verifier, VT_PAYMENTS) &&
+           verifier.Verify(payments()) &&
+           verifier.VerifyVectorOfTables(payments()) &&
+           verifier.EndTable();
+  }
+};
+
+struct PaymentsBuilder {
+  flatbuffers::FlatBufferBuilder &fbb_;
+  flatbuffers::uoffset_t start_;
+  void add_payments(flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<Payment>>> payments) {
+    fbb_.AddOffset(Payments::VT_PAYMENTS, payments);
+  }
+  PaymentsBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  PaymentsBuilder &operator=(const PaymentsBuilder &);
+  flatbuffers::Offset<Payments> Finish() {
+    const auto end = fbb_.EndTable(start_, 1);
+    auto o = flatbuffers::Offset<Payments>(end);
+    return o;
+  }
+};
+
+inline flatbuffers::Offset<Payments> CreatePayments(
+    flatbuffers::FlatBufferBuilder &_fbb,
+    flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<Payment>>> payments = 0) {
+  PaymentsBuilder builder_(_fbb);
+  builder_.add_payments(payments);
+  return builder_.Finish();
+}
+
+inline flatbuffers::Offset<Payments> CreatePaymentsDirect(
+    flatbuffers::FlatBufferBuilder &_fbb,
+    const std::vector<flatbuffers::Offset<Payment>> *payments = nullptr) {
+  return bs::CreatePayments(
+      _fbb,
+      payments ? _fbb.CreateVector<flatbuffers::Offset<Payment>>(*payments) : 0);
 }
 
 }  // namespace bs
