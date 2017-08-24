@@ -45,7 +45,7 @@ table Purchase
 	cost: uint;
 	start: uint;
 	finish: uint;
-	votes: [ulong];	// user identifiers
+	votes: [User];	// users
 }
 
 // relations

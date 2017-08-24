@@ -94,13 +94,13 @@ class Purchase extends Table
     }
 
     /**
-     * @param int offset
-     * @return ulong
+     * @returnVectorOffset
      */
     public function getVotes($j)
     {
         $o = $this->__offset(18);
-        return $o != 0 ? $this->bb->getUlong($this->__vector($o) + $j * 8) : 0;
+        $obj = new User();
+        return $o != 0 ? $obj->init($this->__indirect($this->__vector($o) + $j * 4), $this->bb) : null;
     }
 
     /**
@@ -227,9 +227,9 @@ class Purchase extends Table
      */
     public static function createVotesVector(FlatBufferBuilder $builder, array $data)
     {
-        $builder->startVector(8, count($data), 8);
+        $builder->startVector(4, count($data), 4);
         for ($i = count($data) - 1; $i >= 0; $i--) {
-            $builder->addUlong($data[$i]);
+            $builder->addOffset($data[$i]);
         }
         return $builder->endVector();
     }
@@ -241,7 +241,7 @@ class Purchase extends Table
      */
     public static function startVotesVector(FlatBufferBuilder $builder, $numElems)
     {
-        $builder->startVector(8, $numElems, 8);
+        $builder->startVector(4, $numElems, 4);
     }
 
     /**

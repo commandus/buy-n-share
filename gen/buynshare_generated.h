@@ -380,8 +380,8 @@ struct Purchase FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   uint32_t finish() const {
     return GetField<uint32_t>(VT_FINISH, 0);
   }
-  const flatbuffers::Vector<uint64_t> *votes() const {
-    return GetPointer<const flatbuffers::Vector<uint64_t> *>(VT_VOTES);
+  const flatbuffers::Vector<flatbuffers::Offset<User>> *votes() const {
+    return GetPointer<const flatbuffers::Vector<flatbuffers::Offset<User>> *>(VT_VOTES);
   }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
@@ -395,6 +395,7 @@ struct Purchase FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
            VerifyField<uint32_t>(verifier, VT_FINISH) &&
            VerifyOffset(verifier, VT_VOTES) &&
            verifier.Verify(votes()) &&
+           verifier.VerifyVectorOfTables(votes()) &&
            verifier.EndTable();
   }
 };
@@ -423,7 +424,7 @@ struct PurchaseBuilder {
   void add_finish(uint32_t finish) {
     fbb_.AddElement<uint32_t>(Purchase::VT_FINISH, finish, 0);
   }
-  void add_votes(flatbuffers::Offset<flatbuffers::Vector<uint64_t>> votes) {
+  void add_votes(flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<User>>> votes) {
     fbb_.AddOffset(Purchase::VT_VOTES, votes);
   }
   PurchaseBuilder(flatbuffers::FlatBufferBuilder &_fbb)
@@ -447,7 +448,7 @@ inline flatbuffers::Offset<Purchase> CreatePurchase(
     uint32_t cost = 0,
     uint32_t start = 0,
     uint32_t finish = 0,
-    flatbuffers::Offset<flatbuffers::Vector<uint64_t>> votes = 0) {
+    flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<User>>> votes = 0) {
   PurchaseBuilder builder_(_fbb);
   builder_.add_fridgeid(fridgeid);
   builder_.add_userid(userid);
@@ -469,7 +470,7 @@ inline flatbuffers::Offset<Purchase> CreatePurchaseDirect(
     uint32_t cost = 0,
     uint32_t start = 0,
     uint32_t finish = 0,
-    const std::vector<uint64_t> *votes = nullptr) {
+    const std::vector<flatbuffers::Offset<User>> *votes = nullptr) {
   return bs::CreatePurchase(
       _fbb,
       id,
@@ -479,7 +480,7 @@ inline flatbuffers::Offset<Purchase> CreatePurchaseDirect(
       cost,
       start,
       finish,
-      votes ? _fbb.CreateVector<uint64_t>(*votes) : 0);
+      votes ? _fbb.CreateVector<flatbuffers::Offset<User>>(*votes) : 0);
 }
 
 struct MealCard FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
