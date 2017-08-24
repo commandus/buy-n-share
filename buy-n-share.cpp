@@ -70,7 +70,7 @@ int main(int argc, char** argv)
 				}
 			}
 			break;
-		case CMD_LS_FRIDGE_USER:
+		case CMD_LS_FRIDGEUSER:
 			{
 				const FridgeUsers *f = cli.ls_fridgeuser(config.fridge_id);
 				if (f)
@@ -200,7 +200,7 @@ int main(int argc, char** argv)
 				}
 			}
 			break;
-		case CMD_ADD_FRIDGE_USER:
+		case CMD_ADD_FRIDGEUSER:
 			{
 				const FridgeUser *f = cli.add_fridge_user(config.user_id, config.fridge_id, config.cost);
 				if (f)
@@ -259,7 +259,7 @@ int main(int argc, char** argv)
 			break;
 		case CMD_ADD_VOTE:
 			{
-				uint64_t vote_id = cli.add_vote(config.user_id, config.vote_purchase_id);
+				uint64_t vote_id = cli.add_vote(config.user_id, config.purchase_id);
 				if (vote_id)
 				{
 					std::cout << vote_id << std::endl;
@@ -270,9 +270,48 @@ int main(int argc, char** argv)
 				}
 			}
 			break;
+		case CMD_RM_FRIDGE:
+			{
+				bool v = cli.rm_fridge(config.fridge_id);
+				if (v)
+				{
+					std::cout << "Fridge deleted" << std::endl;
+				}
+				else
+				{
+					std::cerr << cli.url << " HTTP code " << cli.code << ": " << cli.retval << std::endl;
+				}
+			}
+			break;
+		case CMD_RM_FRIDGEUSER:
+			{
+				bool v = cli.rm_fridgeuser(config.fridge_id, config.user_id);
+				if (v)
+				{
+					std::cout << "Fridge user deleted" << std::endl;
+				}
+				else
+				{
+					std::cerr << cli.url << " HTTP code " << cli.code << ": " << cli.retval << std::endl;
+				}
+			}
+			break;
+		case CMD_RM_PURCHASE:
+			{
+				bool v = cli.rm_purchase(config.purchase_id);
+				if (v)
+				{
+					std::cout << "Purchase deleted" << std::endl;
+				}
+				else
+				{
+					std::cerr << cli.url << " HTTP code " << cli.code << ": " << cli.retval << std::endl;
+				}
+			}
+			break;
 		case CMD_RM_VOTE:
 			{
-				bool v = cli.rm_vote(config.user_id, config.vote_purchase_id);
+				bool v = cli.rm_vote(config.user_id, config.purchase_id);
 				if (v)
 				{
 					std::cout << "Vote deleted" << std::endl;

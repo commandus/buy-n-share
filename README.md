@@ -283,6 +283,45 @@ buy-n-share --ls purchase -i 2 -f 2
 buy-n-share --ls user
 ```
 
+### Удаление
+
+Пользователя
+
+- i Идентификатор пользователя
+
+```
+buy-n-share --rm user -i 2
+```
+
+Холодильника
+
+- f Идентификатор холодильника
+
+```
+buy-n-share --rm fridge -f 2
+```
+
+Пользователя холодильника
+
+- f Идентификатор холодильника
+- i Идентификатор пользователя
+
+```
+buy-n-share --rm fridgeuser -f 2 -i 2
+```
+
+Голоса
+
+- p Идентификатор покупки
+- i Идентификатор пользователя
+
+```
+buy-n-share --rm vote -p 2 -i 2
+```
+
+ls_userfridge
+rm_fridgeuser
+
 ## Building Windows using Visual Studio 2017
 
 - cmake 

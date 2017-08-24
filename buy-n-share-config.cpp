@@ -100,7 +100,7 @@ int BuyNShareConfig::parseCmd
 		if (strcmp(*a_add->sval, "fridge") == 0)
 			cmd = CMD_ADD_FRIDGE;
 		if (strcmp(*a_add->sval, "fridgeuser") == 0)
-			cmd = CMD_ADD_FRIDGE_USER;
+			cmd = CMD_ADD_FRIDGEUSER;
 		if (strcmp(*a_add->sval, "meal") == 0)
 			cmd = CMD_ADD_MEAL;
 		if (strcmp(*a_add->sval, "mealcard") == 0)
@@ -118,7 +118,7 @@ int BuyNShareConfig::parseCmd
 		if (strcmp(*a_rm->sval, "fridge") == 0)
 			cmd = CMD_RM_FRIDGE;
 		if (strcmp(*a_rm->sval, "fridgeuser") == 0)
-			cmd = CMD_RM_FRIDGE_USER;
+			cmd = CMD_RM_FRIDGEUSER;
 		if (strcmp(*a_rm->sval, "meal") == 0)
 			cmd = CMD_RM_MEAL;
 		if (strcmp(*a_rm->sval, "mealcard") == 0)
@@ -136,7 +136,7 @@ int BuyNShareConfig::parseCmd
 		if (strcmp(*a_ls->sval, "fridge") == 0)
 			cmd = CMD_LS_FRIDGE;
 		if (strcmp(*a_ls->sval, "fridgeuser") == 0)
-			cmd = CMD_LS_FRIDGE_USER;
+			cmd = CMD_LS_FRIDGEUSER;
 		if (strcmp(*a_ls->sval, "meal") == 0)
 			cmd = CMD_LS_MEAL;
 		if (strcmp(*a_ls->sval, "mealcard") == 0)
@@ -161,9 +161,9 @@ int BuyNShareConfig::parseCmd
 		meal_id = 0;
 	
 	if (a_vote_purchase_id->count)
-		vote_purchase_id = *a_vote_purchase_id->ival;
+		purchase_id = *a_vote_purchase_id->ival;
 	else
-		vote_purchase_id = 0;
+		purchase_id = 0;
 	if (a_user_key->count)
 		key = *a_user_key->sval;
 	else

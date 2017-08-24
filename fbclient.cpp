@@ -408,14 +408,62 @@ bool FBClient::rm_vote
 	const uint64_t &purchase_id
 )
 {
-	bool ret_vote;
+	bool ret_rm;
 	std::stringstream ss;
-	ss << url << "rm_vote.php?purchase_id=" << purchase_id + "&user_id=" << user_id;
+	ss << url << "rm_vote.php?purchase_id=" << purchase_id << "&user_id=" << user_id;
 	CURL *curl = postCurlUrl(ss.str(), NULL, 0);
 	if (perform(curl) == 200)
-		ret_vote = (retval == "1");
+		ret_rm = (retval == "1");
 	else
-		ret_vote = 0;
-	return ret_vote;
+		ret_rm = 0;
+	return ret_rm;
 }
 
+bool FBClient::rm_fridge
+(
+	const uint64_t &fridge_id
+)
+{
+	bool ret_rm;
+	std::stringstream ss;
+	ss << url << "rm_fridge.php?fridge_id=" << fridge_id;
+	CURL *curl = postCurlUrl(ss.str(), NULL, 0);
+	if (perform(curl) == 200)
+		ret_rm = (retval == "1");
+	else
+		ret_rm = 0;
+	return ret_rm;
+}
+
+bool FBClient::rm_fridgeuser
+(
+	const uint64_t &fridge_id,
+	const uint64_t &user_id
+)
+{
+	bool ret_rm;
+	std::stringstream ss;
+	ss << url << "rm_fridgeuser.php?fridge_id=" << fridge_id << "&user_id=" << user_id;
+	CURL *curl = postCurlUrl(ss.str(), NULL, 0);
+	if (perform(curl) == 200)
+		ret_rm = (retval == "1");
+	else
+		ret_rm = 0;
+	return ret_rm;
+}
+
+bool FBClient::rm_purchase
+(
+	const uint64_t &purchase_id
+)
+{
+	bool ret_rm;
+	std::stringstream ss;
+	ss << url << "rm_purchase.php?purchase_id=" << purchase_id;
+	CURL *curl = postCurlUrl(ss.str(), NULL, 0);
+	if (perform(curl) == 200)
+		ret_rm = (retval == "1");
+	else
+		ret_rm = 0;
+	return ret_rm;
+}

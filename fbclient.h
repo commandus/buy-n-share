@@ -105,6 +105,22 @@ public:
 		const uint64_t &purchase_id
 	);
 
+	bool rm_fridge
+	(
+		const uint64_t &fridge_id
+	);
+
+	bool rm_fridgeuser
+	(
+		const uint64_t &fridge_id,
+		const uint64_t &user_id
+	);
+
+	bool rm_purchase
+	(
+		const uint64_t &purchase_id
+	);
+
 	bool rm_vote
 	(
 		const uint64_t &user_id,

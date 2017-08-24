@@ -5,7 +5,6 @@
 	$options = array('fridge_id');
 	$opt = getopt("", $options);
 	$fridge_id = getOption($options[0], $opt, 0);
-	$purchases  = ls_userfridge($user_id);
 	// Remove fridge
 	$done = rm_fridge(
 		$fridge_id

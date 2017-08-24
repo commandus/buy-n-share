@@ -522,6 +522,8 @@
 		$balance
 	)
 	{
+		if (!$user_id)
+			return false;
 		$conn = init();
 		$q = pg_query_params($conn, 
 			'INSERT INTO "fridge" (cn, key, locale, lat, lon, alt) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id', 
@@ -1054,6 +1056,17 @@
 	)
 	{
 		$conn = init();
+
+		// remove foreign
+		$q = pg_query_params($conn, 
+			'DELETE FROM "vote" WHERE purchase_id = $1', array($purchase_id)
+		);
+		if (!$q)
+		{
+			done($conn);
+			return false;
+		}
+
 		$q = pg_query_params($conn, 
 			'DELETE FROM "purchase" WHERE id = $1', array($purchase_id)
 		);
@@ -1076,6 +1089,33 @@
 	)
 	{
 		$conn = init();
+		// check
+		$q = pg_query_params($conn, 
+			'SELECT id FROM "fridge" WHERE id = $1', array($fridge_id)
+		);
+		if (!$q)
+		{
+			done($conn);
+			return false;
+		}
+		$r = pg_fetch_row($q);
+		if (!$r)
+		{
+			done($conn);
+			return false;
+		}
+
+		// remove foreign
+		$q = pg_query_params($conn, 
+			'DELETE FROM "fridgeuser" WHERE fridge_id = $1', array($fridge_id)
+		);
+		if (!$q)
+		{
+			done($conn);
+			return false;
+		}
+
+		// remove fridge
 		$q = pg_query_params($conn, 
 			'DELETE FROM "fridge" WHERE id = $1', array($fridge_id)
 		);
@@ -1084,8 +1124,6 @@
 			done($conn);
 			return false;
 		}
-		pg_free_result($q);
-
 		done($conn);
 		return true;
 	}
