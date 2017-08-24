@@ -144,12 +144,17 @@ int main(int argc, char** argv)
 				{
 					for (auto it(p->purchases()->begin()); it != p->purchases()->end(); ++it)
 					{
-						std::cout 
+						std::cout
 							<< it->id() << "\t"
 							<< it->meal()->cn()->str() << "\t"
 							<< it->fridgeid() << "\t"
 							<< it->start() << "\t"
-							<< it->finish() << "\t"
+							<< it->finish() << "\t";
+						for (auto vit(it->votes()->begin()); vit != it->votes()->end(); ++vit)
+						{
+							std::cout << vit->cn()->str() << "\t";
+						}
+						std::cout
 							<< std::endl;
 					}
 				}

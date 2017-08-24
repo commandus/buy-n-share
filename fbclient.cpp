@@ -272,9 +272,10 @@ const Purchase *FBClient::add_purchase
 	FlatBufferBuilder fbb;
 	flatbuffers::Offset<Meal> meal = CreateMeal(fbb, meal_id, 0, 0);
 
-	std::vector<uint64_t> vote;
-	vote.push_back(user_id);
-	flatbuffers::Offset<flatbuffers::Vector<uint64_t>> votes = fbb.CreateVector(vote);
+	std::vector<flatbuffers::Offset<User>> users;
+	flatbuffers::Offset<User> u = CreateUser(fbb, user_id);
+	users.push_back(u);
+	flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<User>>> votes = fbb.CreateVector(users);
 
 	flatbuffers::Offset<Purchase> m = CreatePurchase(fbb, 0, user_id, fridge_id, meal, cost, 0, 0, votes);
 	fbb.Finish(m);

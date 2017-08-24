@@ -174,7 +174,14 @@
 	{
 		$builder = new Google\FlatBuffers\FlatbufferBuilder(0);
 		$meal = bs\Meal::createMeal($builder, $meal_id, 0, 0);
-		$vvotes = bs\Purchase::CreateVotesVector($builder, $votes);
+
+		$vvote_users = array();
+		for ($i = 0; $i < count($votes); $i++)
+		{
+			$vote_user = bs\User::CreateUser($builder, $votes[$i], 0, 0, 0, 0);
+			array_push($vvote_users, $vote_user);
+		}
+		$vvotes = bs\Purchase::CreateVotesVector($builder, $vvote_users);
 		$p = bs\Purchase::createPurchase($builder, $id, $user_id, $fridge_id, $meal, $cost, $start, $finish, $vvotes);
 		$builder->Finish($p);
 		return $builder->dataBuffer()->data();
@@ -195,6 +202,20 @@
 			$slocale = $builder->createString($purchase[5]);
 			$meal = bs\Meal::createMeal($builder, $purchase[3], $scn, $slocale);
 			$vvotes = 0;
+			// 21:		0          1     2       3    4    5
+			//          v.user_id, u.cn, locale, lat, lon, alt
+			$vvote_users = array();
+			for ($i = 0; $i < count($purchase[21]); $i++)
+			{
+				$u = $purchase[21][$i];
+				$scn = $builder->createString($u[1]);
+				$slocale = $builder->createString($u[2]);
+				// $geo = bs\Geo::createGeo($builder, $u[3], $u[4], $u[5]) // cause error: FlatBuffers: struct must be serialized inline
+				$vote_user = bs\User::CreateUser($builder, $u[0], $scn, 0, $slocale, 0);
+				array_push($vvote_users, $vote_user);
+			}
+			$vvotes = bs\Purchase::CreateVotesVector($builder, $vvote_users);
+
 			$purchase = bs\Purchase::createPurchase($builder, $purchase[0], $purchase[1], $purchase[2], $meal, $purchase[5], $purchase[6], $purchase[7], $vvotes);
 			array_push($pa, $purchase);
 		}
@@ -933,6 +954,16 @@
 	* @brief List user's purchases
 	* @param $user_id
 	* @return purchases
+	    0     1          2            3          4     5         6       7        8
+		p.id, p.user_id, p.fridge_id, p.meal_id, m.cn, m.locale, p.cost, p.start, p.finish,
+		9      10         11        12     13     14
+		f.cn, '' as fkey, f.locale, f.lat, f.lon, f.alt,
+		15    16          17        18     19     20
+		u.cn, '' as ukey, u.locale, u.lat, u.lon, u.alt
+		21
+		user: 
+		0          1     2       3    4    5
+		v.user_id, u.cn, locale, lat, lon, alt
 	*/
 	function ls_purchase
 	(
@@ -950,25 +981,36 @@
 				u.cn, '' as ukey, u.locale, u.lat, u.lon, u.alt
 				FROM \"purchase\" p, \"user\" u, \"fridge\" f, \"meal\" m WHERE f.id = $2 AND p.fridge_id = f.id AND 
 				p.user_id = u.id AND p.meal_id = m.id AND p.user_id = $1 
-				ORDER BY p.start DESC", array($user_id, $fridge_id));
+				ORDER BY p.id DESC", array($user_id, $fridge_id));
 		else
 			$q = pg_query_params($conn, 
-				"SELECT p.id, p.user_id, p.fridge_id, 
+				"SELECT p.id, p.user_id, p.fridge_id,
 				p.meal_id, m.cn, m.locale,
 				p.cost, p.start, p.finish,
 				f.cn, '' as fkey, f.locale, f.lat, f.lon, f.alt,
 				u.cn, '' as ukey, u.locale, u.lat, u.lon, u.alt
 				FROM \"purchase\" p, \"user\" u, \"fridge\" f, \"meal\" m WHERE p.fridge_id = f.id AND 
 				p.user_id = u.id AND p.meal_id = m.id AND p.user_id = $1 
-				ORDER BY p.start DESC", array($user_id));
+				ORDER BY p.id DESC", array($user_id));
 		if (!$q)
 		{
 			done($conn);
 			return false;
 		}
 		$r = array();
-		while($row = pg_fetch_row($q))
+		while ($row = pg_fetch_row($q))
 		{
+			$qvote = pg_query_params($conn, 
+				"SELECT 
+				v.user_id, u.cn, locale, lat, lon, alt
+				FROM \"vote\" v, \"user\" u WHERE v.purchase_id = $1 AND  u.id = v.user_id
+				ORDER BY v.id DESC", array($row[0]));
+			$vote_users = array();
+			while ($vote_row = pg_fetch_row($qvote))
+			{
+				array_push($vote_users, $vote_row);
+			}
+			array_push($row, $vote_users);	// 19
 			array_push($r, $row);
 		}
 		pg_free_result($q);

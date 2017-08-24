@@ -34,7 +34,7 @@
 		$vs = array();
 		for ($i = 0; $i < $f->getVotesLength(); $i++)
 		{
-			array_push($vs, $f->getVotes($i));
+			array_push($vs, $f->getVotes($i)->getId());
 		}
 	}
 
