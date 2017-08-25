@@ -398,7 +398,7 @@
 
 	/**
 	* @brief Serialize payments array
-	* @param $balance_array Each item is [$fridgeid, $userid, $start, $total]
+	* @param $user_payments Each item is [$fridgeid, $fridgecn, $userid, $usercn, $start, $total]
 	*/
 	function fb_payments
 	(
@@ -410,9 +410,13 @@
 		$pa = array();
 		foreach ($user_payments as $user_payment)
 		{
-			if (count($user_payment) == 4)
+			if (count($user_payment) >= 6)
 			{
-				$p = bs\Payment::createPayment($builder, $user_payment[0], $user_payment[1], $user_payment[2], $user_payment[3]);
+				$sfridgecn = $builder->createString($user_payment[1]);
+				$f = bs\Fridge::CreateFridge($builder, $user_payment[0], $sfridgecn, 0, 0, 0);
+				$susercn = $builder->createString($user_payment[3]);
+				$u = bs\User::CreateUser($builder, $user_payment[2], $susercn, 0, 0, 0);
+				$p = bs\Payment::createPayment($builder, $f, $u, $user_payment[4], $user_payment[5]);
 				array_push($pa, $p);
 			}
 		}
@@ -1133,7 +1137,7 @@
 
 	/**
 	* @brief Remove fridge user by user identifier not relation
-	* @return payments array, each item is array of [$fridgeid, $userid, $start, $total]
+	* @return payments array, each item is array of [$fridgeid, $fridgecn, $userid, $usercn, $start, $total]
 	* @see fb_payments()
 	*/
 	function rm_fridgeuser(
@@ -1142,8 +1146,53 @@
 	)
 	{
 		$conn = init();
-		
-		$balance_array = calc_pg_user($conn, $fridge_id, $user_id);
+		$balance_array = array();
+		$c = calc_pg_user($conn, $fridge_id, $user_id);
+		if ($c)
+		{
+			$r2 = array();	
+			array_push($r2, $c[0]);
+			// get fridge cn
+			$q = pg_query_params($conn, 
+				'SELECT cn FROM "fridge" WHERE fridge_id = $1', array($fridge_id)
+			);
+			if (!$q)
+			{
+				done($conn);
+				return false;
+			}
+			$r = pg_fetch_row($q);
+			if (!$r)
+			{
+				done($conn);
+				return false;
+			}
+			array_push($r2, $r[0]);
+
+			array_push($r2, $c[1]);
+
+			// get user cn
+			$q = pg_query_params($conn, 
+				'SELECT cn FROM "user" WHERE user_id = $1', array($user_id, $fridge_id)
+			);
+			if (!$q)
+			{
+				done($conn);
+				return false;
+			}
+			$r = pg_fetch_row($q);
+			if (!$r)
+			{
+				done($conn);
+				return false;
+			}
+			array_push($r2, $r[0]);
+			
+			array_push($r2, $c[2]);
+			array_push($r2, $c[3]);
+			
+			array_push($balance_array, $c);
+		}
 
 		$q = pg_query_params($conn, 
 			'DELETE FROM "fridgeuser" WHERE user_id = $1 AND fridge_id = $2', array($user_id, $fridge_id)

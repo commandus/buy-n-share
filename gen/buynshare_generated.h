@@ -1196,16 +1196,16 @@ inline flatbuffers::Offset<MealCards> CreateMealCardsDirect(
 
 struct Payment FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   enum {
-    VT_FRIDGEID = 4,
-    VT_USERID = 6,
+    VT_FRIDGE = 4,
+    VT_USER = 6,
     VT_START = 8,
     VT_TOTAL = 10
   };
-  uint64_t fridgeid() const {
-    return GetField<uint64_t>(VT_FRIDGEID, 0);
+  const Fridge *fridge() const {
+    return GetPointer<const Fridge *>(VT_FRIDGE);
   }
-  uint64_t userid() const {
-    return GetField<uint64_t>(VT_USERID, 0);
+  const User *user() const {
+    return GetPointer<const User *>(VT_USER);
   }
   uint32_t start() const {
     return GetField<uint32_t>(VT_START, 0);
@@ -1215,8 +1215,10 @@ struct Payment FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
-           VerifyField<uint64_t>(verifier, VT_FRIDGEID) &&
-           VerifyField<uint64_t>(verifier, VT_USERID) &&
+           VerifyOffset(verifier, VT_FRIDGE) &&
+           verifier.VerifyTable(fridge()) &&
+           VerifyOffset(verifier, VT_USER) &&
+           verifier.VerifyTable(user()) &&
            VerifyField<uint32_t>(verifier, VT_START) &&
            VerifyField<int32_t>(verifier, VT_TOTAL) &&
            verifier.EndTable();
@@ -1226,11 +1228,11 @@ struct Payment FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 struct PaymentBuilder {
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
-  void add_fridgeid(uint64_t fridgeid) {
-    fbb_.AddElement<uint64_t>(Payment::VT_FRIDGEID, fridgeid, 0);
+  void add_fridge(flatbuffers::Offset<Fridge> fridge) {
+    fbb_.AddOffset(Payment::VT_FRIDGE, fridge);
   }
-  void add_userid(uint64_t userid) {
-    fbb_.AddElement<uint64_t>(Payment::VT_USERID, userid, 0);
+  void add_user(flatbuffers::Offset<User> user) {
+    fbb_.AddOffset(Payment::VT_USER, user);
   }
   void add_start(uint32_t start) {
     fbb_.AddElement<uint32_t>(Payment::VT_START, start, 0);
@@ -1252,15 +1254,15 @@ struct PaymentBuilder {
 
 inline flatbuffers::Offset<Payment> CreatePayment(
     flatbuffers::FlatBufferBuilder &_fbb,
-    uint64_t fridgeid = 0,
-    uint64_t userid = 0,
+    flatbuffers::Offset<Fridge> fridge = 0,
+    flatbuffers::Offset<User> user = 0,
     uint32_t start = 0,
     int32_t total = 0) {
   PaymentBuilder builder_(_fbb);
-  builder_.add_userid(userid);
-  builder_.add_fridgeid(fridgeid);
   builder_.add_total(total);
   builder_.add_start(start);
+  builder_.add_user(user);
+  builder_.add_fridge(fridge);
   return builder_.Finish();
 }
 

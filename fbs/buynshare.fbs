@@ -134,8 +134,8 @@ table MealCards
 
 table Payment
 {
-	fridgeid: ulong;
-	userid: ulong;
+	fridge: Fridge;
+	user: User;
 	start: uint;
 	total: int;
 }

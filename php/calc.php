@@ -24,18 +24,19 @@
 		if (!$row)
 			return false;
 		
-		$r = array();
 		$start = time();
+		$r1 = array();
 		//-------------------------------- VVV INSERT BRAIN HERE VVV --------------------------------
 
+		// Remember, not user to user, but user to the fridge!!!
+		// one user-fridge-total
 		$total = 0;
-		
+		array_push($r1, $fridge_id);
+		array_push($r1, $user_id);
+		array_push($r1, $start);
+		array_push($r1, $total);
 		//-------------------------------- ^^^ INSERT BRAIN HERE ^^^ --------------------------------
-		array_push($r, $fridge_id);
-		array_push($r, $user_id);
-		array_push($r, $start);
-		array_push($r, $total);
-		return $r;
+		return $r1;
 	}
 
 	/**

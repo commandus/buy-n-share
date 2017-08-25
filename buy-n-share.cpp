@@ -45,6 +45,25 @@ int main(int argc, char** argv)
 								<< std::endl;
 						}
 				}
+				
+				std::cout << "Users: " << std::endl;
+				for (auto itu(u->users()->begin()); itu != u->users()->end(); ++itu)
+				{
+					std::cout
+						<< "Fridge: "
+						<< itu->fridge()->cn()->str() << "\t"
+						<< itu->fridge()->locale()->str() << "\t"
+						<< std::endl;
+					for (auto itfu(itu->fridgeusers()->begin()); itfu != itu->fridgeusers()->end(); ++itfu)
+					{
+						std::cout
+							<< "Meal card: "
+							<< itfu->user()->id() << "\t"
+							<< itfu->user()->cn()->str() << "\t"
+							<< itfu->balance() << "\t"
+							<< std::endl;
+					}
+				}
 			}
 			else
 			{
@@ -313,10 +332,21 @@ int main(int argc, char** argv)
 			break;
 		case CMD_RM_FRIDGEUSER:
 			{
-				bool v = cli.rm_fridgeuser(config.fridge_id, config.user_id);
-				if (v)
+				const Payments *p = cli.rm_fridgeuser(config.fridge_id, config.user_id);
+				if (p)
 				{
 					std::cout << "Fridge user deleted" << std::endl;
+					
+					for (auto it(p->payments()->begin()); it != p->payments()->end(); ++it)
+					{
+						std::cout 
+							<< it->total() << "\t"
+							<< it->fridge()->id() << "\t"
+							<< it->fridge()->cn()->str() << "\t"
+							<< it->user()->id() << "\t"
+							<< it->user()->cn()->str() << "\t"
+							<< std::endl;
+					}
 				}
 				else
 				{
