@@ -10,8 +10,7 @@
 #include <vector>
 
 #define CMD_NONE			0
-#define CMD_MEAL			1
-#define CMD_BALANCE			2
+#define CMD_LS_USERFRIDGE	1
 
 #define CMD_ADD_USER		10
 #define CMD_ADD_FRIDGE		11

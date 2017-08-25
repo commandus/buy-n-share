@@ -22,7 +22,35 @@ int main(int argc, char** argv)
 
 	switch (config.cmd) 
 	{
-		case CMD_BALANCE:
+		case CMD_LS_USERFRIDGE:
+		{
+			// dashboard
+			const UserFridges *u = cli.ls_userfridge(config.user_id);
+			if (u)
+			{
+				for (auto it(u->mealcards()->begin()); it != u->mealcards()->end(); ++it)
+				{
+					std::cout 
+						<< "Fridge: " 
+						<< it->fridge()->cn()->str() << "\t"
+						<< it->fridge()->locale()->str() << "\t"
+						<< std::endl;
+						for (auto itc(it->mealcards()->begin()); itc != it->mealcards()->end(); ++itc)
+						{
+							std::cout
+								<< "Meal card: "
+								<< itc->meal()->cn()->str() << "\t"
+								<< itc->meal()->locale()->str() << "\t"
+								<< (int) itc->qty() << "\t"
+								<< std::endl;
+						}
+				}
+			}
+			else
+			{
+				std::cerr << cli.url << " HTTP code " << cli.code << ": " << cli.retval << std::endl;
+			}
+		}
 			break;
 		case CMD_LS_USER:
 			{

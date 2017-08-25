@@ -402,6 +402,25 @@ const Purchases *FBClient::ls_purchase
 	return ret_purchases;
 }
 
+const UserFridges *FBClient::ls_userfridge
+(
+	const uint64_t &user_id
+)
+{
+	const UserFridges *ret_userfridges;
+	std::stringstream ss;
+	ss << url << "ls_userfridge.php?user_id=" << user_id;
+	CURL *curl = postCurlUrl(ss.str(), NULL, 0);
+	if (!curl)
+		return 0;
+
+	if (perform(curl) == 200)
+		ret_userfridges = GetUserFridges(retval.c_str());
+	else
+		ret_userfridges = NULL;
+	return ret_userfridges;
+}
+
 bool FBClient::rm_vote
 (
 	const uint64_t &user_id,
@@ -467,3 +486,4 @@ bool FBClient::rm_purchase
 		ret_rm = 0;
 	return ret_rm;
 }
+

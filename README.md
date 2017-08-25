@@ -143,12 +143,12 @@ exit
 
 ### List
 
-1. Fridges f = ls_fridge([User, ]Fridge); // список холодильников пользователя
-2. FridgeUsers fu = ls_fridgeuser([User, ]Fridge, FridgeUser);  // список пользователей холодильника
-3. Purchases p = ls_purchase([User, ]Purchase); // список покупок пользователя
-4. Meals m = ls_meal([User]); // список продуктов
-5. MealCards c = ls_mealcard([User, ]Fridge); // список продуктов в холодильнике
-6. UserFridges uf = ls_userfridge([User, ])	// список холодильников с едой
+1. UserFridges uf = ls_userfridge([User, ])	// список холодильников с едой
+2. Fridges f = ls_fridge([User, ]Fridge); // список холодильников пользователя
+3. FridgeUsers fu = ls_fridgeuser([User, ]Fridge, FridgeUser);  // список пользователей холодильника
+4. Purchases p = ls_purchase([User, ]Purchase); // список покупок пользователя
+5. Meals m = ls_meal([User]); // список продуктов
+6. MealCards c = ls_mealcard([User, ]Fridge); // список продуктов в холодильнике
 
 ### Helper functions
 

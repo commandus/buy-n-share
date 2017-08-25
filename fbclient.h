@@ -11,6 +11,7 @@
 
 #include "user_generated.h"
 #include "users_generated.h"
+#include "userfridges_generated.h"
 #include "fridge_generated.h"
 #include "fridges_generated.h"
 #include "fridgeuser_generated.h"
@@ -164,7 +165,13 @@ public:
 		const uint64_t &user_id,
 		const uint64_t &fridge_id
 	);
+
 	
+	const UserFridges *ls_userfridge
+	(
+		const uint64_t &user_id
+	);
+
 };
 
 #endif // FBCLIENT_H

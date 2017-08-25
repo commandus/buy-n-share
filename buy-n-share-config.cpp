@@ -38,8 +38,7 @@ int BuyNShareConfig::parseCmd
 {
 	struct arg_str *a_base_url = arg_str0("u", "url", "<URL>", "Default " DEF_BASE_URL);
 	// commands
-	struct arg_lit *a_meal = arg_lit0(NULL, "meal", "print fridge meals");
-	struct arg_lit *a_balance = arg_lit0(NULL, "balance", "print fridge purchase balance by user");
+	struct arg_int *a_ls_userfridge = arg_int0("d", "dashboard", "<user id>", "List of all user's fridges");
 	struct arg_str *a_add = arg_str0(NULL, "add", OBJECT_LIST, "Add a new object");
 	struct arg_str *a_rm = arg_str0(NULL, "rm", OBJECT_LIST, "Remove an object");
 	struct arg_str *a_ls = arg_str0(NULL, "ls", OBJECT_LIST, "List");
@@ -65,7 +64,7 @@ int BuyNShareConfig::parseCmd
 	void* argtable[] = { 
 		a_base_url,
 		// commands
-		a_meal, a_balance, a_add, a_rm, a_ls,
+		a_ls_userfridge, a_add, a_rm, a_ls,
 		// identifiers
 		a_user_id, a_fridge_id, a_meal_id, a_vote_purchase_id, a_user_key,
 		// options
@@ -91,8 +90,11 @@ int BuyNShareConfig::parseCmd
 		base_url = DEF_BASE_URL;
 
 	cmd = CMD_NONE;
-	if (a_balance->count)
-		cmd = CMD_BALANCE;
+	if (a_ls_userfridge->count)
+	{
+		cmd = CMD_LS_USERFRIDGE;
+		user_id = *a_ls_userfridge->ival;
+	}
 	if (a_add->count)
 	{
 		if (strcmp(*a_add->sval, "user") == 0)
