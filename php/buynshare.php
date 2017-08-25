@@ -399,6 +399,7 @@
 	/**
 	* @brief Serialize payments array
 	* @param $user_payments Each item is [$fridgeid, $fridgecn, $userid, $usercn, $start, $total]
+	* @see rm_fridgeuser()
 	*/
 	function fb_payments
 	(
@@ -1154,7 +1155,7 @@
 			array_push($r2, $c[0]);
 			// get fridge cn
 			$q = pg_query_params($conn, 
-				'SELECT cn FROM "fridge" WHERE fridge_id = $1', array($fridge_id)
+				'SELECT cn FROM "fridge" WHERE id = $1', array($fridge_id)
 			);
 			if (!$q)
 			{
@@ -1173,7 +1174,7 @@
 
 			// get user cn
 			$q = pg_query_params($conn, 
-				'SELECT cn FROM "user" WHERE user_id = $1', array($user_id, $fridge_id)
+				'SELECT cn FROM "user" WHERE id = $1', array($user_id)
 			);
 			if (!$q)
 			{
@@ -1191,7 +1192,7 @@
 			array_push($r2, $c[2]);
 			array_push($r2, $c[3]);
 			
-			array_push($balance_array, $c);
+			array_push($balance_array, $r2);
 		}
 
 		$q = pg_query_params($conn, 
