@@ -61,7 +61,9 @@
 		$r = array();
 		while ($row = pg_fetch_row($q))
 		{
-			array_push($r, calc_pg_user($conn, $fridge_id, $row[0]));
+			$c = calc_pg_user($conn, $fridge_id, $row[0]);
+			if ($c)
+				array_push($r, $c);
 		}
 		pg_free_result($q);
 
