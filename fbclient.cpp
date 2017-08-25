@@ -435,21 +435,21 @@ bool FBClient::rm_fridge
 	return ret_rm;
 }
 
-bool FBClient::rm_fridgeuser
+const Payments *FBClient::rm_fridgeuser
 (
 	const uint64_t &fridge_id,
 	const uint64_t &user_id
 )
 {
-	bool ret_rm;
+	const Payments *ret_payments;
 	std::stringstream ss;
 	ss << url << "rm_fridgeuser.php?fridge_id=" << fridge_id << "&user_id=" << user_id;
 	CURL *curl = postCurlUrl(ss.str(), NULL, 0);
 	if (perform(curl) == 200)
-		ret_rm = (retval == "1");
+		ret_payments = GetPayments(retval.c_str());
 	else
-		ret_rm = 0;
-	return ret_rm;
+		ret_payments = NULL;
+	return ret_payments;
 }
 
 bool FBClient::rm_purchase

@@ -19,6 +19,7 @@
 #include "meals_generated.h"
 #include "mealcard_generated.h"
 #include "mealcards_generated.h"
+#include "payments_generated.h"
 #include "purchase_generated.h"
 #include "purchases_generated.h"
 
@@ -110,7 +111,7 @@ public:
 		const uint64_t &fridge_id
 	);
 
-	bool rm_fridgeuser
+	const Payments *rm_fridgeuser
 	(
 		const uint64_t &fridge_id,
 		const uint64_t &user_id

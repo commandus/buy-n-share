@@ -410,10 +410,13 @@
 		$pa = array();
 		foreach ($user_payments as $user_payment)
 		{
-			$p = bs\Payment::createPayment($builder, $user_payment[0], $user_payment[1], $user_payment[2], $user_payment[3]);
-			array_push($pa, $p);
+			if (count($user_payment) == 4)
+			{
+				$p = bs\Payment::createPayment($builder, $user_payment[0], $user_payment[1], $user_payment[2], $user_payment[3]);
+				array_push($pa, $p);
+			}
 		}
-		$pv = bs\Meals::CreatePaymentsVector($builder, $pa);
+		$pv = bs\Payments::CreatePaymentsVector($builder, $pa);
 		bs\Payments::startPayments($builder);
 		bs\Payments::addPayments($builder, $pv);
 		$ff = bs\Payments::EndPayments($builder);

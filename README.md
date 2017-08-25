@@ -137,7 +137,7 @@ exit
 ### Remove
 
 1. rm_fridge([User, ]Fridge); // также удаляет всех пользователей- rm_fridgeuser()
-2. Balance = rm_fridgeuser([User, ]Fridge, FridgeUser);  // удаляет пользователя холодильника, вызывает calc() и выравнивает баланс проводками "Долг" add_purchase()
+2. Payments = rm_fridgeuser([User, ]Fridge, FridgeUser);  // удаляет пользователя холодильника, вызывает calc() и выравнивает баланс проводками "Долг" add_purchase()
 3. rm_purchase([User, ]Purchase);   // сторнирование
 4. rm_vote([User, ]Purchase_id); // Отзывает голос
 
@@ -145,7 +145,7 @@ exit
 
 1. Fridges f = ls_fridge([User, ]Fridge); // список холодильников пользователя
 2. FridgeUsers fu = ls_fridgeuser([User, ]Fridge, FridgeUser);  // список пользователей холодильника
-3. Purchaces p = ls_purchase([User, ]Purchase); // список покупок пользователя
+3. Purchases p = ls_purchase([User, ]Purchase); // список покупок пользователя
 4. Meals m = ls_meal([User]); // список продуктов
 5. MealCards c = ls_mealcard([User, ]Fridge); // список продуктов в холодильнике
 6. UserFridges uf = ls_userfridge([User, ])	// список холодильников с едой
@@ -184,6 +184,10 @@ buy-n-share --add user -e ru -n "Alice" -l 62.028098 -o 129.732555 -a 100
 - i идентификатор пользователя
 - n название
 - l, o, a координаты
+
+```
+buy-n-share --add fridge -e ru -n "Fridge 1" -l 62.028098 -o 129.732555 -a 100
+```
 
 Пользователя холодильника, параметры:
 
@@ -319,8 +323,17 @@ buy-n-share --rm fridgeuser -f 2 -i 2
 buy-n-share --rm vote -p 2 -i 2
 ```
 
+Пользователя холодильника
+
+- i Идентификатор пользователя
+- f Идентификатор холодильника
+
+```
+buy-n-share --rm fridgeuser -i 3 -f 2
+```
+
 ls_userfridge
-rm_fridgeuser
+
 
 ## Building Windows using Visual Studio 2017
 
