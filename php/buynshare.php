@@ -715,7 +715,6 @@
 		done($conn);
 	}
 
-
 	/**
 	* @brief Add purchase and votes
 	* @param votes array- user id list, true- all, false- none
@@ -842,6 +841,28 @@
 	}
 
 	/**
+	* @brief Get user
+	* @param $conn Database
+	* @param $user_id User identifier
+	* @return users array [id, cn, key, locale, lat, lon, alt]
+	*/
+	function pg_get_user
+	(
+		$conn,
+		$user_id
+	)
+	{
+		$q = pg_query_params($conn, 
+			"SELECT id, cn, '' as key, locale, lat, lon, alt FROM \"user\" WHERE (id = $1)", array($user_id)
+		);
+		if (!$q)
+			return false;
+		$r = pg_fetch_row($q);
+		pg_free_result($q);
+		return $r;
+	}
+
+	/**
 	* @brief List fridges in specified locale
 	* @param $locale 
 	* @return fridge array
@@ -881,13 +902,29 @@
 	)
 	{
 		$conn = init();
+		$r = pg_ls_fridgeuser($conn, $fridge_id);
+		done($conn);
+		return $r;
+	}
+
+	/**
+	* @brief List fridge users
+	* @param $conn Database
+	* @param $fridge_id fridge identifier
+	* @return users array [id, fridge_id, user_id, cn, key, locale, lat, lon, alt, start, finish, balance]
+	*/
+	function pg_ls_fridgeuser
+	(
+		$conn,
+		$fridge_id
+	)
+	{
 		$q = pg_query_params($conn, 
-			"SELECT fu.id, fu.fridge_id, fu.user_id, u.cn, '' as key, u.locale, u.lat,  u.lon, u.alt, fu.start, fu.finish, fu.balance
+			"SELECT fu.id, fu.fridge_id, fu.user_id, u.cn, '' as key, u.locale, u.lat, u.lon, u.alt, fu.start, fu.finish, fu.balance
 			FROM \"fridgeuser\" fu, \"user\" u WHERE fu.user_id = u.id AND fridge_id = $1 ORDER BY id", array($fridge_id)
 		);
 		if (!$q)
 		{
-			done($conn);
 			return false;
 		}
 		$r = array();
@@ -896,7 +933,6 @@
 			array_push($r, $row);
 		}
 		pg_free_result($q);
-		done($conn);
 		return $r;
 	}
 
@@ -941,13 +977,28 @@
 	)
 	{
 		$conn = init();
+		$r = pg_ls_mealcard($conn, $fridge_id);
+		return $r;
+	}
+
+	/**
+	* @brief List meal cards in the fridge
+	* @param $conn Postgresql connection
+	* @param $fridge_id 
+	* @return meal cards array [id, cn, locale, qty]
+	*/
+	function pg_ls_mealcard
+	(
+		$conn,
+		$fridge_id
+	)
+	{
 		$q = pg_query_params($conn, 
 			"SELECT m.id, m.cn, m.locale, mc.qty
 			FROM \"meal\" m, \"mealcard\" mc WHERE mc.fridge_id = $1 AND mc.meal_id = m.id ORDER BY m.cn", array($fridge_id)
 		);
 		if (!$q)
 		{
-			done($conn);
 			return false;
 		}
 		$r = array();
@@ -956,7 +1007,6 @@
 			array_push($r, $row);
 		}
 		pg_free_result($q);
-		done($conn);
 		return $r;
 	}
 
@@ -1028,6 +1078,63 @@
 		return $r;
 	}
 
+	/**
+	* @brief List of user fridges
+	* @return array [id, cn, key, locale, lat, lon, alt]
+	* user: User; mealcards: [FridgeMealCards];	users: [FridgeUsers];
+	*/
+	function ls_userfridge
+	(
+		$user_id
+	)
+	{
+		$conn = init();
+		// [id, cn, key, locale, lat, lon, alt]
+		$u = pg_get_user($conn, $user_id);
+
+		// [id, cn, key, locale, lat, lon, alt] Add 7- mealcards, 8- users
+		$fridges = pg_ls_userfridge($conn, $user_id);
+		for ($f = 0; $f < count($fridges); $f++)
+		{
+			// [id, cn, locale, qty]
+			$mealcards = pg_ls_mealcard($conn, $fridges[$i][0]);
+			$fridges[7] = $mealcards;
+			// [id, fridge_id, user_id, cn, key, locale, lat, lon, alt, start, finish, balance]
+			$users = pg_ls_fridgeuser($conn, $fridge_id);
+			$fridges[8] = $mealcards;
+		}
+		done($conn);
+		$r = array('u'=>$u, 'f'=>$fridges)
+		return $r;
+	}
+	
+	/**
+	* @brief List of user fridges
+	* @return array [id, cn, key, locale, lat, lon, alt]
+	*/
+	function pg_ls_userfridge
+	(
+		$conn,
+		$user_id
+	)
+	{
+		// FridgeMealCards.fridge
+		$q = pg_query_params($conn, 
+			"SELECT f.id, cn, '' as key, f.locale, f.lat, f.lon, f.alt FROM \"fridge\" f WHERE f.id IN 
+			(SELECT fridge_id FROM fridgeuser WHERE user_id = $1)
+			ORDER BY f.cn", array($user_id)
+		);
+		if (!$q)
+			return false;
+		$r = array();
+		while ($row = pg_fetch_row($q))
+		{
+			array_push($r, $row);
+		}
+		pg_free_result($q);
+		return $r;
+	}
+	
 	// ------------------------------------ Delete ---------------------------------
 
 	/**
