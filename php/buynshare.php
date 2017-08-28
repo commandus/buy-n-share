@@ -54,6 +54,7 @@
 		bs\User::addLocale($builder, $slocale);
 		bs\User::addGeo($builder, bs\Geo::createGeo($builder, $lat, $lon, $alt));
 		$u = bs\User::EndUser($builder);
+		return $u;
 	}
 
 	/**
@@ -233,14 +234,10 @@
 	)
 	{
 		$f = fb_fridge1($builder, $fridge[0], $fridge[1], $fridge[2], $fridge[3], $fridge[4], $fridge[5], $fridge[6]);
-		$builder->Finish($f);
-
 		$mcs = fb_mealcards1($builder, $mealcards);
-		$builder->Finish($mcs);
 		$fmc = bs\FridgeMealCards::CreateFridgeMealCards($builder, $f, $mcs);
 		return $fmc;
 	}
-
 
 	/**
 	* @brief Serialize meal
@@ -385,15 +382,18 @@
 
 	/**
 	* @brief Serialize fridge users array
+	* @param $fridge array [id, fridge_id, user_id, cn, key, locale, lat, lon, alt, start, finish, balance]
 	* @param $fridgeusers array [id, fridge_id, user_id, cn, key, locale, lat, lon, alt, start, finish, balance]
 	* @see ls_fridgeuser()
 	*/
 	function fb_fridgeusers1
 	(
 		$builder,
+		&$fridge,
 		&$fridgeusers
 	)
 	{
+		$f = fb_fridge1($builder, $fridge[0], $fridge[1], $fridge[2], $fridge[3], $fridge[4], $fridge[5], $fridge[6]);
 		$fa = array();
 		foreach ($fridgeusers as $fridgeuser)
 		{
@@ -415,15 +415,12 @@
 			bs\FridgeUser::addFinish($builder, $fridgeuser[10]);
 			bs\FridgeUser::addBalance($builder, $fridgeuser[11]);
 			$fu = bs\FridgeUser::EndFridgeUser($builder);
-			$builder->Finish($fu);
 		
 			array_push($fa, $fu);
 		}
 		$fv = bs\FridgeUsers::CreateFridgeUsersVector($builder, $fa);
-		bs\FridgeUsers::startFridgeUsers($builder);
-		bs\FridgeUsers::addFridgeUsers($builder, $fv);
-		$ff = bs\FridgeUsers::EndFridgeUsers($builder);
-		return $ff;
+		$fu = bs\FridgeUsers::CreateFridgeUsers($builder, $f, $fv);
+		return $fu;
 	}
 
 	/**
@@ -431,6 +428,7 @@
 	*/
 	function fb_fridgeusers
 	(
+		&$fridge,
 		&$fridgeusers
 	)
 	{
@@ -438,6 +436,7 @@
 		$ff = fb_fridgeusers1
 		(
 			$builder,
+			$fridge,
 			$fridgeusers
 		);
 		$builder->Finish($ff);
@@ -487,16 +486,12 @@
 		{
 			$scn = $builder->createString($mealcard[1]);
 			$slocale = $builder->createString($mealcard[2]);
-
 			$meal = bs\Meal::createMeal($builder, $mealcard[0], $scn, $slocale);
 			$mealcard = bs\MealCard::createMealCard($builder, $meal, $mealcard[3]);
 			array_push($ma, $mealcard);
 		}
 		$mv = bs\MealCards::CreateMealCardsVector($builder, $ma);
-		bs\MealCards::startMealCards($builder);
-		bs\MealCards::addMealCards($builder, $mv);
-		$ff = bs\MealCards::EndMealCards($builder);
-		return $ff;
+		return $mv;
 	}
 
 	/**
@@ -570,25 +565,24 @@
 			$data['u'][5],
 			$data['u'][6]
 		);
-		$builder->Finish($user);
 
 		$mealcards = array();
 		$users = array();
 		for ($f = 0; $f < count($data['f']); $f++)
 		{
 			$fridgemealcards = fb_fridgemealcards1($builder, $data['f'][$f], $data['f'][$f][7]);
-			$builder->Finish($fridgemealcards);
-
 			array_push($mealcards, $fridgemealcards);
-			$fridgeusers = fb_fridgeusers1($builder, $data['f'][$f][8]);
-			$builder->Finish($fridgeusers);
+
+			$fridgeusers = fb_fridgeusers1($builder, $data['f'][$f], $data['f'][$f][8]);
 			array_push($users, $fridgeusers);
 		}
+
 		$mcv = bs\UserFridges::createMealcardsVector($builder, $mealcards);
 		$uv = bs\UserFridges::createUsersVector($builder, $users);
 		$uf = bs\UserFridges::createUserFridges($builder, $user, $mcv, $uv);
+		$builder->Finish($uf);
 		return $builder->dataBuffer()->data();
-	}
+}
 	
 	// ------------------------------------ Helper routines ---------------------------------
 

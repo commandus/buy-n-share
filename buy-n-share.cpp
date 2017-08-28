@@ -31,48 +31,61 @@ int main(int argc, char** argv)
 				std::cout
 					<< "User: "
 					<< u->user()->id() << "\t"
-//					<< u->user()->cn()->str() << "\t"
-//					<< u->user()->locale()->str() << "\t"
+					<< u->user()->cn()->str() << "\t"
+					<< u->user()->locale()->str() << "\t"
 					<< std::endl;
+				std::cout << "Meal cards: " << std::endl;
+				for (auto it(u->mealcards()->begin()); it != u->mealcards()->end(); ++it)
+				{
+					if (!it->fridge())
+						continue;
+					std::cout
+						<< "Fridge: "
+						<< it->fridge()->id() << "\t"
+						<< it->fridge()->cn()->str() << "\t"
+						<< it->fridge()->locale()->str() << "\t"
+						<< std::endl;
+					for (auto itc(it->mealcards()->begin()); itc != it->mealcards()->end(); ++itc)
+					{
+						if (!itc->meal())
+						{
+							std::cerr << "Meal?" << std::endl;
+							continue;
+						}
+						std::cout
+							<< "Meal card: "
+							<< itc->meal()->id() << "\t"
+							<< itc->meal()->cn()->str() << "\t"
+							<< itc->meal()->locale()->str() << "\t"
+							<< (int)itc->qty() << "\t"
+							<< std::endl;
+					}
+
+				}
+				
 				std::cout << "Users: " << std::endl;
 				for (auto itu(u->users()->begin()); itu != u->users()->end(); ++itu)
 				{
-					std::cout
-						<< "Fridge: "
-						<< itu->fridge()->cn()->str() << "\t"
-						<< itu->fridge()->locale()->str() << "\t"
-						<< std::endl;
+					if (itu->fridge())
+					{
+						std::cout
+							<< "Fridge: "
+							<< itu->fridge()->id() << "\t"
+							<< itu->fridge()->cn()->str() << "\t"
+							<< itu->fridge()->locale()->str() << "\t"
+							<< std::endl;
+					}
+					
 					for (auto itfu(itu->fridgeusers()->begin()); itfu != itu->fridgeusers()->end(); ++itfu)
 					{
 						std::cout
-							<< "Meal card: "
+							<< "User: "
 							<< itfu->user()->id() << "\t"
 							<< itfu->user()->cn()->str() << "\t"
 							<< itfu->balance() << "\t"
 							<< std::endl;
 					}
-				}
-
-				for (auto it(u->mealcards()->begin()); it != u->mealcards()->end(); ++it)
-				{
-					if (!it->fridge())
-						continue;
-					std::cout 
-						<< "Fridge: " 
-						<< it->fridge()->id() << "\t"
-//						<< it->fridge()->cn()->str() << "\t"
-//						<< it->fridge()->locale()->str() << "\t"
-						<< std::endl;
-						for (auto itc(it->mealcards()->begin()); itc != it->mealcards()->end(); ++itc)
-						{
-							std::cout
-								<< "Meal card: "
-								<< itc->meal()->id() << "\t"
-//								<< itc->meal()->cn()->str() << "\t"
-//								<< itc->meal()->locale()->str() << "\t"
-								<< (int) itc->qty() << "\t"
-								<< std::endl;
-						}
+					
 				}
 			}
 			else
