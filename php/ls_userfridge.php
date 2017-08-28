@@ -4,6 +4,14 @@
 	$opt = getopt("", array("user_id:"));
 	$user_id = getOption("user_id", $opt, 0);
 	// List of my fridges
-	$r  = ls_userfridge($user_id);
-	echo fb_userfridges($r);
+	$f = ls_userfridge($user_id);
+	$r = fb_userfridges($f);
+	if (!$r)
+	{
+		http_response_code(500);
+		echo false;
+		return;
+	}
+	else
+		echo $r;
 ?>

@@ -90,6 +90,12 @@ int BuyNShareConfig::parseCmd
 		base_url = DEF_BASE_URL;
 
 	cmd = CMD_NONE;
+
+	if (a_user_id->count)
+		user_id = *a_user_id->ival;
+	else
+		user_id = 0;
+
 	if (a_ls_userfridge->count)
 	{
 		cmd = CMD_LS_USERFRIDGE;
@@ -149,10 +155,6 @@ int BuyNShareConfig::parseCmd
 			cmd = CMD_LS_VOTE;
 	}
 
-	if (a_user_id->count)
-		user_id = *a_user_id->ival;
-	else
-		user_id = 0;
 	if (a_fridge_id->count)
 		fridge_id = *a_fridge_id->ival;
 	else

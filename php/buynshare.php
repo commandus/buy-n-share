@@ -558,6 +558,8 @@
 		&$data
 	)
 	{
+		if (!$data)
+			return false;
 		$builder = new Google\FlatBuffers\FlatbufferBuilder(0);
 		$user = fb_user1($builder,
 			$data['u'][0],
@@ -1254,6 +1256,8 @@
 		$conn = init();
 		// [id, cn, key, locale, lat, lon, alt]
 		$u = pg_get_user($conn, $user_id);
+		if(!$u)
+			return false;
 		// [id, cn, key, locale, lat, lon, alt] Add 7- mealcards, 8- users
 		$fridges = pg_ls_userfridge($conn, $user_id);
 		foreach ($fridges as &$fridge)

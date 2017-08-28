@@ -28,24 +28,12 @@ int main(int argc, char** argv)
 			const UserFridges *u = cli.ls_userfridge(config.user_id);
 			if (u)
 			{
-				for (auto it(u->mealcards()->begin()); it != u->mealcards()->end(); ++it)
-				{
-					std::cout 
-						<< "Fridge: " 
-						<< it->fridge()->cn()->str() << "\t"
-						<< it->fridge()->locale()->str() << "\t"
-						<< std::endl;
-						for (auto itc(it->mealcards()->begin()); itc != it->mealcards()->end(); ++itc)
-						{
-							std::cout
-								<< "Meal card: "
-								<< itc->meal()->cn()->str() << "\t"
-								<< itc->meal()->locale()->str() << "\t"
-								<< (int) itc->qty() << "\t"
-								<< std::endl;
-						}
-				}
-				
+				std::cout
+					<< "User: "
+					<< u->user()->id() << "\t"
+//					<< u->user()->cn()->str() << "\t"
+//					<< u->user()->locale()->str() << "\t"
+					<< std::endl;
 				std::cout << "Users: " << std::endl;
 				for (auto itu(u->users()->begin()); itu != u->users()->end(); ++itu)
 				{
@@ -63,6 +51,28 @@ int main(int argc, char** argv)
 							<< itfu->balance() << "\t"
 							<< std::endl;
 					}
+				}
+
+				for (auto it(u->mealcards()->begin()); it != u->mealcards()->end(); ++it)
+				{
+					if (!it->fridge())
+						continue;
+					std::cout 
+						<< "Fridge: " 
+						<< it->fridge()->id() << "\t"
+//						<< it->fridge()->cn()->str() << "\t"
+//						<< it->fridge()->locale()->str() << "\t"
+						<< std::endl;
+						for (auto itc(it->mealcards()->begin()); itc != it->mealcards()->end(); ++itc)
+						{
+							std::cout
+								<< "Meal card: "
+								<< itc->meal()->id() << "\t"
+//								<< itc->meal()->cn()->str() << "\t"
+//								<< itc->meal()->locale()->str() << "\t"
+								<< (int) itc->qty() << "\t"
+								<< std::endl;
+						}
 				}
 			}
 			else
