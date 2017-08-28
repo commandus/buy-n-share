@@ -3,10 +3,9 @@
 	header('Content-Type: text/plain');
 	
 	// get user identifier
-	$options = array('user_id', 'purchase_id');
-	$opt = getopt("", $options);
-	$user_id = getOption($options[0], $opt, 0);
-	$purchase_id = getOption($options[1], $opt, 0);
+	$opt = getopt("", array('user_id:', 'purchase_id:'));
+	$user_id = getOption('user_id', $opt, 0);
+	$purchase_id = getOption('purchase_id', $opt, 0);
 	// Remove vote
 	$done = rm_vote(
 		$user_id,

@@ -1,10 +1,9 @@
 <?php
 	require "buynshare.php";
 	header('Content-Type: application/octet-stream');
-	$options = array('user_id', 'balance');
-	$opt = getopt("", $options);
-	$user_id = getOption($options[0], $opt, 0);  // mandatory
-	$balance = getOption($options[1], $opt, 0);  // optional
+	$opt = getopt("", array('user_id:', 'balance:'));
+	$user_id = getOption('user_id', $opt, 0);  // mandatory
+	$balance = getOption('balance', $opt, 0);  // optional
 
 	// Read fridge
 	$bb = Google\FlatBuffers\ByteBuffer::wrap(file_get_contents('php://input'));

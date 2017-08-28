@@ -18,10 +18,9 @@
 	$start = time(); // $f->getStart();
 	$finish = $f->getFinish();
 
-	$options = array('qty', 'all');
-	$opt = getopt("", $options);
-	$qty = getOption($options[0], $opt, 1);
-	$all = getOption($options[1], $opt, false);
+	$opt = getopt("", array('qty:', 'all:'));
+	$qty = getOption('qty', $opt, 1);
+	$all = getOption('all', $opt, false);
 
 	if ($all)
 	{

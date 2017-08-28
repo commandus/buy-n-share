@@ -2,9 +2,8 @@
 	require "buynshare.php";
 	header('Content-Type: text/plain');
 	// get fridge identifier
-	$options = array('fridge_id');
-	$opt = getopt("", $options);
-	$fridge_id = getOption($options[0], $opt, 0);
+	$opt = getopt("", array('fridge_id:'));
+	$fridge_id = getOption('fridge_id', $opt, 0);
 	// Remove fridge
 	$done = rm_fridge(
 		$fridge_id

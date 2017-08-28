@@ -71,6 +71,7 @@
 	{
 		$builder = new Google\FlatBuffers\FlatbufferBuilder(0);
 		$u = fb_user1(
+			$builder,
 			$id,
 			$cn,
 			$key,
@@ -83,37 +84,6 @@
 		return $builder->dataBuffer()->data();
 	}
 
-	/**
-	* $brief Serialize user's fridges
-	* @param $data array u=>[id, cn, key, locale, lat, lon, alt] f=>[id, cn, key, locale, 4-lat, lon, alt, 7- [FridgeMealCards], 8- [FridgeUsers];]
-	* user: User; FridgeMealCards: [id, cn, key, locale, lat, lon, alt]; FridgeUsers: [id, fridge_id, user_id, cn, key, locale, lat, lon, alt, start, finish, balance];
-	* @see ls_userfridge
-	*/
-	function fb_userfridges(
-		$data
-	)
-	{
-		$builder = new Google\FlatBuffers\FlatbufferBuilder(0);
-		$u = fb_user1($builder,
-			$data['u'][0],
-			$data['u'][1],
-			$data['u'][2],
-			$data['u'][3],
-			$data['u'][4],
-			$data['u'][5],
-			$data['u'][6]
-		);
-		$builder->Finish($u);
-
-		for ($f = 0; $f < count($data['f']); $f++)
-		{
-			$fridgeusers = fb_fridgeusers1($builder, $data['f'][$f][8]);
-			$builder->Finish($fridgeusers);
-		}
-
-		return $builder->dataBuffer()->data();
-	}
-	
 	/**
 	* @brief Serialize fridge
 	*/
@@ -128,6 +98,25 @@
 	)
 	{
 		$builder = new Google\FlatBuffers\FlatbufferBuilder(0);
+		$f = fb_fridge1($builder, $id, $cn, $key, $locale, $lat, $lon, $alt);
+		$builder->Finish($f);
+		return $builder->dataBuffer()->data();
+	}
+
+	/**
+	* @brief Serialize fridge
+	*/
+	function fb_fridge1(
+		$builder,
+		$id,
+		$cn,
+		$key,
+		$locale,
+		$lat,
+		$lon,
+		$alt
+	)
+	{
 		$scn = $builder->createString($cn);
 		$skey = $builder->createString($key);
 		$slocale = $builder->createString($locale);
@@ -137,9 +126,8 @@
 		bs\Fridge::addKey($builder, $skey);
 		bs\Fridge::addLocale($builder, $slocale);
 		bs\Fridge::addGeo($builder, bs\Geo::createGeo($builder, $lat, $lon, $alt));
-		$u = bs\Fridge::EndFridge($builder);
-		$builder->Finish($u);
-		return $builder->dataBuffer()->data();
+		$f = bs\Fridge::EndFridge($builder);
+		return $f;
 	}
 
 	/**
@@ -213,6 +201,46 @@
 		$builder->Finish($mealcard);
 		return $builder->dataBuffer()->data();
 	}
+
+
+	/**
+	* @brief Serialize fridge meal cards
+	* $param $fridge [id, cn, key, locale, lat, lon, alt]
+	* $param $mealcards [id, cn, locale, qty] 
+	* @see fb_fridgemealcards1()
+	*/
+	function fb_fridgemealcards(
+		&$fridge,
+		&$mealcards
+	)
+	{
+		$builder = new Google\FlatBuffers\FlatbufferBuilder(0);
+		$fmc = fb_fridgemealcards1($builder, $fridge, $mealcards);
+		$builder->Finish($fmc);
+		return $builder->dataBuffer()->data();
+	}
+
+	/**
+	* @brief Serialize fridge meal card
+	* $param $fridge [id, cn, key, locale, lat, lon, alt]
+	* $param $mealcards [id, cn, locale, qty] 
+	* @see fb_fridgemealcards()
+	*/
+	function fb_fridgemealcards1(
+		$builder,
+		&$fridge,
+		&$mealcards
+	)
+	{
+		$f = fb_fridge1($builder, $fridge[0], $fridge[1], $fridge[2], $fridge[3], $fridge[4], $fridge[5], $fridge[6]);
+		$builder->Finish($f);
+
+		$mcs = fb_mealcards1($builder, $mealcards);
+		$builder->Finish($mcs);
+		$fmc = bs\FridgeMealCards::CreateFridgeMealCards($builder, $f, $mcs);
+		return $fmc;
+	}
+
 
 	/**
 	* @brief Serialize meal
@@ -410,7 +438,7 @@
 		$ff = fb_fridgeusers1
 		(
 			$builder,
-			&$fridgeusers
+			$fridgeusers
 		);
 		$builder->Finish($ff);
 		return $builder->dataBuffer()->data();
@@ -445,13 +473,15 @@
 
 	/**
 	* @brief Serialize meal card array
+	* @param $mealcards [id, cn, locale, qty]
+	* @see fb_mealcards()
 	*/
-	function fb_mealcards
+	function fb_mealcards1
 	(
+		$builder,
 		&$mealcards
 	)
 	{
-		$builder = new Google\FlatBuffers\FlatbufferBuilder(0);
 		$ma = array();
 		foreach ($mealcards as $mealcard)
 		{
@@ -466,6 +496,21 @@
 		bs\MealCards::startMealCards($builder);
 		bs\MealCards::addMealCards($builder, $mv);
 		$ff = bs\MealCards::EndMealCards($builder);
+		return $ff;
+	}
+
+	/**
+	* @brief Serialize meal card array
+	* @param $mealcards [id, cn, locale, qty]
+	* @see fb_mealcards1()
+	*/
+	function fb_mealcards
+	(
+		&$mealcards
+	)
+	{
+		$builder = new Google\FlatBuffers\FlatbufferBuilder(0);
+		$ff = fb_mealcards1($builder, $mealcards);
 		$builder->Finish($ff);
 		return $builder->dataBuffer()->data();
 	}
@@ -503,21 +548,61 @@
 		return $builder->dataBuffer()->data();
 	}
 
+	/**
+	* $brief Serialize user's fridges
+	* @param $data array u=>[id, cn, key, locale, lat, lon, alt] f=>[id, cn, key, locale, 4-lat, lon, alt, 7- [FridgeMealCards], 8- [FridgeUsers];]
+	* user: User; FridgeMealCards: [id, cn, locale, qty]; FridgeUsers: [id, fridge_id, user_id, cn, key, locale, lat, lon, alt, start, finish, balance];
+	* @see ls_userfridge
+	*/
+	function fb_userfridges(
+		&$data
+	)
+	{
+		$builder = new Google\FlatBuffers\FlatbufferBuilder(0);
+		$user = fb_user1($builder,
+			$data['u'][0],
+			$data['u'][1],
+			$data['u'][2],
+			$data['u'][3],
+			$data['u'][4],
+			$data['u'][5],
+			$data['u'][6]
+		);
+		$builder->Finish($user);
+
+		$mealcards = array();
+		$users = array();
+		for ($f = 0; $f < count($data['f']); $f++)
+		{
+			$fridgemealcards = fb_fridgemealcards1($builder, $data['f'][$f], $data['f'][$f][7]);
+			$builder->Finish($fridgemealcards);
+
+			array_push($mealcards, $fridgemealcards);
+			$fridgeusers = fb_fridgeusers1($builder, $data['f'][$f][8]);
+			$builder->Finish($fridgeusers);
+			array_push($users, $fridgeusers);
+		}
+		$mcv = bs\UserFridges::createMealcardsVector($builder, $mealcards);
+		$uv = bs\UserFridges::createUsersVector($builder, $users);
+		$uf = bs\UserFridges::createUserFridges($builder, $user, $mcv, $uv);
+		return $builder->dataBuffer()->data();
+	}
+	
 	// ------------------------------------ Helper routines ---------------------------------
 
 	function getOption(
 		$name,
-		&$argv,
+		&$options,
 		$default
 	) 
 	{
 		if (isset($_REQUEST[$name]))
-			$r = $_REQUEST [$name];
+			$r = $_REQUEST[$name];
 		else
 		{
-			if (array_key_exists($name, $argv))
+			if (array_key_exists($name, $options))
 			{
-				$r = $argv[$name];
+				$r = $options[$name];
 			}
 			else 
 			{
@@ -939,7 +1024,7 @@
 	/**
 	* @brief List fridges in specified locale
 	* @param $locale 
-	* @return fridge array
+	* @return fridge array [id, cn, key, locale, lat, lon, alt]
 	*/
 	function ls_fridge
 	(
@@ -1043,7 +1128,8 @@
 	/**
 	* @brief List meal cards in the fridge
 	* @param $fridge_id 
-	* @return meal cards array
+	* @return meal cards array [id, cn, locale, qty] 
+	* @see pg_ls_mealcard()
 	*/
 	function ls_mealcard
 	(
@@ -1060,6 +1146,7 @@
 	* @param $conn Postgresql connection
 	* @param $fridge_id 
 	* @return meal cards array [id, cn, locale, qty]
+	* @see ls_mealcard()
 	*/
 	function pg_ls_mealcard
 	(
@@ -1155,7 +1242,7 @@
 	/**
 	* @brief List of user fridges
 	* @return array u=>[id, cn, key, locale, lat, lon, alt] f=>[id, cn, key, locale, lat, lon, alt, [FridgeMealCards], [FridgeUsers];]
-	* user: User; FridgeMealCards: [id, cn, key, locale, lat, lon, alt]; FridgeUsers: [id, fridge_id, user_id, cn, key, locale, lat, lon, alt, start, finish, balance];
+	* user: User; FridgeMealCards: [id, cn, locale, qty]; FridgeUsers: [id, fridge_id, user_id, cn, key, locale, lat, lon, alt, start, finish, balance];
 	* @see pg_ls_userfridge
 	* @see fb_userfridges()
 	*/
@@ -1167,20 +1254,19 @@
 		$conn = init();
 		// [id, cn, key, locale, lat, lon, alt]
 		$u = pg_get_user($conn, $user_id);
-
 		// [id, cn, key, locale, lat, lon, alt] Add 7- mealcards, 8- users
 		$fridges = pg_ls_userfridge($conn, $user_id);
-		for ($f = 0; $f < count($fridges); $f++)
+		foreach ($fridges as &$fridge)
 		{
 			// [id, cn, locale, qty]
-			$mealcards = pg_ls_mealcard($conn, $fridges[$i][0]);
-			$fridges[7] = $mealcards;
+			$mealcards = pg_ls_mealcard($conn, $fridge[0]);
+			array_push($fridge, $mealcards);
 			// [id, fridge_id, user_id, cn, key, locale, lat, lon, alt, start, finish, balance]
-			$fridgeusers = pg_ls_fridgeuser($conn, $fridge_id);
-			$fridges[8] = $fridgeusers;
+			$fridgeusers = pg_ls_fridgeuser($conn, $fridge[0]);
+			array_push($fridge, $fridgeusers);
 		}
 		done($conn);
-		$r = array('u'=>$u, 'f'=>$fridges)
+		$r = array('u'=>$u, 'f'=>$fridges);
 		return $r;
 	}
 	
