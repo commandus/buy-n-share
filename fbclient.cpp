@@ -7,8 +7,6 @@
 
 using namespace flatbuffers;
 
-#define DEF_URL "https://f.commandus.com/a/"
-
 FBClient::FBClient()
 	: url(DEF_URL), code(CURLE_OK)
 {
@@ -89,6 +87,11 @@ CURL *FBClient::postCurlUrl
 	curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
 	curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
 	
+
+	struct curl_slist *list = NULL;
+	list = curl_slist_append(list, "Content-Type: application/octet-stream");
+	curl_easy_setopt(curl, CURLOPT_HTTPHEADER, list);
+
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_string);
 	curl_easy_setopt(curl, CURLOPT_WRITEDATA, &retval);
   

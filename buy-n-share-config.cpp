@@ -1,16 +1,16 @@
 #include "buy-n-share-config.h"
+#include "fbclient.h"
 #include <iostream>
 #include <cstring>
 #include <argtable2.h>
 
-#define DEF_BASE_URL	"https://f.commandus.com/a/"
 #define DEF_LOCALE		"ru"
 static const char* progname = "buy-n-share";
 
 static const char* OBJECT_LIST = "<user|fridge|fridgeuser|meal|mealcard|purchase|vote>";
 
 BuyNShareConfig::BuyNShareConfig()
-	: base_url(DEF_BASE_URL), cmd(CMD_NONE), user_id(0), key(""), cn(""), locale(""),
+	: base_url(DEF_URL), cmd(CMD_NONE), user_id(0), key(""), cn(""), locale(""),
 	cost(0), qty(0), lat(0.0), lon(0.0), alt(0), fridge_id(0), meal_id(0)
 {
 }
@@ -36,7 +36,7 @@ int BuyNShareConfig::parseCmd
 	char* argv[]
 )
 {
-	struct arg_str *a_base_url = arg_str0("u", "url", "<URL>", "Default " DEF_BASE_URL);
+	struct arg_str *a_base_url = arg_str0("u", "url", "<URL>", "Default " DEF_URL);
 	// commands
 	struct arg_int *a_ls_userfridge = arg_int0("d", "dashboard", "<user id>", "List of all user's fridges");
 	struct arg_str *a_add = arg_str0(NULL, "add", OBJECT_LIST, "Add a new object");
@@ -87,7 +87,7 @@ int BuyNShareConfig::parseCmd
 	if (a_base_url->count)
 		base_url = *a_base_url->sval;
 	else
-		base_url = DEF_BASE_URL;
+		base_url = DEF_URL;
 
 	cmd = CMD_NONE;
 

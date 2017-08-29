@@ -24,6 +24,8 @@
 #include "purchase_generated.h"
 #include "purchases_generated.h"
 
+#define DEF_URL "http://f.commandus.com/a/"
+
 using namespace bs;
 
 class FBClient
