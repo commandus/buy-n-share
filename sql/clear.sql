@@ -1,3 +1,11 @@
+GRANT ALL ON TABLE fridge TO commandu_buynshare1;
+GRANT ALL ON TABLE fridgeuser TO commandu_buynshare1;
+GRANT ALL ON TABLE meal TO commandu_buynshare1;
+GRANT ALL ON TABLE mealcard TO commandu_buynshare1;
+GRANT ALL ON TABLE purchase TO commandu_buynshare1;
+GRANT ALL ON TABLE "user" TO commandu_buynshare1;
+GRANT ALL ON TABLE vote TO commandu_buynshare1;
+
 DELETE FROM "fridgeuser";
 SELECT setval('fridgeuser_id_seq', 1, true);
 DELETE FROM "fridge";
