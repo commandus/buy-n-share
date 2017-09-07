@@ -296,8 +296,10 @@
 				array_push($vvote_users, $vote_user);
 			}
 			$vvotes = bs\Purchase::CreateVotesVector($builder, $vvote_users);
-
-			$purchase = bs\Purchase::createPurchase($builder, $purchase[0], $purchase[1], $purchase[2], $meal, $purchase[5], $purchase[6], $purchase[7], $vvotes);
+			// 0     1          2            3          4     5         6       7        8
+			// p.id, p.user_id, p.fridge_id, p.meal_id, m.cn, m.locale, p.cost, p.start, p.finish,
+			//                                                $id,          $userid,      $fridgeid,    $meal, $cost,        $start,       $finish,      $votes
+			$purchase = bs\Purchase::createPurchase($builder, $purchase[0], $purchase[1], $purchase[2], $meal, $purchase[6], $purchase[7], $purchase[8], $vvotes);
 			array_push($pa, $purchase);
 		}
 		$pv = bs\Purchases::CreatePurchasesVector($builder, $pa);
