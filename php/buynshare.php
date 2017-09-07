@@ -1184,31 +1184,57 @@
 	*/
 	function ls_purchase
 	(
-		$user_id,
+		$user_id = false,
 		$fridge_id = false
 	)
 	{
 		$conn = init();
-		if ($fridge_id)
-			$q = pg_query_params($conn, 
-				"SELECT p.id, p.user_id, p.fridge_id, 
-				p.meal_id, m.cn, m.locale,
-				p.cost, p.start, p.finish,
-				f.cn, '' as fkey, f.locale, f.lat, f.lon, f.alt,
-				u.cn, '' as ukey, u.locale, u.lat, u.lon, u.alt
-				FROM \"purchase\" p, \"user\" u, \"fridge\" f, \"meal\" m WHERE f.id = $2 AND p.fridge_id = f.id AND 
-				p.user_id = u.id AND p.meal_id = m.id AND p.user_id = $1 
-				ORDER BY p.id DESC", array($user_id, $fridge_id));
+		if ($user_id)
+		{
+			if ($fridge_id)
+				$q = pg_query_params($conn, 
+					"SELECT p.id, p.user_id, p.fridge_id, 
+					p.meal_id, m.cn, m.locale,
+					p.cost, p.start, p.finish,
+					f.cn, '' as fkey, f.locale, f.lat, f.lon, f.alt,
+					u.cn, '' as ukey, u.locale, u.lat, u.lon, u.alt
+					FROM \"purchase\" p, \"user\" u, \"fridge\" f, \"meal\" m WHERE f.id = $2 AND p.fridge_id = f.id AND 
+					p.user_id = u.id AND p.meal_id = m.id AND p.user_id = $1 
+					ORDER BY p.id DESC", array($user_id, $fridge_id));
+			else
+				$q = pg_query_params($conn, 
+					"SELECT p.id, p.user_id, p.fridge_id,
+					p.meal_id, m.cn, m.locale,
+					p.cost, p.start, p.finish,
+					f.cn, '' as fkey, f.locale, f.lat, f.lon, f.alt,
+					u.cn, '' as ukey, u.locale, u.lat, u.lon, u.alt
+					FROM \"purchase\" p, \"user\" u, \"fridge\" f, \"meal\" m WHERE p.fridge_id = f.id AND 
+					p.user_id = u.id AND p.meal_id = m.id AND p.user_id = $1 
+					ORDER BY p.id DESC", array($user_id));
+		}
 		else
-			$q = pg_query_params($conn, 
-				"SELECT p.id, p.user_id, p.fridge_id,
-				p.meal_id, m.cn, m.locale,
-				p.cost, p.start, p.finish,
-				f.cn, '' as fkey, f.locale, f.lat, f.lon, f.alt,
-				u.cn, '' as ukey, u.locale, u.lat, u.lon, u.alt
-				FROM \"purchase\" p, \"user\" u, \"fridge\" f, \"meal\" m WHERE p.fridge_id = f.id AND 
-				p.user_id = u.id AND p.meal_id = m.id AND p.user_id = $1 
-				ORDER BY p.id DESC", array($user_id));
+		{
+			if ($fridge_id)
+				$q = pg_query_params($conn, 
+					"SELECT p.id, p.user_id, p.fridge_id, 
+					p.meal_id, m.cn, m.locale,
+					p.cost, p.start, p.finish,
+					f.cn, '' as fkey, f.locale, f.lat, f.lon, f.alt,
+					u.cn, '' as ukey, u.locale, u.lat, u.lon, u.alt
+					FROM \"purchase\" p, \"user\" u, \"fridge\" f, \"meal\" m WHERE f.id = $1 AND p.fridge_id = f.id AND 
+					p.user_id = u.id AND p.meal_id = m.id 
+					ORDER BY p.id DESC", array($fridge_id));
+			else
+				$q = pg_query_params($conn, 
+					"SELECT p.id, p.user_id, p.fridge_id,
+					p.meal_id, m.cn, m.locale,
+					p.cost, p.start, p.finish,
+					f.cn, '' as fkey, f.locale, f.lat, f.lon, f.alt,
+					u.cn, '' as ukey, u.locale, u.lat, u.lon, u.alt
+					FROM \"purchase\" p, \"user\" u, \"fridge\" f, \"meal\" m WHERE p.fridge_id = f.id AND 
+					p.user_id = u.id AND p.meal_id = m.id 
+					ORDER BY p.id DESC", array());
+		}
 		if (!$q)
 		{
 			done($conn);
