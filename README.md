@@ -357,3 +357,10 @@ cmake -G "Visual Studio 15"
 Install-Package curl
 ```
 неверная, так как пакет собран неправильно. Надо библиотеку собрать вручную.
+
+### Включение gzip
+
+env.php:
+```
+ob_start("ob_gzhandler");
+```
