@@ -18,14 +18,18 @@
 	if (empty($key))
 		$key = generateRandomString();
 
+	$lat = 0.0;	// $u->getGeo()->getLat();
+	$lon = 0.0;	// $u->getGeo()->getLon();
+	$alt = 0;	// $u->getGeo()->getAlt();
+
 	// Create  a new user
 	$id = add_user(
 		$u->getCn(),
 		$key,
 		$u->getLocale(),
-		$u->getGeo()->getLat(),
-		$u->getGeo()->getLon(),
-		$u->getGeo()->getAlt()
+		$lat,
+		$lon,
+		$alt
 	);
 
 	if (!$id)
@@ -41,9 +45,9 @@
 		$u->getCn(),
 		$key,
 		$u->getLocale(),
-		$u->getGeo()->getLat(),
-		$u->getGeo()->getLon(),
-		$u->getGeo()->getAlt()
+		$lat,
+		$lon,
+		$alt
 	);
 
 ?>

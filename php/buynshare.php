@@ -590,10 +590,12 @@
 
 	function get_post_input()
 	{
-		$v = gzdecode(file_get_contents('php://input'));
+		$raw = file_get_contents('php://input');
+		$v = gzdecode($raw);
 		if (!$v)
-			$v = file_get_contents('php://input');
-		return $v;
+			return $raw;
+		else
+			return $v;
 	}
 
 	function getOption(
