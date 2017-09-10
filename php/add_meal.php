@@ -2,7 +2,7 @@
 	require "buynshare.php";
 
 	// Read meal
-	$bb = Google\FlatBuffers\ByteBuffer::wrap(file_get_contents('php://input'));
+	$bb = Google\FlatBuffers\ByteBuffer::wrap(get_post_input());
 	header('Content-Type: application/octet-stream');
 	try
 	{

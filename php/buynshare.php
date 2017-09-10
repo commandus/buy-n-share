@@ -588,6 +588,14 @@
 	
 	// ------------------------------------ Helper routines ---------------------------------
 
+	function get_post_input()
+	{
+		$v = gzdecode(file_get_contents('php://input'));
+		if (!$v)
+			$v = file_get_contents('php://input');
+		return $v;
+	}
+
 	function getOption(
 		$name,
 		&$options,

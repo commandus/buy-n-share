@@ -3,7 +3,7 @@
 	header('Content-Type: application/octet-stream');
 
 	// Read meal
-	$bb = Google\FlatBuffers\ByteBuffer::wrap(file_get_contents('php://input'));
+	$bb = Google\FlatBuffers\ByteBuffer::wrap(get_post_input());
 
 	$opt = getopt("", array('qty:', 'fridge_id:', 'meal_id:'));
 	$qty = getOption('qty', $opt, 1);

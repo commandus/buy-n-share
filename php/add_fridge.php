@@ -6,7 +6,7 @@
 	$balance = getOption('balance', $opt, 0);  // optional
 
 	// Read fridge
-	$bb = Google\FlatBuffers\ByteBuffer::wrap(file_get_contents('php://input'));
+	$bb = Google\FlatBuffers\ByteBuffer::wrap(get_post_input());
 
 	try
 	{

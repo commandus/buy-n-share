@@ -2,7 +2,7 @@
 	require "buynshare.php";
 	header('Content-Type: application/octet-stream');
 	// Read user
-	$bb = Google\FlatBuffers\ByteBuffer::wrap(file_get_contents('php://input'));
+	$bb = Google\FlatBuffers\ByteBuffer::wrap(get_post_input());
 	try
 	{
 		$u = bs\User::getRootAsUser($bb);
