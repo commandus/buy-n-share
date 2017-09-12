@@ -152,7 +152,7 @@
 		bs\User::addCn($builder, $scn);
 		bs\User::addKey($builder, $skey);
 		bs\User::addLocale($builder, $slocale);
-		bs\User::addGeo($builder, bs\Geo::createGeo($builder, 0.0, 0.0, 0.0));
+		bs\User::addGeo($builder, bs\Geo::createGeo($builder, 0.0, 0.0, 0));
 		$user = bs\User::EndUser($builder);
 
 		bs\FridgeUser::startFridgeUser($builder);
@@ -369,7 +369,7 @@
 
 			bs\Fridge::addKey($builder, $skey);
 			bs\Fridge::addLocale($builder, $slocale);
-			bs\Fridge::addGeo($builder, bs\Geo::createGeo($builder, $fridge[4], $fridge[5], $fridge[6]));
+//			bs\Fridge::addGeo($builder, bs\Geo::createGeo($builder, $fridge[4], $fridge[5], $fridge[6]));
 
 			$f = bs\Fridge::EndFridge($builder);
 			array_push($fa, $f);
