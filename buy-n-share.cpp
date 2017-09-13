@@ -127,11 +127,15 @@ int main(int argc, char** argv)
 						std::cout << it->id() << "\t"
 							<< it->cn()->str() << "\t"
 							<< it->locale()->str() << "\t"
-							<< it->key()->str() << "\t"
-							<< it->geo()->lat() << "\t"
-							<< it->geo()->lon() << "\t"
-							<< it->geo()->alt() << "\t"
-							<< std::endl;
+							<< it->key()->str() << "\t";
+						if (it->geo())
+						{
+							std::cout 
+								<< it->geo()->lat() << "\t"
+								<< it->geo()->lon() << "\t"
+								<< it->geo()->alt() << "\t";
+						}
+						std::cout << std::endl;
 					}
 				}
 				else
