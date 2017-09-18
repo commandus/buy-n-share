@@ -21,7 +21,7 @@ php = \
 	php/add_fridgeuser.php  php/add_vote.php   php/ls_fridgeuser.php  php/ls_user.php \
 	php/add_mealcard.php    php/buynshare.php  php/ls_mealcard.php    php/rm_fridge.php \
 	php/add_meal.php        php/env.php        php/ls_meal.php        php/rm_fridgeuser.php \
-	php/add_purchase.php    php/index.php      php/ls_purchase.php    php/rm_purchase.php    calc.php
+	php/add_purchase.php    php/index.php      php/ls_purchase.php    php/rm_purchase.php    php/calc.php
 	
 docs = \
 	docs/README.md docs/_layouts/default.html
