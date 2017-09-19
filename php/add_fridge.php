@@ -25,14 +25,27 @@
 
 	// Create  a new fridge
 
+	$geo = $f->getGeo();
+	if ($geo) 
+	{
+		$lat = $geo->getLat();
+		$lon = $geo->getLon();
+		$alt = $geo->getAlt();
+	}
+	else
+	{
+		$lat = 0.0;
+		$lon = 0.0;
+		$alt = 0;
+	}
 	$id = add_fridge(
 		$user_id,
 		$f->getCn(),
 		$key,
 		$f->getLocale(),
-		$f->getGeo()->getLat(),
-		$f->getGeo()->getLon(),
-		$f->getGeo()->getAlt(),
+		$lat,
+		$lon,
+		$alt,
 		$balance
 	);
 
