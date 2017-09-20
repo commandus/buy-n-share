@@ -496,11 +496,11 @@ ALTER TABLE ONLY vote
 
 
 --
--- Name: mealcard_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: commandu
+-- Name: mealcard_meal_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: commandu
 --
 
 ALTER TABLE ONLY mealcard
-    ADD CONSTRAINT mealcard_user_id_fkey FOREIGN KEY (meal_id) REFERENCES "user"(id);
+    ADD CONSTRAINT mealcard_meal_id_fkey FOREIGN KEY (meal_id) REFERENCES "meal"(id);
 
 
 --
