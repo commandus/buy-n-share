@@ -841,7 +841,7 @@
 				if ($increment_qty)
 					$qty += $r[1];
 				$q = pg_query_params($conn, 
-					'UPDATE  "mealcard" SET fridge_id = $1, meal_id = $2, qty = $3', array($fridge_id, $meal_id, $qty)
+					'UPDATE  "mealcard" SET qty = $2 WHERE id = $1', array($r[0], $qty)
 				);
 				if (!$q)
 				{
