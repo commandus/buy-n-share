@@ -1097,6 +1097,8 @@
 		$r = array();
 		while($row = pg_fetch_row($q))
 		{
+			// calc balance
+			$row[11] = $row[11] + calc_pg_user($conn, $row[1], $row[2]);
 			array_push($r, $row);
 		}
 		pg_free_result($q);

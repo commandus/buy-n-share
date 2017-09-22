@@ -12,6 +12,14 @@
 		$user_id
 	)
 	{
+		$total = 2220;
+		array_push($r1, $fridge_id);
+		array_push($r1, $user_id);
+		array_push($r1, $start);
+		array_push($r1, $total);
+		//-------------------------------- ^^^ INSERT BRAIN HERE ^^^ --------------------------------
+		return $r1;
+
 		if (!$conn)
 			return false;
 		$q = pg_query_params($conn, 
@@ -30,7 +38,7 @@
 
 		// Remember, not user to user, but user to the fridge!!!
 		// one user-fridge-total
-		$total = 0;
+		$total = 2220;
 		array_push($r1, $fridge_id);
 		array_push($r1, $user_id);
 		array_push($r1, $start);
