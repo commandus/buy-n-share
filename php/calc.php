@@ -12,13 +12,7 @@
 		$user_id
 	)
 	{
-		$total = 2220;
-		array_push($r1, $fridge_id);
-		array_push($r1, $user_id);
-		array_push($r1, $start);
-		array_push($r1, $total);
 		//-------------------------------- ^^^ INSERT BRAIN HERE ^^^ --------------------------------
-		return $r1;
 
 		if (!$conn)
 			return false;
@@ -38,45 +32,29 @@
 
 		// Remember, not user to user, but user to the fridge!!!
 		// one user-fridge-total
-		$total = 2220;
-		array_push($r1, $fridge_id);
-		array_push($r1, $user_id);
-		array_push($r1, $start);
-		array_push($r1, $total);
+		$total = 22;
 		//-------------------------------- ^^^ INSERT BRAIN HERE ^^^ --------------------------------
-		return $r1;
+		return $total;
 	}
+
 
 	/**
-	* @brief Calc balance for each fridge user 
-	* @return array of fridge users balance 
-	* @see calc_pg_user()
+	* @brief Calc balance for user of the fridge: 
+	* @return array of $fridgeid, $userid, $start, $total
+	* @see calc_pg_fridge()
+	* @see rm_fridgeuser()
 	*/
-	function calc_pg_fridge
+	function calc_pg_user1
 	(
 		$conn,
-		$fridge_id
+		$fridge_id,
+		$user_id
 	)
 	{
-		if (!$conn)
-			return false;
-		$r = array();
-
-		$q = pg_query_params($conn, 
-			"SELECT fu.user_id FROM \"fridgeuser\" fu WHERE fu.fridge_id = $1 ORDER BY id", array($fridge_id)
-		);
-		if (!$q)
-			return false;
-		$r = array();
-		while ($row = pg_fetch_row($q))
-		{
-			$c = calc_pg_user($conn, $fridge_id, $row[0]);
-			if ($c)
-				array_push($r, $c);
-		}
-		pg_free_result($q);
-
+		$r = calc_pg_user(
+			$conn,
+			$fridge_id,
+			$user_id);
 		return $r;
 	}
-
 ?>
