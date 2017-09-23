@@ -346,7 +346,7 @@ ls_userfridge
 
 ```
 git clone git@github.com:google/flatbuffers.git
-cmake -G "Visual Studio 15"
+ 
 
 ```
 
