@@ -1097,8 +1097,7 @@
 		$r = array();
 		while($row = pg_fetch_row($q))
 		{
-			// calc balance $row[11] + 
-			$row[11] = calc_pg_user1($conn, $row[1], $row[2]);
+			$row[11] = balance $row[11] + calc_pg_user($conn, $row[1], $row[2]);
 			array_push($r, $row);
 		}
 		pg_free_result($q);
@@ -1455,7 +1454,7 @@
 	{
 		$conn = init();
 		$balance_array = array();
-		$c = calc_pg_user1($conn, $fridge_id, $user_id);
+		$c = calc_pg_user($conn, $fridge_id, $user_id);
 		if ($c)
 		{
 			$r2 = array();	
