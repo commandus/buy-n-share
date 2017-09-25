@@ -364,3 +364,39 @@ env.php:
 ```
 ob_start("ob_gzhandler");
 ```
+## Скрипты
+
+### import-meal.sh
+
+Импорт продуктов
+
+```
+cd tools
+./import-meal.sh <locale> <CSV file>
+```
+
+Пример:
+
+```
+cd tools
+./import-meal.sh ru fridge-ikfia-221.cs
+```
+### import-purchase-vote.sh
+
+Импорт покупок и голосов
+
+```
+cd tools
+./import-purchase-vote.sh <fridge_id> <CSV file> <uid1> <uid2> <uid3> <uid4> <uid5>
+```
+
+Пример:
+
+```
+cd tools
+./import-meal.sh ru fridge-ikfia-221.cs
+```
+
+
+
+
