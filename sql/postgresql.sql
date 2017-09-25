@@ -604,3 +604,10 @@ GRANT ALL ON TABLE mealcard TO commandu_buynshare1;
 GRANT ALL ON TABLE purchase TO commandu_buynshare1;
 GRANT ALL ON TABLE "user" TO commandu_buynshare1;
 GRANT ALL ON TABLE vote TO commandu_buynshare1;
+
+
+CREATE FUNCTION purchase_votes(bigint) RETURNS bigint
+    AS $$ SELECT COUNT(v.purchase_id) FROM vote v WHERE v.purchase_id = $1 $$
+    LANGUAGE SQL;
+
+-- GRANT ALL ON FUNCTION purchase_votes TO commandu_buynshare1;
