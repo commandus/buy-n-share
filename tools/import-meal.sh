@@ -1,9 +1,10 @@
 #!/bin/bash
 #	Import meal
 #	./import-meal <locale> <CSV file>
+#
+CLI=../buy-n-share
 LOCALE=$1
 INPUT=$2
-CLI=../buy-n-share
 OLDIFS=$IFS
 IFS=,
 [ ! -f $INPUT ] && { echo "$INPUT file not found"; exit 1; }
