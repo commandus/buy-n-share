@@ -588,6 +588,114 @@
 	
 	// ------------------------------------ Helper routines ---------------------------------
 
+	function get_uid()
+	{
+		return intval($_SERVER['U']);
+	}
+
+	function get_pwd()
+	{
+		return $_SERVER['P'];
+	}
+
+	/**
+	 * @brief Return false if user does not authenticated
+	 * @param $conn database connection resource
+	 */
+	function uid($conn)
+	{
+		$u = get_uid();
+		if ((!$u) || (!$conn))
+		{
+			return false;
+		}
+		$p = get_pwd();
+		$q = pg_query_params($conn, 
+			'SELECT id FROM "user" WHERE id = $1 AND key = $2', 
+			array($u, $p)
+		);
+		if (!$q)
+		{
+			return false;
+		}
+		$r = pg_fetch_row($q);
+		pg_free_result($q);
+		if ($r)
+		{
+			return $r[0];
+		}
+		return false;
+	}
+
+	/**
+	 * @brief Authenticate user
+	 * @param $conn database connection resource
+	 */
+	 function is_uid($conn, $uid)
+	 {
+		if (!$uid)
+			return false;
+		return $uid == uid($conn);
+	 }
+ 
+	/**
+	 * @brief Return false if user does not authenticated or is not registerfed in the fridge.
+	 * @param $conn database connection resource
+	 * @return user identifier
+	 */
+	 function has_fridge($conn, $fridge_id)
+	 {
+		 $u = uid($conn);
+		 if ((!$u) || (!$conn))
+		 {
+			 return false;
+		 }
+		 $q = pg_query_params($conn, 
+			 'SELECT id FROM "fridgeuser" WHERE user_id = $1 AND fridge_id = $2', 
+			 array($u, $fridge_id)
+		 );
+		 if (!$q)
+		 {
+			 return false;
+		 }
+		 $r = pg_fetch_row($q);
+		 pg_free_result($q);
+		 if ($r)
+		 {
+			 return $u;
+		 }
+		 return false;
+	}
+
+	/**
+	 * @brief Return false if user does not authenticated or not purchase
+	 * @param $conn database connection resource
+	 * @return user identifier
+	 */
+	 function has_purchase($conn, $purchase_id)
+	 {
+		 $u = uid($conn);
+		 if ((!$u) || (!$conn))
+		 {
+			 return false;
+		 }
+		 $q = pg_query_params($conn, 
+			 'SELECT id FROM "purchase" WHERE user_id = $1 AND id = $2', 
+			 array($u, $purchase_id)
+		 );
+		 if (!$q)
+		 {
+			 return false;
+		 }
+		 $r = pg_fetch_row($q);
+		 pg_free_result($q);
+		 if ($r)
+		 {
+			 return $u;
+		 }
+		 return false;
+	}
+
 	function get_post_input()
 	{
 		$raw = file_get_contents('php://input');
@@ -699,7 +807,12 @@
 	{
 		if (!$user_id)
 			return false;
+
 		$conn = init();
+		// check credentials
+		if (!is_uid($conn, $user_id))
+			return false;
+
 		$q = pg_query_params($conn, 
 			'INSERT INTO "fridge" (cn, key, locale, lat, lon, alt) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id', 
 			array($cn, $key, $locale, $lat, $lon, $alt)
@@ -742,7 +855,11 @@
 	)
 	{
 		$conn = init();
-		// check
+		// check credentials
+		if (!is_uid($conn, $user_id))
+			return false;
+	
+		// check exist already
 		$q = pg_query_params($conn, 
 			'SELECT id FROM "fridgeuser" WHERE fridge_id = $1 AND user_id = $2', 
 				array($fridge_id, $user_id)
@@ -786,6 +903,9 @@
 	)
 	{
 		$conn = init();
+		// check credentials
+		if (!uid($conn))
+			return false;
 		$q = pg_query_params($conn, 
 			'SELECT id FROM "meal" WHERE cn = $1 AND locale = $2', array($cn, $locale)
 		);
@@ -878,6 +998,10 @@
 	)
 	{
 		$conn = init();
+		// check credemtials
+		if (!has_fridge($conn, $fridge_id))
+			return false;
+
 		$id = pg_add_mealcard($conn, $fridge_id, $meal_id, $qty, false);
 		done($conn);
 	}
@@ -899,6 +1023,9 @@
 	)
 	{
 		$conn = init();
+		// check credemtials
+		if (!has_fridge($conn, $fridge_id))
+			return false;
 		$q = pg_query_params($conn, 
 			'INSERT INTO "purchase" (user_id, fridge_id, meal_id, cost, start, finish) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id', 
 			array($user_id, $fridge_id, $meal_id, $cost, $start, $finish)
@@ -958,8 +1085,12 @@
 	)
 	{
 		$conn = init();
+		// check credemtials
+		if (!is_uid($conn, $user_id))
+			return false;
+	
 		// Delete all prevoius votes is not necessary
-		$q = pg_query_params($conn, 
+		$q = pg_query_params($conn,
 			'DELETE FROM "vote" WHERE purchase_id = $1 AND user_id = $2', array($purchase_id, $user_id)
 		);
 		
@@ -989,6 +1120,9 @@
 	)
 	{
 		$conn = init();
+		if (!uid($conn))
+			return false;
+
 		$q = pg_query_params($conn, 
 			"SELECT id, cn, '' as key, locale, lat, lon, alt FROM \"user\" WHERE (locale = $1) ORDER BY id", array($locale)
 		);
@@ -1040,6 +1174,9 @@
 	)
 	{
 		$conn = init();
+		if (!uid($conn))
+			return false;
+
 		$q = pg_query_params($conn, 
 			"SELECT id, cn, '' as key, locale, lat, lon, alt FROM \"fridge\" WHERE (locale = $1) ORDER BY id", array($locale)
 		);
@@ -1069,6 +1206,8 @@
 	)
 	{
 		$conn = init();
+		if (!uid($conn))
+			return false;
 		$r = pg_ls_fridgeuser($conn, $fridge_id);
 		done($conn);
 		return $r;
@@ -1097,7 +1236,7 @@
 		$r = array();
 		while($row = pg_fetch_row($q))
 		{
-			$row[11] = balance $row[11] + calc_pg_user($conn, $row[1], $row[2]);
+			$row[11] = $row[11] + calc_pg_user($conn, $row[1], $row[2]);
 			array_push($r, $row);
 		}
 		pg_free_result($q);
@@ -1115,6 +1254,9 @@
 	)
 	{
 		$conn = init();
+		// check credentials
+		if (!uid($conn))
+			return false;
 		$q = pg_query_params($conn, 
 			"SELECT id, cn, locale
 			FROM \"meal\" WHERE locale = $1 ORDER BY id", array($locale)
@@ -1146,6 +1288,10 @@
 	)
 	{
 		$conn = init();
+		// check credentials
+		if (!has_fridge($conn))
+			return false;
+	
 		$r = pg_ls_mealcard($conn, $fridge_id);
 		return $r;
 	}
@@ -1202,6 +1348,9 @@
 	)
 	{
 		$conn = init();
+		// check credentials
+		if (!has_fridge($conn))
+			return false;
 		if ($user_id)
 		{
 			if ($fridge_id)
@@ -1287,6 +1436,9 @@
 	)
 	{
 		$conn = init();
+		// check credentials
+		if (!is_uid($conn, $user_id))
+			return false;
 		// [id, cn, key, locale, lat, lon, alt]
 		$u = pg_get_user($conn, $user_id);
 		if(!$u)
@@ -1348,6 +1500,9 @@
 		if (!($purchase_id && $user_id))
 			return false;
 		$conn = init();
+		// Check credentials
+		if (!is_uid($conn, $user_id))
+			return false;
 		$q = pg_query_params($conn, 
 			'DELETE FROM "vote" WHERE purchase_id = $1 AND user_id = $2', array($purchase_id, $user_id)
 		);
@@ -1370,6 +1525,10 @@
 	)
 	{
 		$conn = init();
+		// Check credentials
+		$uid = has_purchase($conn, $purchase_id);
+		if (!$uid)
+			return false;
 
 		// remove foreign
 		$q = pg_query_params($conn, 
@@ -1403,7 +1562,11 @@
 	)
 	{
 		$conn = init();
-		// check
+		// Check credentials
+		$p = has_fridge($conn, $fridge_id);
+		if (!$p)
+			return false;
+		// check fridge exists
 		$q = pg_query_params($conn, 
 			'SELECT id FROM "fridge" WHERE id = $1', array($fridge_id)
 		);
@@ -1453,6 +1616,11 @@
 	)
 	{
 		$conn = init();
+		// check credentials
+		$uid = has_fridge($conn, $fridge_id);
+		if (!$uid)
+			return false;
+
 		$balance_array = array();
 		$c = calc_pg_user($conn, $fridge_id, $user_id);
 		if ($c)
@@ -1526,6 +1694,10 @@
 	)
 	{
 		$conn = init();
+		// check credentials
+		$uid = has_purchase($conn, $purchase_id);
+		if (!$uid)
+			return false;
 		// Delete all prevoius votes is not necessary
 		$q = pg_query_params($conn, 
 			'DELETE FROM "vote" WHERE purchase_id = $1', array($purchase_id)
