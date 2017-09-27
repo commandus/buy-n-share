@@ -2,26 +2,28 @@
 
 Мобильное приложение для управления совместными финансами с долевым участием при покупке еды.
 
+## Ссылки 
+
+- [Установить альфа-версию приложения из Play Market](https://play.google.com/store/apps/details?id=com.commandus.buynshare)
+- [Исходный код Андроид клиента на GitHub](https://github.com/commandus/buy-n-share-android)
 - [Repository git@github.com:commandus/buy-n-share.git](https://github.com/commandus//buy-n-share.git)
 - [Site https://github.com/commandus//buy-n-share](https://github.com/commandus//buy-n-share)
 
-[Диаграмма классов](https://repository.genmymodel.com/commandus/fridge):
-
-![Диаграмма классов](http://f.commandus.com/i/d/diagram-gmm.png#1)
-
-Сериализация - описание в файле [flatbuffers](https://github.com/commandus/buy-n-share/blob/master/fbs/buynshare.fbs)
-
-## Аудитория 
-
-Покупка еды для офиса.
-
 ## Назначение
+
+Покупка еды для рабочих групп.
 
 1. к празднику
 2. будни
 3. легкий каприз(вдруг чего то вкусненького захотелось)
 
 ### Учет запасов
+
+[Диаграмма классов](https://repository.genmymodel.com/commandus/fridge):
+
+![Диаграмма классов](http://f.commandus.com/i/d/diagram-gmm.png#1)
+
+Сериализация - описание в файле [flatbuffers](https://github.com/commandus/buy-n-share/blob/master/fbs/buynshare.fbs)
 
 Начальный экран показывает виртуальное содержимое офисного холодильника в условных единицах:
 
@@ -396,7 +398,3 @@ cd tools
 cd tools
 ./import-meal.sh ru fridge-ikfia-221.cs
 ```
-
-
-
-
